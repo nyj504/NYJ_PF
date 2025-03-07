@@ -1,0 +1,5 @@
+<Components IsPlayer="false" Path="chest">
+    <Component Tag="Head" PosX="0" PosY="0.40000001" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.875" ScaleY="0.125" ScaleZ="0.875"/>
+    <Component Tag="Body" PosX="0" PosY="0" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.875" ScaleY="0.75" ScaleZ="0.875"/>
+    <Component Tag="Button" PosX="0" PosY="0.30000001" PosZ="0.5" RotX="0" RotY="0" RotZ="0" ScaleX="0.1" ScaleY="0.2" ScaleZ="0.1"/>
+</Components>

@@ -1,0 +1,14 @@
+<Material Name="Head">
+    <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
+    <Texture>
+        <DiffuseMap Diffuse="Resources\Textures\Skin\torchHead.png"/>
+        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <NormalMap Normal="Resources/Textures/Colors/White.png"/>
+    </Texture>
+    <Property Shininess="24" HasNormalMap="0">
+        <Diffuse R="0.79901958" G="0.57968086" B="0.57968086" A="1"/>
+        <Specular R="1" G="1" B="1" A="1"/>
+        <Ambient R="0.93627453" G="0.21571031" B="0.21571031" A="1"/>
+        <Emissive R="0.64215684" G="0.64215684" B="0.64215684" A="1"/>
+    </Property>
+</Material>

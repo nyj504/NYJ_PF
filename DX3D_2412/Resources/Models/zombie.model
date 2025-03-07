@@ -1,0 +1,8 @@
+<Components IsPlayer="true" Path="zombie">
+    <Component Tag="Head" PosX="0" PosY="1.5" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.60000002" ScaleY="0.60000002" ScaleZ="0.60000002"/>
+    <Component Tag="Body" PosX="0" PosY="0.8" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.80000001" ScaleY="0.80000001" ScaleZ="0.40000001"/>
+    <Component Tag="LeftArm" PosX="-0.6" PosY="0.8" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.40000001" ScaleY="0.80000001" ScaleZ="0.40000001"/>
+    <Component Tag="RightArm" PosX="0.6" PosY="0.8" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.40000001" ScaleY="0.80000001" ScaleZ="0.40000001"/>
+    <Component Tag="LeftLeg" PosX="-0.2" PosY="0.0" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.40000001" ScaleY="0.80000001" ScaleZ="0.40000001"/>
+    <Component Tag="RightLeg" PosX="0.2" PosY="0.0" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.40000001" ScaleY="0.80000001" ScaleZ="0.40000001"/>
+</Components>

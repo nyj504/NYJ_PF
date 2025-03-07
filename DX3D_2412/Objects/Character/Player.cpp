@@ -1,0 +1,176 @@
+#include "Framework.h"
+
+Player::Player() : Character("Resources/Models/Player.model")
+{
+	tag = "Player";
+
+	clientCenterPos = { SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1 };
+	ClientToScreen(hWnd, &clientCenterPos);
+	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+	ShowCursor(false);
+}
+
+Player::~Player()
+{
+}
+
+void Player::Update()
+{
+	if (KEY->Down('C'))
+	{
+		isCreativeMode = !isCreativeMode;
+		if (isCreativeMode)
+		{
+			velocity = Vector3(0, 0, 0); 
+		}
+	}
+
+	if (isCreativeMode)
+	{
+		velocity.y = 0; 
+	}
+	else
+	{
+		if (jumpTime >= 0)
+		{
+			jumpTime -= DELTA;
+		}
+	}
+
+	Character::Update();
+
+	UpdateWorld();
+	BuildAndMining();
+	SetCursor();
+	Control();
+	Move();
+	CAM->UpdateWorld();
+}
+
+void Player::Render()
+{
+	Character::Render();
+}
+
+void Player::PostRender()
+{
+}
+
+void Player::SetPlayerState(PlayerState playerState)
+{
+	this->playerState = playerState;
+
+	switch (playerState)
+	{
+	case Player::IDLE:
+		break;
+	case Player::MOVE:
+		break;
+	case Player::JUMP:
+		break;
+	case Player::EDIT:
+		break;
+	case Player::FALL:
+		velocity.y -= GRAVITY * DELTA;
+		break;
+	case Player::LAND:
+		velocity.y = 0;
+		Jump();
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::SetLand()
+{
+	if (jumpTime <= 0)
+	SetPlayerState(LAND);
+}
+
+void Player::SetFall()
+{
+	if (jumpTime <= 0) 
+	{
+		SetPlayerState(FALL);
+	}
+}
+
+void Player::Control()
+{
+	Vector3 dir;
+
+	if (KEY->Press('W'))
+		dir += GetForward();
+	if (KEY->Press('S'))
+		dir += GetBack();
+	if (KEY->Press('A'))
+		dir += GetLeft();
+	if (KEY->Press('D'))
+		dir += GetRight();
+
+	if (isCreativeMode) 
+	{
+		if (KEY->Press(VK_SPACE)) 
+			dir.y += 1.0f;
+		if (KEY->Press(VK_SHIFT)) 
+			dir.y -= 1.0f;
+	}
+
+	dir.Normalize();
+
+	velocity = dir;
+
+	if (CAM->IsFPSView() && !UIManager::Get()->IsPopup())
+	{
+		Vector3 delta = mousePos - CENTER;
+		Rotate(Vector3::Up(), delta.x * rotSpeed * DELTA);
+		CAM->Rotate(Vector3::Left(), delta.y * rotSpeed * DELTA);
+	}
+}
+
+void Player::Jump()
+{
+	if (KEY->Down(VK_SPACE))
+	{
+		velocity.y += JUMP_POWER;
+		jumpTime = 0.2f;
+		SetPlayerState(JUMP);
+	}
+}
+
+void Player::Move()
+{
+	Translate(velocity * moveSpeed * DELTA);
+}
+
+void Player::BuildAndMining()
+{
+	//if (UIManager::Get()->IsPopup()) return;
+	//if (BlockManager::Get()->GetSelectedBlock() == nullptr) return;
+	//
+	//if (KEY->Down(VK_RBUTTON))
+	//{
+	//	if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1)
+	//		BlockManager::Get()->InteractingBlock();
+	//	else
+	//	{
+	//		BlockManager::Get()->BuildBlock();
+	//	}
+	//}
+	//else if (KEY->Down(VK_LBUTTON))
+	//{
+	//	if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
+	//		return;
+	//
+	//	BlockManager::Get()->MiningBlock();
+	//}
+}
+
+void Player::SetCursor()
+{
+	if (UIManager::Get()->IsPopup()) return;
+	if (CAM->IsQuaterView()) return;
+
+	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
+}

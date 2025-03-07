@@ -1,0 +1,4 @@
+<Components IsPlayer="false" Path="acacia_stair">
+    <Component Tag="Top" PosX="0" PosY="0" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="1" ScaleY="0.5" ScaleZ="1"/>
+    <Component Tag="Bottom" PosX="0" PosY="0.5" PosZ="0.25" RotX="0" RotY="0" RotZ="0" ScaleX="1" ScaleY="0.5" ScaleZ="0.5"/>
+</Components>

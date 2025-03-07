@@ -1,0 +1,14 @@
+<Material Name="Bottom">
+    <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
+    <Texture>
+        <DiffuseMap Diffuse="Resources\Textures\BlockTexture\acacia_planks.png"/>
+        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <NormalMap Normal="Resources/Textures/Colors/White.png"/>
+    </Texture>
+    <Property Shininess="24" HasNormalMap="0">
+        <Diffuse R="1" G="1" B="1" A="1"/>
+        <Specular R="1" G="1" B="1" A="1"/>
+        <Ambient R="0.77450979" G="0.77071321" B="0.77071321" A="1"/>
+        <Emissive R="0.083333313" G="0.08210782" B="0.08210782" A="1"/>
+    </Property>
+</Material>
