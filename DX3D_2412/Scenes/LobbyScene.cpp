@@ -75,6 +75,7 @@ void LobbyScene::GUIRender()
 void LobbyScene::GameStart()
 {
 	ShowCursor(false);
+
 	SceneManager::Get()->Add("Test");
 	SceneManager::Get()->Remove("Lobby");
 }

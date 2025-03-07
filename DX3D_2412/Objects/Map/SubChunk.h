@@ -9,13 +9,14 @@ public:
 	void Update();
 	void Render();
 
-	Block* GetBlock(int x, int y, int z);
+	Block* GetBlock(Vector3 localPos);
+	
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1]);
 	void UpdateInstanceBuffer();
+	void CheckVisibleBlocks();
 
 private:
 	void FindSurroundedBlocks();
-	void CheckVisibleBlocks();
 private:
 	UINT index;
 

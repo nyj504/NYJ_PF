@@ -17,7 +17,7 @@ BlockManager::~BlockManager()
 	//
 	//delete block;
 	//delete instanceBuffer;
-	for (auto& chunk : activeChunks)
+	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 	{
 		delete chunk.second;
 	}
@@ -38,17 +38,28 @@ void BlockManager::Update()
 	Vector3 currentPlayerPos = PLAYER->GetGlobalPosition();
 	float distanceMoved = Vector3::Distance(currentPlayerPos, lastPlayerPos);
 	
+	if (distanceMoved >= 1)
+	{
+		//ActivateCollisionBlocks();
+	}
+
 	if (distanceMoved >= updateThreshold)
 	{
 		lastPlayerPos = currentPlayerPos;
 		ActivateRenderingChunks();
 
-		for (auto& chunk : activeChunks)
+		for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 		{
 			chunk.second->Update();
 		}
 	}
-}
+
+	if (!activeBlocks.empty())
+	{
+		//for (Block* activeBlock : activeBlocks)
+		//	activeBlock->Update();
+	}
+;}
 
 void BlockManager::Render()
 {
@@ -63,11 +74,16 @@ void BlockManager::Render()
 	//	{
 	//		block->Render();
 	////	}
-	for (auto& chunk : activeChunks)
+	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 	{
 		chunk.second->Render();
 	}
-
+	
+	if (!activeBlocks.empty())
+	{
+		//for (Block* activeBlock : activeBlocks)
+		//	activeBlock->Render();
+	}
 }
 
 void BlockManager::PostRender()
@@ -152,6 +168,22 @@ void BlockManager::InteractingBlock()
 	UIManager::Get()->SetTopSlot(selectedBlock->GetTag());
 }
 
+void BlockManager::ActivateCollisionBlocks()
+{
+	UINT updateDistance = 7;
+
+	activeBlocks.clear();
+	activeBlocks.reserve(updateDistance * updateDistance * updateDistance);
+
+	for (const auto& pair : activeChunks)
+	{
+		MainChunk* mainChunk = pair.second;
+
+		Block* collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
+		activeBlocks.push_back(collidableBlocks);
+	}
+}
+
 void BlockManager::ActivateRenderingChunks()
 {
 	int renderDistance = 4; 
@@ -164,6 +196,8 @@ void BlockManager::ActivateRenderingChunks()
 	{
 		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetGlobalPosition().x / CHUNK_WIDTH,
 			chunk->GetGlobalPosition().z / CHUNK_DEPTH);
+		chunk->CheckVisibleBlock();
+		
 		activeChunks[chunkKey] = chunk;
 	}
 }

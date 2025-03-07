@@ -3,27 +3,15 @@
 
 TestScene::TestScene() : isPaused(false)
 {
-	UIManager::Get();
-
-	zombie = new Character();
-	zombie->SetLocalPosition(9, 1, 8);
-	zombie->UpdateWorld();
-
-	CAM->SetTarget(PLAYER);
-	CAM->TargetOptionLoad("FPSMode");
-	CAM->SetFPSView(true);
-
-	skybox = new Skybox(L"Resources/Textures/Landscape/SpaceSky.dds");
-
-	PLAYER->SetLocalPosition(0, 1, 0);
+	Init();
 }
 
 TestScene::~TestScene()
 {
+	PlayerSingleton::Delete();
+	InventorySingleton::Delete();
 	BlockManager::Delete();
 	UIManager::Delete();
-
-	delete zombie;
 }
 
 void TestScene::Update()
@@ -52,8 +40,6 @@ void TestScene::Update()
 		PLAYER->Update();
 		BlockManager::Get()->Update();
 		UIManager::Get()->Update();
-
-		zombie->Update();
 	}
 }
 
@@ -69,8 +55,6 @@ void TestScene::Render()
 	{
 		BlockManager::Get()->Render();
 		PLAYER->Render();
-
-		zombie->Render();
 	}
 }
 
@@ -79,7 +63,9 @@ void TestScene::PostRender()
 	BlockManager::Get()->PostRender();
 	UIManager::Get()->PostRender();
 
-	PLAYER->PostRender();
+	string position = "Pos X:" + to_string((int)PLAYER->GetGlobalPosition().x) +
+		" Pos Y:" + to_string((int)PLAYER->GetGlobalPosition().y) + " Pos Z:" + to_string((int)PLAYER->GetGlobalPosition().z);
+	Font::Get()->RenderText(position, { 150, SCREEN_HEIGHT - 30 });
 }
 
 void TestScene::GUIRender()
@@ -102,4 +88,19 @@ void TestScene::GUIRender()
 
 		ImGui::End();*/
 	}
+}
+
+void TestScene::Init()
+{
+	PlayerSingleton::Get();
+	InventorySingleton::Get();
+	UIManager::Get();
+	BlockManager::Get();
+
+	PLAYER->SetLocalPosition(0, 1, 0);
+	CAM->SetTarget(PLAYER);
+	CAM->TargetOptionLoad("FPSMode");
+	CAM->SetFPSView(true);
+
+	skybox = new Skybox(L"Resources/Textures/Landscape/SpaceSky.dds");
 }

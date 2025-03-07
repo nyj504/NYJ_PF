@@ -6,7 +6,7 @@ struct UVInfo
 };
 
 
-class Block : public Transform
+class Block : public BoxCollider
 {
 private:
 	enum ItemType
@@ -20,7 +20,6 @@ public:
 
 public:
 	void Update();
-	void Render() {};
 
 	UINT GetItemKey() const { return itemData.key; }
 	

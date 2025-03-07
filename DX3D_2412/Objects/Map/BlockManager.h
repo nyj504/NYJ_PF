@@ -15,6 +15,7 @@ public:
 	//void MiningBlock();
 	void InteractingBlock();
 
+	void ActivateCollisionBlocks();
 	void ActivateRenderingChunks();
 
 	//Block* GetSelectedBlock();
@@ -28,6 +29,7 @@ private:
 	Block* selectedBlock = nullptr;
 	
 	unordered_map<UINT64, MainChunk*>activeChunks;
+	vector<Block*>activeBlocks;
 
 	WorldGenerator* worldGenerator;
 

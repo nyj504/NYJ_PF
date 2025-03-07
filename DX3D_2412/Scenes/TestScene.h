@@ -5,7 +5,6 @@ public:
 	TestScene();
 	~TestScene();
 
-
 	// Scene을(를) 통해 상속됨
 	void Update() override;
 
@@ -17,9 +16,9 @@ public:
 
 	void GUIRender() override;
 
-private:
-	Character* zombie;
+	void Init();
 
+private:
 	Skybox* skybox;
 
 	bool isPaused = false;

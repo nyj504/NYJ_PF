@@ -98,3 +98,35 @@ void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
         }
     }
 }
+
+void MainChunk::CheckVisibleBlock()
+{
+    for (SubChunk* subChunk : subChunks)
+    {
+        subChunk->CheckVisibleBlocks();
+    }
+}
+
+Block* MainChunk::GetCollidableBlocks(UINT range)
+{
+    unordered_set<Block*> collidableBlocks;
+
+    collidableBlocks.clear(); 
+    Vector3 playerPos = PLAYER->GetGlobalPosition();
+
+    int localX = (int)playerPos.x % CHUNK_WIDTH;
+    int localZ = (int)playerPos.z % CHUNK_DEPTH;
+
+    if (localX < 0) localX += CHUNK_WIDTH;
+    if (localZ < 0) localZ += CHUNK_DEPTH;
+
+    int subChunkIndex = (int)(playerPos.y / SUBCHUNK_HEIGHT);
+   
+    if (subChunkIndex < 0 || subChunkIndex >= subChunks.size())
+        return nullptr;
+
+    SubChunk* subChunk = subChunks[subChunkIndex];
+    Vector3 localPos(localX, (int)playerPos.y % SUBCHUNK_HEIGHT, localZ);
+
+    return subChunk->GetBlock(localPos);
+}

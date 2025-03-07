@@ -17,13 +17,11 @@ SubChunk::~SubChunk()
 {
 	delete singleFaceBlock;
 	delete multiFaceBlock;
-
 }
 
 
 void SubChunk::Update()
 {
-	CheckVisibleBlocks();
 }
 
 void SubChunk::Render()
@@ -132,16 +130,16 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 }
 
 
-Block* SubChunk::GetBlock(int x, int y, int z)
+Block* SubChunk::GetBlock(Vector3 localPos)
 {
-	if (x < 0 || x >= CHUNK_WIDTH ||
-		y < 0 || y >= SUBCHUNK_HEIGHT ||
-		z < 0 || z >= CHUNK_DEPTH)
+	if (localPos.x < 0 || localPos.x >= CHUNK_WIDTH ||
+		localPos.y < 0 || localPos.y >= SUBCHUNK_HEIGHT ||
+		localPos.z < 0 || localPos.z >= CHUNK_DEPTH)
 	{
 		return nullptr;
 	}
 
-	UINT index = (x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (y * CHUNK_DEPTH) + z; 
+	UINT index = (localPos.x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (localPos.y * CHUNK_DEPTH) + localPos.z;
 
 	auto it = blocks.find(index);
 	if (it == blocks.end()) return nullptr;
@@ -163,14 +161,15 @@ void SubChunk::FindSurroundedBlocks()
 		{
 			for (int y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
-				Block* block = GetBlock(x, y, z); 
+				Vector3 pos = { (float)x, (float)y, (float)z };
+				Block* block = GetBlock({pos.x, pos.y, pos.z});
 				if (!block) continue;
 
 				Vector3 blockWorldPos = block->GetGlobalPosition();
 
-				if (GetBlock(x + 1, y, z) && GetBlock(x - 1, y, z) &&
-					GetBlock(x, y + 1, z) && GetBlock(x, y - 1, z) &&
-					GetBlock(x, y, z + 1) && GetBlock(x, y, z - 1))
+				if (GetBlock({ pos.x + 1, pos.y, pos.z }) && GetBlock({ pos.x - 1, pos.y,pos.z }) &&
+					GetBlock({ pos.x, pos.y + 1, pos.z }) && GetBlock({ pos.x, pos.y - 1, pos.z }) &&
+					GetBlock({ pos.x, pos.y, pos.z + 1 }) && GetBlock({ pos.x, pos.y, pos.z - 1 }))
 				{
 					continue;
 				} // 오클루젼 

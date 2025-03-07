@@ -13,14 +13,8 @@ public:
     void Update();
     void Render();
     void MergeHeightMap(MainChunk* neighbor);
-   
-    SubChunk* GetSubChunkAt(int index)
-    {
-        if (index < 0 || index >= subChunks.size())
-            return nullptr;
-
-        return subChunks[index];
-    }
+    void CheckVisibleBlock();
+    Block* GetCollidableBlocks(UINT range);
 
     pair<int, int> GetIndex() const { return chunkIndex; }
 

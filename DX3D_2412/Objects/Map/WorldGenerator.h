@@ -21,7 +21,7 @@ public:
 	void CreateWorld();
 	void UpdateChunks();
 
-	vector<MainChunk*> GetChunksInRange(int renderDistance);
+	vector<MainChunk*> GetChunksInRange(int distance);
 private:
 	TerrainType terrainType = TerrainType::PLAINS;
 

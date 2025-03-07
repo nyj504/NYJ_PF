@@ -68,16 +68,16 @@ void WorldGenerator::UpdateChunks()
     }
 }
 
-vector<MainChunk*> WorldGenerator::GetChunksInRange(int renderDistance)
+vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)
 {
     Vector3 playerChunkPos = PLAYER->GetGlobalPosition() / CHUNK_WIDTH;
 
     vector<MainChunk*> surroundingChunks;
-    surroundingChunks.reserve((renderDistance * 2 + 1)* (renderDistance * 2 + 1));
+    surroundingChunks.reserve((distance * 2 + 1)* (distance * 2 + 1));
 
-    for (int x = -renderDistance; x <= renderDistance; x++)
+    for (int x = -distance; x <= distance; x++)
     {
-        for (int z = -renderDistance; z <= renderDistance; z++)
+        for (int z = -distance; z <= distance; z++)
         {
             UINT64 chunkKey = GameMath::ChunkPosToKey((int)playerChunkPos.x + x, (int)playerChunkPos.z + z);
 
