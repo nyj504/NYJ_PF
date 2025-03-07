@@ -30,6 +30,22 @@ void Block::Update()
     //CheckPlayerCollision();
 }
 
+void Block::Render()
+{
+    if (collider)
+        collider->Render();
+}
+
+void Block::EnableCollider()
+{
+    if (!collider)
+    {
+        collider = new BoxCollider();
+        collider->SetParent(this);
+        collider->UpdateWorld();
+    }
+}
+
 void Block::Damage()
 {
     int damage = PLAYER->GetDamage();

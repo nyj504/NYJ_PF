@@ -14,7 +14,7 @@ public:
     void Render();
     void MergeHeightMap(MainChunk* neighbor);
     void CheckVisibleBlock();
-    Block* GetCollidableBlocks(UINT range);
+    vector<Block*> GetCollidableBlocks(UINT range);
 
     pair<int, int> GetIndex() const { return chunkIndex; }
 

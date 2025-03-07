@@ -40,7 +40,7 @@ void BlockManager::Update()
 	
 	if (distanceMoved >= 1)
 	{
-		//ActivateCollisionBlocks();
+		ActivateCollisionBlocks();
 	}
 
 	if (distanceMoved >= updateThreshold)
@@ -56,8 +56,11 @@ void BlockManager::Update()
 
 	if (!activeBlocks.empty())
 	{
-		//for (Block* activeBlock : activeBlocks)
-		//	activeBlock->Update();
+		for (Block* activeBlock : activeBlocks)
+		{
+			if (activeBlock)
+				activeBlock->Update();
+		}
 	}
 ;}
 
@@ -81,8 +84,11 @@ void BlockManager::Render()
 	
 	if (!activeBlocks.empty())
 	{
-		//for (Block* activeBlock : activeBlocks)
-		//	activeBlock->Render();
+		for (Block* activeBlock : activeBlocks)
+		{
+			if (activeBlock)
+				activeBlock->Render();
+		}
 	}
 }
 
@@ -173,16 +179,37 @@ void BlockManager::ActivateCollisionBlocks()
 	UINT updateDistance = 7;
 
 	activeBlocks.clear();
-	activeBlocks.reserve(updateDistance * updateDistance * updateDistance);
+	Vector3 playerPos = PLAYER->GetGlobalPosition();
 
-	for (const auto& pair : activeChunks)
+	int chunkX = (int)(playerPos.x / CHUNK_WIDTH);
+	int chunkZ = (int)(playerPos.z / CHUNK_DEPTH);
+
+	for (int dx = 0; dx <= 1; dx++)
 	{
-		MainChunk* mainChunk = pair.second;
+		for (int dz = 0; dz <= 1; dz++)
+		{
+			UINT64 chunkKey = GameMath::ChunkPosToKey(chunkX + dx, chunkZ + dz);
 
-		Block* collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
-		activeBlocks.push_back(collidableBlocks);
+			if (activeChunks.find(chunkKey) != activeChunks.end())
+			{
+				MainChunk* mainChunk = activeChunks[chunkKey];
+
+				vector<Block*> collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
+
+				for (Block* block : collidableBlocks)
+				{
+					if (block) 
+					{
+						block->EnableCollider();
+						activeBlocks.push_back(block);
+					}
+				}
+			}
+		}
 	}
 }
+
+
 
 void BlockManager::ActivateRenderingChunks()
 {

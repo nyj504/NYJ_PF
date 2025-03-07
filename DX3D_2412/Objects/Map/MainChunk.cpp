@@ -107,26 +107,61 @@ void MainChunk::CheckVisibleBlock()
     }
 }
 
-Block* MainChunk::GetCollidableBlocks(UINT range)
+vector<Block*> MainChunk::GetCollidableBlocks(UINT range)
 {
-    unordered_set<Block*> collidableBlocks;
+    vector<Block*> collidableBlocks;
 
-    collidableBlocks.clear(); 
     Vector3 playerPos = PLAYER->GetGlobalPosition();
 
-    int localX = (int)playerPos.x % CHUNK_WIDTH;
-    int localZ = (int)playerPos.z % CHUNK_DEPTH;
+    float chunkMinX = GetGlobalPosition().x;
+    float chunkMaxX = chunkMinX + CHUNK_WIDTH;
+    float chunkMinZ = GetGlobalPosition().z;
+    float chunkMaxZ = chunkMinZ + CHUNK_DEPTH;
 
-    if (localX < 0) localX += CHUNK_WIDTH;
-    if (localZ < 0) localZ += CHUNK_DEPTH;
+    if (playerPos.x + range < chunkMinX || playerPos.x - range >= chunkMaxX ||
+        playerPos.z + range < chunkMinZ || playerPos.z - range >= chunkMaxZ)
+    {
+        return collidableBlocks;
+    }
 
-    int subChunkIndex = (int)(playerPos.y / SUBCHUNK_HEIGHT);
-   
-    if (subChunkIndex < 0 || subChunkIndex >= subChunks.size())
-        return nullptr;
+    int startX = max((int)chunkMinX, (int)playerPos.x - range);
+    int startY = (int)playerPos.y - range;
+    int startZ = max((int)chunkMinZ, (int)playerPos.z - range);
 
-    SubChunk* subChunk = subChunks[subChunkIndex];
-    Vector3 localPos(localX, (int)playerPos.y % SUBCHUNK_HEIGHT, localZ);
+    int endX = min((int)chunkMaxX - 1, (int)playerPos.x + range);
+    int endY = (int)playerPos.y + range;
+    int endZ = min((int)chunkMaxZ - 1, (int)playerPos.z + range);
 
-    return subChunk->GetBlock(localPos.x, localPos.y, localPos.z);
+    for (SubChunk* subChunk : subChunks)
+    {
+        for (int x = startX; x <= endX; x++)
+        {
+            for (int y = startY; y <= endY; y++)
+            {
+                for (int z = startZ; z <= endZ; z++)
+                {
+                    int localX = x % CHUNK_WIDTH;
+                    int localZ = z % CHUNK_DEPTH;
+                    int localY = y % SUBCHUNK_HEIGHT;
+
+                    if (localX < 0) localX += CHUNK_WIDTH;
+                    if (localZ < 0) localZ += CHUNK_DEPTH;
+                    if (localY < 0) localY += SUBCHUNK_HEIGHT;
+
+                    int subChunkIndex = (y - ((int)GetGlobalPosition().y - MAINCHUNK_HEIGHT)) / SUBCHUNK_HEIGHT;
+
+                    if (subChunkIndex < 0 || subChunkIndex >= subChunks.size())
+                        continue;
+
+                    SubChunk* targetSubChunk = subChunks[subChunkIndex - 1];
+                    Block* block = targetSubChunk->GetBlock(localX, localY, localZ);
+
+                    if (block)
+                        collidableBlocks.push_back(block);  
+                }
+            }
+        }
+    }
+
+    return collidableBlocks;
 }
