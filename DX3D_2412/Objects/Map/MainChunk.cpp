@@ -128,5 +128,5 @@ Block* MainChunk::GetCollidableBlocks(UINT range)
     SubChunk* subChunk = subChunks[subChunkIndex];
     Vector3 localPos(localX, (int)playerPos.y % SUBCHUNK_HEIGHT, localZ);
 
-    return subChunk->GetBlock(localPos);
+    return subChunk->GetBlock(localPos.x, localPos.y, localPos.z);
 }
