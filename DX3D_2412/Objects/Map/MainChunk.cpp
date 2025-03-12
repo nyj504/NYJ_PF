@@ -106,6 +106,7 @@ void MainChunk::SetInstanceData()
     }
 }
 
+
 Block* MainChunk::GetCollidableBlocks(UINT range)
 {
     unordered_set<Block*> collidableBlocks;

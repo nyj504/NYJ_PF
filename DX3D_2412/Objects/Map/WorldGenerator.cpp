@@ -102,12 +102,11 @@ void WorldGenerator::UpdateChunks()
 
 void WorldGenerator::SetInstanceData(MainChunk* chunk)
 {
-    vector<InstanceData>totalSingleInstanceData = chunk->GetTotalSingleInstanceDatas();
-    totalMultiInstanceDatas = chunk->GetTotalMultiInstanceDatas();
-    
-    UINT totalMultiInstanceDataCount = totalSingleInstanceDatas.size();
+    vector<InstanceData> newSingleInstanceData = chunk->GetTotalSingleInstanceDatas();
+    vector<InstanceData> newMultiInstanceData = chunk->GetTotalMultiInstanceDatas();
 
-    UpdateInstanceBuffer();
+    totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
+    totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
 }
 
 void WorldGenerator::UpdateInstanceBuffer()
@@ -164,6 +163,15 @@ void WorldGenerator::UpdateInstanceBuffer()
             );
         }
     }
+}
+
+void WorldGenerator::ReserveInstanceData(size_t singleSize, size_t multiSize)
+{
+    totalSingleInstanceDatas.clear();
+    totalMultiInstanceDatas.clear();
+
+    totalSingleInstanceDatas.reserve(singleSize);
+    totalMultiInstanceDatas.reserve(multiSize);
 }
 
 vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)

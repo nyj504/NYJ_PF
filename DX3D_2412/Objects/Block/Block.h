@@ -20,6 +20,9 @@ public:
 
 public:
 	void Update();
+	void Render();
+
+	void EnableCollider();
 
 	UINT GetItemKey() const { return itemData.key; }
 	
@@ -52,4 +55,5 @@ protected:
 
 private:
 	UVInfo uvInfo;
+	BoxCollider* collider = nullptr;
 };

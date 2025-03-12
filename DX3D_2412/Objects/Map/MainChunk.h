@@ -14,7 +14,7 @@ public:
     void Render();
     void MergeHeightMap(MainChunk* neighbor);
     void SetInstanceData();
-
+  
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
 

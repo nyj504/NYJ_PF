@@ -25,6 +25,7 @@ public:
 	void UpdateChunks();
 	void SetInstanceData(MainChunk* chunk);
 	void UpdateInstanceBuffer();
+	void ReserveInstanceData(size_t singleSize, size_t multiSize);
 
 	vector<MainChunk*> GetChunksInRange(int distance);
 private:

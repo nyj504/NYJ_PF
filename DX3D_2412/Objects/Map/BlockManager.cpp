@@ -38,7 +38,7 @@ void BlockManager::Update()
 	
 	if (distanceMoved >= 1)
 	{
-		ActivateCollisionBlocks();
+		//ActivateCollisionBlocks();
 	}
 
 	if (distanceMoved >= updateThreshold)
@@ -189,16 +189,16 @@ void BlockManager::ActivateCollisionBlocks()
 			{
 				MainChunk* mainChunk = activeChunks[chunkKey];
 
-				vector<Block*> collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
+				//vector<Block*> collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
 
-				for (Block* block : collidableBlocks)
-				{
-					if (block) 
-					{
-						block->EnableCollider();
-						activeBlocks.push_back(block);
-					}
-				}
+				//for (Block* block : collidableBlocks)
+				//{
+				//	if (block) 
+				//	{
+				//		block->EnableCollider();
+				//		activeBlocks.push_back(block);
+				//	}
+				//}
 			}
 		}
 	}
@@ -214,20 +214,29 @@ void BlockManager::ActivateRenderingChunks()
 
 	vector<MainChunk*> surroundingChunks = worldGenerator->GetChunksInRange(renderDistance);
 
+	size_t totalSingleInstanceSize = 0;
+	size_t totalMultiInstanceSize = 0;
+
 	for (MainChunk* chunk : surroundingChunks)
 	{
 		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetGlobalPosition().x / CHUNK_WIDTH,
 			chunk->GetGlobalPosition().z / CHUNK_DEPTH);
 		chunk->SetInstanceData();
 		
+		totalSingleInstanceSize += chunk->GetTotalSingleInstanceDatas().size();
+		totalMultiInstanceSize += chunk->GetTotalMultiInstanceDatas().size();
+
 		activeChunks[chunkKey] = chunk;
 	}
+
+	worldGenerator->ReserveInstanceData(totalSingleInstanceSize, totalMultiInstanceSize);
 
 	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 	{
 		worldGenerator->SetInstanceData(chunk.second);
 	}
-	
+	worldGenerator->UpdateInstanceBuffer();
+
 }
 
 //Block* BlockManager::GetSelectedBlock()
