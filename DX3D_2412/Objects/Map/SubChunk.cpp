@@ -3,20 +3,10 @@
 
 SubChunk::SubChunk(int index) : index(index)
 {
-	singleFaceBlock = new Cube();
-	singleFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");
-	singleFaceBlock->GetMaterial()->SetShader(L"Instancing/Instancing.hlsl");
-	
-	multiFaceBlock = new Cube();
-	multiFaceBlock->ApplyObjectUVMapping();
-	multiFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap2.png");
-	multiFaceBlock->GetMaterial()->SetShader(L"Instancing/MultiFaceInstancing.hlsl");
 }
 
 SubChunk::~SubChunk()
 {
-	delete singleFaceBlock;
-	delete multiFaceBlock;
 }
 
 
@@ -26,19 +16,7 @@ void SubChunk::Update()
 
 void SubChunk::Render()
 {
-	if (!singleInstanceBuffer && !multiInstanceBuffer) return;
-
-	if (singleInstanceBuffer)
-	{
-		singleInstanceBuffer->Set(1);
-		singleFaceBlock->RenderInstanced(visibleSingleInstanceDatas.size());
-	}
-
-	if (multiInstanceBuffer)
-	{
-		multiInstanceBuffer->Set(1);
-		multiFaceBlock->RenderInstanced(visibleMultiInstanceDatas.size());
-	}
+	
 }
 
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1])
@@ -125,21 +103,19 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 			}
 		}
 	}
-
-	UpdateInstanceBuffer();
 }
 
 
-Block* SubChunk::GetBlock(Vector3 localPos)
+Block* SubChunk::GetBlock(int x, int y, int z)
 {
-	if (localPos.x < 0 || localPos.x >= CHUNK_WIDTH ||
-		localPos.y < 0 || localPos.y >= SUBCHUNK_HEIGHT ||
-		localPos.z < 0 || localPos.z >= CHUNK_DEPTH)
+	if (x < 0 || x >= CHUNK_WIDTH ||
+		y < 0 || y >= SUBCHUNK_HEIGHT ||
+		z < 0 || z >= CHUNK_DEPTH)
 	{
 		return nullptr;
 	}
 
-	UINT index = (localPos.x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (localPos.y * CHUNK_DEPTH) + localPos.z;
+	UINT index = (x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (y * CHUNK_DEPTH) + z;
 
 	auto it = blocks.find(index);
 	if (it == blocks.end()) return nullptr;
@@ -161,15 +137,14 @@ void SubChunk::FindSurroundedBlocks()
 		{
 			for (int y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
-				Vector3 pos = { (float)x, (float)y, (float)z };
-				Block* block = GetBlock({pos.x, pos.y, pos.z});
+				Block* block = GetBlock(x, y, z);
 				if (!block) continue;
 
 				Vector3 blockWorldPos = block->GetGlobalPosition();
 
-				if (GetBlock({ pos.x + 1, pos.y, pos.z }) && GetBlock({ pos.x - 1, pos.y,pos.z }) &&
-					GetBlock({ pos.x, pos.y + 1, pos.z }) && GetBlock({ pos.x, pos.y - 1, pos.z }) &&
-					GetBlock({ pos.x, pos.y, pos.z + 1 }) && GetBlock({ pos.x, pos.y, pos.z - 1 }))
+				if (GetBlock(x + 1, y, z) && GetBlock(x - 1, y, z) &&
+					GetBlock(x, y + 1, z) && GetBlock(x, y - 1, z) &&
+					GetBlock(x, y, z + 1) && GetBlock(x, y, z - 1))
 				{
 					continue;
 				} // 오클루젼 
@@ -215,65 +190,5 @@ void SubChunk::FindSurroundedBlocks()
 void SubChunk::CheckVisibleBlocks()
 {
 	FindSurroundedBlocks();
-
-	if (!visibleSingleInstanceDatas.empty() || !visibleMultiInstanceDatas.empty())
-	{
-		UpdateInstanceBuffer();
-	}
 }
 
-void SubChunk::UpdateInstanceBuffer()
-{
-	if (visibleSingleInstanceDatas.empty())
-	{
-		if (singleInstanceBuffer)
-		{
-			delete singleInstanceBuffer;
-			singleInstanceBuffer = nullptr;
-		}
-	}
-	else
-	{
-		if (!singleInstanceBuffer)
-		{
-			singleInstanceBuffer = new VertexBuffer(
-				visibleSingleInstanceDatas.data(),
-				sizeof(InstanceData),
-				(UINT)visibleSingleInstanceDatas.size()
-			);
-		}
-		else
-		{
-			singleInstanceBuffer->Update(
-				visibleSingleInstanceDatas.data(),
-				sizeof(InstanceData) * (UINT)visibleSingleInstanceDatas.size()
-			);
-		}
-	}
-	if (visibleMultiInstanceDatas.empty())
-	{
-		if (multiInstanceBuffer)
-		{
-			delete multiInstanceBuffer;
-			multiInstanceBuffer = nullptr;
-		}
-	}
-	else
-	{
-		if (!multiInstanceBuffer)
-		{
-			multiInstanceBuffer = new VertexBuffer(
-				visibleMultiInstanceDatas.data(),
-				sizeof(InstanceData),
-				(UINT)visibleMultiInstanceDatas.size()
-			);
-		}
-		else
-		{
-			multiInstanceBuffer->Update(
-				visibleMultiInstanceDatas.data(),
-				sizeof(InstanceData) * (UINT)visibleMultiInstanceDatas.size()
-			);
-		}
-	}
-}

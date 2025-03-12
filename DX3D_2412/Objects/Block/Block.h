@@ -6,7 +6,7 @@ struct UVInfo
 };
 
 
-class Block : public BoxCollider
+class Block : public Transform
 {
 private:
 	enum ItemType

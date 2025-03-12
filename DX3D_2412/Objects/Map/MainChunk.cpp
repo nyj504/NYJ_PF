@@ -74,10 +74,6 @@ void MainChunk::Update()
 
 void MainChunk::Render()
 {
-    for (SubChunk* subChunk : subChunks)
-    {
-        subChunk->Render();
-    }
 }
 
 void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
@@ -99,11 +95,14 @@ void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
     }
 }
 
-void MainChunk::CheckVisibleBlock()
+void MainChunk::SetInstanceData()
 {
     for (SubChunk* subChunk : subChunks)
     {
         subChunk->CheckVisibleBlocks();
+
+        totalSingleInstanceDatas = subChunk->GetVisibleSingleInstanceData();
+        totalMultiInstanceDatas = subChunk->GetVisibleMultiInstanceData();
     }
 }
 
@@ -128,5 +127,5 @@ Block* MainChunk::GetCollidableBlocks(UINT range)
     SubChunk* subChunk = subChunks[subChunkIndex];
     Vector3 localPos(localX, (int)playerPos.y % SUBCHUNK_HEIGHT, localZ);
 
-    return subChunk->GetBlock(localPos);
+    return subChunk->GetBlock(localPos.x, localPos.y, localPos.z);
 }

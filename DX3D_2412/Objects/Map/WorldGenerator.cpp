@@ -4,11 +4,49 @@
 WorldGenerator::WorldGenerator()
 {
     CreateWorld();
+
+    singleFaceBlock = new Cube();
+    singleFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");
+    singleFaceBlock->GetMaterial()->SetShader(L"Instancing/Instancing.hlsl");
+
+    multiFaceBlock = new Cube();
+    multiFaceBlock->ApplyObjectUVMapping();
+    multiFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap2.png");
+    multiFaceBlock->GetMaterial()->SetShader(L"Instancing/MultiFaceInstancing.hlsl");
 }
 
 WorldGenerator::~WorldGenerator()
 {
+    delete singleFaceBlock;
+    delete multiFaceBlock;
 
+    if (singleInstanceBuffer)
+        delete singleInstanceBuffer;
+
+    if (multiInstanceBuffer)
+        delete multiInstanceBuffer;
+}
+
+void WorldGenerator::Update()
+{
+}
+
+void WorldGenerator::Render()
+{
+    if (!singleInstanceBuffer && !multiInstanceBuffer) return;
+
+    if (singleInstanceBuffer)
+    {
+        singleInstanceBuffer->Set(1);
+        UINT size = totalSingleInstanceDatas.size();
+        singleFaceBlock->RenderInstanced(totalSingleInstanceDatas.size());
+    }
+
+    if (multiInstanceBuffer)
+    {
+        multiInstanceBuffer->Set(1);
+        multiFaceBlock->RenderInstanced(totalMultiInstanceDatas.size());
+    }
 }
 
 void WorldGenerator::CreateWorld()
@@ -60,11 +98,71 @@ void WorldGenerator::CreateWorld()
 
 void WorldGenerator::UpdateChunks()
 {
-    vector<MainChunk*> activeChunks = GetChunksInRange(2);
+}
 
-    for (MainChunk* chunk : activeChunks)
+void WorldGenerator::SetInstanceData(MainChunk* chunk)
+{
+    vector<InstanceData>totalSingleInstanceData = chunk->GetTotalSingleInstanceDatas();
+    totalMultiInstanceDatas = chunk->GetTotalMultiInstanceDatas();
+    
+    UINT totalMultiInstanceDataCount = totalSingleInstanceDatas.size();
+
+    UpdateInstanceBuffer();
+}
+
+void WorldGenerator::UpdateInstanceBuffer()
+{
+    if (totalSingleInstanceDatas.empty())
     {
-        chunk->Update();
+        if (singleInstanceBuffer)
+        {
+            delete singleInstanceBuffer;
+            singleInstanceBuffer = nullptr;
+        }
+    }
+    else
+    {
+        if (!singleInstanceBuffer)
+        {
+            singleInstanceBuffer = new VertexBuffer(
+                totalSingleInstanceDatas.data(),
+                sizeof(InstanceData),
+                (UINT)totalSingleInstanceDatas.size()
+            );
+        }
+        else
+        {
+            singleInstanceBuffer->Update(
+                totalSingleInstanceDatas.data(),
+                sizeof(InstanceData) * (UINT)totalSingleInstanceDatas.size()
+            );
+        }
+    }
+    if (totalMultiInstanceDatas.empty())
+    {
+        if (multiInstanceBuffer)
+        {
+            delete multiInstanceBuffer;
+            multiInstanceBuffer = nullptr;
+        }
+    }
+    else
+    {
+        if (!multiInstanceBuffer)
+        {
+            multiInstanceBuffer = new VertexBuffer(
+                totalMultiInstanceDatas.data(),
+                sizeof(InstanceData),
+                (UINT)totalMultiInstanceDatas.size()
+            );
+        }
+        else
+        {
+            multiInstanceBuffer->Update(
+                totalMultiInstanceDatas.data(),
+                sizeof(InstanceData) * (UINT)totalMultiInstanceDatas.size()
+            );
+        }
     }
 }
 
@@ -88,6 +186,6 @@ vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)
             }
         }
     }
-
+ 
     return surroundingChunks;
 }
