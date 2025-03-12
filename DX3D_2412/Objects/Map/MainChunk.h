@@ -13,8 +13,13 @@ public:
     void Update();
     void Render();
     void MergeHeightMap(MainChunk* neighbor);
-    void CheckVisibleBlock();
-    vector<Block*> GetCollidableBlocks(UINT range);
+    void SetInstanceData();
+
+    vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
+    vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
+
+
+    Block* GetCollidableBlocks(UINT range);
 
     pair<int, int> GetIndex() const { return chunkIndex; }
 
@@ -27,4 +32,8 @@ private:
     vector<SubChunk*>subChunks;
   
     pair<int, int>chunkIndex;
+
+    vector<InstanceData> totalSingleInstanceDatas;
+    vector<InstanceData> totalMultiInstanceDatas;
+
 };

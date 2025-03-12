@@ -5,6 +5,7 @@ struct UVInfo
 	Vector2 uvStart, uvEnd;
 };
 
+
 class Block : public Transform
 {
 private:
@@ -19,10 +20,6 @@ public:
 
 public:
 	void Update();
-	void Render();
-
-	void EnableCollider();
-	void DisableCollider();
 
 	UINT GetItemKey() const { return itemData.key; }
 	
@@ -54,6 +51,5 @@ protected:
 	ItemData itemData;
 
 private:
-	BoxCollider* collider = nullptr;
 	UVInfo uvInfo;
 };

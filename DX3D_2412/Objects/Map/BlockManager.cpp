@@ -6,7 +6,6 @@ BlockManager::BlockManager()
 
 	lastPlayerPos = PLAYER->GetGlobalPosition();
 	//Load();
-	ActivateRenderingChunks();
 }
 
 BlockManager::~BlockManager()
@@ -22,7 +21,6 @@ BlockManager::~BlockManager()
 		delete chunk.second;
 	}
 	activeChunks.clear();
-
 }
 
 void BlockManager::Update()
@@ -77,10 +75,7 @@ void BlockManager::Render()
 	//	{
 	//		block->Render();
 	////	}
-	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
-	{
-		chunk.second->Render();
-	}
+	worldGenerator->Render();
 	
 	if (!activeBlocks.empty())
 	{
@@ -223,10 +218,16 @@ void BlockManager::ActivateRenderingChunks()
 	{
 		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetGlobalPosition().x / CHUNK_WIDTH,
 			chunk->GetGlobalPosition().z / CHUNK_DEPTH);
-		chunk->CheckVisibleBlock();
+		chunk->SetInstanceData();
 		
 		activeChunks[chunkKey] = chunk;
 	}
+
+	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
+	{
+		worldGenerator->SetInstanceData(chunk.second);
+	}
+	
 }
 
 //Block* BlockManager::GetSelectedBlock()

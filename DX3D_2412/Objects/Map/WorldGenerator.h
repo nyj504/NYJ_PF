@@ -18,8 +18,13 @@ public:
 	WorldGenerator();
 	~WorldGenerator();
 
+	void Update();
+	void Render();
+
 	void CreateWorld();
 	void UpdateChunks();
+	void SetInstanceData(MainChunk* chunk);
+	void UpdateInstanceBuffer();
 
 	vector<MainChunk*> GetChunksInRange(int distance);
 private:
@@ -28,4 +33,14 @@ private:
 	unordered_map<UINT64, MainChunk*>mainChunks;
 	queue<UINT> availableChunkIndices;  // 사용할 수 있는 인덱스 목록
 	UINT nextChunkIndex = 0; 
+
+	Cube* singleFaceBlock;
+	Cube* multiFaceBlock;
+
+	vector<InstanceData> totalSingleInstanceDatas;
+	vector<InstanceData> totalMultiInstanceDatas;
+
+	VertexBuffer* singleInstanceBuffer;
+	VertexBuffer* multiInstanceBuffer;
+
 };
