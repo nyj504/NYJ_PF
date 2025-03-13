@@ -5,6 +5,13 @@ struct UVInfo
 	Vector2 uvStart, uvEnd;
 };
 
+struct InstanceData
+{
+	Matrix transform = XMMatrixIdentity();
+	Vector2 curFrame;
+	Vector2 maxFrame;
+	class Block* block;
+};
 
 class Block : public Transform
 {
@@ -30,6 +37,7 @@ public:
 
 	virtual void Damage();
 	
+	bool HasCollider() { return hasCollider; }
 	int GetHp() { return curHp; }
 	void SetIndex(UINT index) { this->index = index; }
 	UINT GetIndex() { return index; }
@@ -54,6 +62,7 @@ protected:
 	ItemData itemData;
 
 private:
+	bool hasCollider = false;
 	UVInfo uvInfo;
 	BoxCollider* collider = nullptr;
 };

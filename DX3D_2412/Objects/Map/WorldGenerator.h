@@ -25,6 +25,7 @@ public:
 	void UpdateChunks();
 	void SetInstanceData(MainChunk* chunk);
 	void UpdateInstanceBuffer();
+	void ActivateBlocks();
 	void ReserveInstanceData(size_t singleSize, size_t multiSize);
 
 	vector<MainChunk*> GetChunksInRange(int distance);
@@ -34,6 +35,8 @@ private:
 	unordered_map<UINT64, MainChunk*>mainChunks;
 	queue<UINT> availableChunkIndices;  // 사용할 수 있는 인덱스 목록
 	UINT nextChunkIndex = 0; 
+
+	vector<SubChunk*>subchunks;
 
 	Cube* singleFaceBlock;
 	Cube* multiFaceBlock;

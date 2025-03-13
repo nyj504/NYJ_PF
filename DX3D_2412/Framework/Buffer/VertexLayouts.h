@@ -1,5 +1,4 @@
 #pragma once
-
 //Vertex(정점) : 3차원 공간에서의 한점
 struct Vertex
 {
@@ -60,14 +59,6 @@ struct VertexUVNormalTangent
         : pos(x, y, z), uv(u, v)
     {
     }
-};
-
-struct InstanceData
-{
-    Matrix transform = XMMatrixIdentity();
-    Vector2 curFrame;
-    Vector2 maxFrame;
-    UINT key;
 };
 
 struct VertexUVNormalTangentBlend

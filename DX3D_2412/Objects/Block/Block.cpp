@@ -43,6 +43,8 @@ void Block::EnableCollider()
         collider = new BoxCollider();
         collider->SetParent(this);
         collider->UpdateWorld();
+
+        hasCollider = true;
     }
 }
 

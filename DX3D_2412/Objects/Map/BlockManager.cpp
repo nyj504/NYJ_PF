@@ -38,19 +38,16 @@ void BlockManager::Update()
 	
 	if (distanceMoved >= 1)
 	{
-		ActivateCollisionBlocks();
+		worldGenerator->ActivateBlocks();
+		worldGenerator->Update();
 	}
 
 	if (distanceMoved >= updateThreshold)
 	{
 		lastPlayerPos = currentPlayerPos;
 		ActivateRenderingChunks();
-
-		for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
-		{
-			chunk.second->Update();
-		}
 	}
+
 }
 
 void BlockManager::Render()

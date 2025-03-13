@@ -20,6 +20,11 @@ WorldGenerator::~WorldGenerator()
     delete singleFaceBlock;
     delete multiFaceBlock;
 
+    for (SubChunk* subchunk : subchunks)
+    {
+        delete subchunk;
+    }
+
     if (singleInstanceBuffer)
         delete singleInstanceBuffer;
 
@@ -29,6 +34,10 @@ WorldGenerator::~WorldGenerator()
 
 void WorldGenerator::Update()
 {
+    for (SubChunk* subchunk : subchunks)
+    {
+        subchunk->Update();
+    }
 }
 
 void WorldGenerator::Render()
@@ -38,7 +47,6 @@ void WorldGenerator::Render()
     if (singleInstanceBuffer)
     {
         singleInstanceBuffer->Set(1);
-        UINT size = totalSingleInstanceDatas.size();
         singleFaceBlock->RenderInstanced(totalSingleInstanceDatas.size());
     }
 
@@ -46,6 +54,11 @@ void WorldGenerator::Render()
     {
         multiInstanceBuffer->Set(1);
         multiFaceBlock->RenderInstanced(totalMultiInstanceDatas.size());
+    }
+
+    for (SubChunk* subchunk : subchunks)
+    {
+        subchunk->Render();
     }
 }
 
@@ -161,6 +174,21 @@ void WorldGenerator::UpdateInstanceBuffer()
                 totalMultiInstanceDatas.data(),
                 sizeof(InstanceData) * (UINT)totalMultiInstanceDatas.size()
             );
+        }
+    }
+}
+
+void WorldGenerator::ActivateBlocks()
+{
+    vector<MainChunk*>chunks = GetChunksInRange(1);
+   
+    for (MainChunk* chunk : chunks)
+    {
+        vector<SubChunk*> chunkSubchunks = chunk->GetSubchunks();
+
+        for (SubChunk* subchunk : chunkSubchunks)
+        {
+            subchunks.push_back(subchunk);
         }
     }
 }

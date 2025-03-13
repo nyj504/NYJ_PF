@@ -13,6 +13,22 @@ MainChunk::~MainChunk()
     }
 }
 
+void MainChunk::Update()
+{
+    for (SubChunk* subChunk : subChunks)
+    {
+        subChunk->Update();
+    }
+}
+
+void MainChunk::Render()
+{
+    for (SubChunk* subChunk : subChunks)
+    {
+        subChunk->Render();
+    }
+}
+
 void MainChunk::GenerateTerrain(Vector3 pos)
 {
     PerlinNoise perlin((int)terrainType * 100);
@@ -63,19 +79,6 @@ void MainChunk::GenerateTerrain(Vector3 pos)
     }
 }
 
-
-void MainChunk::Update()
-{
-    for (SubChunk* subChunk : subChunks)
-    {
-        subChunk->Update();
-    }
-}
-
-void MainChunk::Render()
-{
-}
-
 void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
 {
     if (!neighborChunk) return;
@@ -109,45 +112,3 @@ void MainChunk::SetInstanceData()
     }
 }
 
-
-vector<Block*> MainChunk::GetCollidableBlocks(int range)
-{
-    Vector3 playerPos = PLAYER->GetGlobalPosition();
-    vector<Block*> blocks;
-
-    float minChunkPosX = this->GetGlobalPosition().x - CHUNK_WIDTH;
-    float maxChunkPosX = this->GetGlobalPosition().x + CHUNK_WIDTH;
-    float minChunkPosZ = this->GetGlobalPosition().z - CHUNK_DEPTH;
-    float maxChunkPosZ = this->GetGlobalPosition().z + CHUNK_DEPTH;
-
-    if (minChunkPosX < playerPos.x && maxChunkPosX > playerPos.x
-        && minChunkPosZ < playerPos.z && maxChunkPosZ > playerPos.z)
-    {
-        int localX = 0;
-        int localY = 0;
-        int localZ = 0;
-
-        int subChunkIndex = (int)(playerPos.y / SUBCHUNK_HEIGHT);
-
-        SubChunk* subChunk = subChunks[subChunkIndex];
-
-        for (int x = -range; x < range; x++)
-        {
-            for (int z = -range; z < range; z++)
-            {
-                for (int y = -range; y < range; y++)
-                {
-                    localX = (int)playerPos.x < 0 ? ((int)playerPos.x + x) + CHUNK_WIDTH : ((int)playerPos.x + x) % CHUNK_WIDTH;
-                    localY = (int)playerPos.y < 0 ? ((int)playerPos.y + y) + SUBCHUNK_HEIGHT : ((int)playerPos.y + y) % SUBCHUNK_HEIGHT;
-                    localZ = (int)playerPos.z < 0 ? ((int)playerPos.z + z) + CHUNK_DEPTH : ((int)playerPos.z + z) % CHUNK_DEPTH;
-
-                    Block* block = subChunk->GetBlock(localX, localY, localZ);
-                    if (block)
-                        blocks.push_back(block);
-                }
-            }
-        }
-
-        return blocks;
-    }
-}

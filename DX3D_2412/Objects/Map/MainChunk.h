@@ -9,12 +9,17 @@ public:
     MainChunk(Vector3 pos, TerrainType terrainType);
     ~MainChunk();
 
+    void Update();
+    void Render();
+
     void GenerateTerrain(Vector3 pos);
     void MergeHeightMap(MainChunk* neighbor);
     void SetInstanceData();
   
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
+
+    vector<SubChunk*>GetSubchunks() { return subChunks; }
 
     pair<int, int> GetIndex() const { return chunkIndex; }
 

@@ -9,6 +9,30 @@ SubChunk::~SubChunk()
 {
 }
 
+void SubChunk::Update()
+{
+	for (auto& pair : blocks)
+	{
+		Block& block = pair.second;
+		if (!block.HasCollider())
+		{
+			block.EnableCollider();
+		}
+	}
+}
+
+void SubChunk::Render()
+{
+	for (auto& pair : blocks)
+	{
+		Block& block = pair.second;
+		if (block.HasCollider())
+		{
+			block.Render();
+		}
+	}
+}
+
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1])
 {
 	blocks.clear(); 
@@ -141,39 +165,22 @@ void SubChunk::FindSurroundedBlocks()
 
 				//if (abs(playerPos.x - blockWorldPos.x) < 16 &&
 				//	abs(playerPos.z - blockWorldPos.z) < 16)
-				
+				InstanceData visibleInstanceData;
+				UVInfo uvInfo = block->GetUVInfo();
+\
+				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
+				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
+
+				visibleInstanceData.curFrame = uvInfo.uvStart;
+				visibleInstanceData.maxFrame = uvInfo.uvEnd;
+				visibleInstanceData.block = block;
+
 				if (block->IsNormal())
 				{
-					visibleBlocks.push_back(block);
-
-					InstanceData visibleInstanceData;
-					UVInfo uvInfo = block->GetUVInfo();
-
-					visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
-					visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
-
-					visibleInstanceData.curFrame = uvInfo.uvStart;
-					visibleInstanceData.maxFrame = uvInfo.uvEnd;
-					
-					visibleInstanceData.key = block->GetItemKey();
-
 					visibleSingleInstanceDatas.push_back(visibleInstanceData);
 				}
 				else
 				{
-					visibleBlocks.push_back(block);
-
-					InstanceData visibleInstanceData;
-					UVInfo uvInfo = block->GetUVInfo();
-
-					visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
-					visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
-
-					visibleInstanceData.curFrame = uvInfo.uvStart;
-					visibleInstanceData.maxFrame = uvInfo.uvEnd;
-
-					visibleInstanceData.key = block->GetItemKey();
-
 					visibleMultiInstanceDatas.push_back(visibleInstanceData);
 				}
 			}
