@@ -101,32 +101,53 @@ void MainChunk::SetInstanceData()
     {
         subChunk->CheckVisibleBlocks();
 
-        totalSingleInstanceDatas = subChunk->GetVisibleSingleInstanceData();
-        totalMultiInstanceDatas = subChunk->GetVisibleMultiInstanceData();
+        vector<InstanceData> newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
+        vector<InstanceData> newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
+
+        totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
+        totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
     }
 }
 
 
-Block* MainChunk::GetCollidableBlocks(UINT range)
+vector<Block*> MainChunk::GetCollidableBlocks(int range)
 {
-    unordered_set<Block*> collidableBlocks;
-
-    collidableBlocks.clear(); 
     Vector3 playerPos = PLAYER->GetGlobalPosition();
+    vector<Block*> blocks;
 
-    int localX = (int)playerPos.x % CHUNK_WIDTH;
-    int localZ = (int)playerPos.z % CHUNK_DEPTH;
+    float minChunkPosX = this->GetGlobalPosition().x - CHUNK_WIDTH;
+    float maxChunkPosX = this->GetGlobalPosition().x + CHUNK_WIDTH;
+    float minChunkPosZ = this->GetGlobalPosition().z - CHUNK_DEPTH;
+    float maxChunkPosZ = this->GetGlobalPosition().z + CHUNK_DEPTH;
 
-    if (localX < 0) localX += CHUNK_WIDTH;
-    if (localZ < 0) localZ += CHUNK_DEPTH;
+    if (minChunkPosX < playerPos.x && maxChunkPosX > playerPos.x
+        && minChunkPosZ < playerPos.z && maxChunkPosZ > playerPos.z)
+    {
+        int localX = 0;
+        int localY = 0;
+        int localZ = 0;
 
-    int subChunkIndex = (int)(playerPos.y / SUBCHUNK_HEIGHT);
-   
-    if (subChunkIndex < 0 || subChunkIndex >= subChunks.size())
-        return nullptr;
+        int subChunkIndex = (int)(playerPos.y / SUBCHUNK_HEIGHT);
 
-    SubChunk* subChunk = subChunks[subChunkIndex];
-    Vector3 localPos(localX, (int)playerPos.y % SUBCHUNK_HEIGHT, localZ);
+        SubChunk* subChunk = subChunks[subChunkIndex];
 
-    return subChunk->GetBlock(localPos.x, localPos.y, localPos.z);
+        for (int x = -range; x < range; x++)
+        {
+            for (int z = -range; z < range; z++)
+            {
+                for (int y = -range; y < range; y++)
+                {
+                    localX = (int)playerPos.x < 0 ? ((int)playerPos.x + x) + CHUNK_WIDTH : ((int)playerPos.x + x) % CHUNK_WIDTH;
+                    localY = (int)playerPos.y < 0 ? ((int)playerPos.y + y) + SUBCHUNK_HEIGHT : ((int)playerPos.y + y) % SUBCHUNK_HEIGHT;
+                    localZ = (int)playerPos.z < 0 ? ((int)playerPos.z + z) + CHUNK_DEPTH : ((int)playerPos.z + z) % CHUNK_DEPTH;
+
+                    Block* block = subChunk->GetBlock(localX, localY, localZ);
+                    if (block)
+                        blocks.push_back(block);
+                }
+            }
+        }
+
+        return blocks;
+    }
 }

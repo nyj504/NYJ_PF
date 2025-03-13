@@ -10,16 +10,11 @@ public:
     ~MainChunk();
 
     void GenerateTerrain(Vector3 pos);
-    void Update();
-    void Render();
     void MergeHeightMap(MainChunk* neighbor);
     void SetInstanceData();
   
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
-
-
-    Block* GetCollidableBlocks(UINT range);
 
     pair<int, int> GetIndex() const { return chunkIndex; }
 

@@ -6,9 +6,6 @@ public:
 	SubChunk(int index);
 	~SubChunk();
 
-	void Update();
-	void Render();
-
 	Block* GetBlock(int x, int y, int z);
 	
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1]);

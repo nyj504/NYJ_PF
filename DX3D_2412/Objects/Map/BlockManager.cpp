@@ -38,7 +38,7 @@ void BlockManager::Update()
 	
 	if (distanceMoved >= 1)
 	{
-		//ActivateCollisionBlocks();
+		ActivateCollisionBlocks();
 	}
 
 	if (distanceMoved >= updateThreshold)
@@ -51,16 +51,7 @@ void BlockManager::Update()
 			chunk.second->Update();
 		}
 	}
-
-	if (!activeBlocks.empty())
-	{
-		for (Block* activeBlock : activeBlocks)
-		{
-			if (activeBlock)
-				activeBlock->Update();
-		}
-	}
-;}
+}
 
 void BlockManager::Render()
 {
@@ -76,15 +67,6 @@ void BlockManager::Render()
 	//		block->Render();
 	////	}
 	worldGenerator->Render();
-	
-	if (!activeBlocks.empty())
-	{
-		for (Block* activeBlock : activeBlocks)
-		{
-			if (activeBlock)
-				activeBlock->Render();
-		}
-	}
 }
 
 void BlockManager::PostRender()
@@ -173,7 +155,6 @@ void BlockManager::ActivateCollisionBlocks()
 {
 	UINT updateDistance = 7;
 
-	activeBlocks.clear();
 	Vector3 playerPos = PLAYER->GetGlobalPosition();
 
 	int chunkX = (int)(playerPos.x / CHUNK_WIDTH);
@@ -188,17 +169,6 @@ void BlockManager::ActivateCollisionBlocks()
 			if (activeChunks.find(chunkKey) != activeChunks.end())
 			{
 				MainChunk* mainChunk = activeChunks[chunkKey];
-
-				//vector<Block*> collidableBlocks = mainChunk->GetCollidableBlocks(updateDistance);
-
-				//for (Block* block : collidableBlocks)
-				//{
-				//	if (block) 
-				//	{
-				//		block->EnableCollider();
-				//		activeBlocks.push_back(block);
-				//	}
-				//}
 			}
 		}
 	}

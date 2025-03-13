@@ -67,6 +67,7 @@ struct InstanceData
     Matrix transform = XMMatrixIdentity();
     Vector2 curFrame;
     Vector2 maxFrame;
+    UINT key;
 };
 
 struct VertexUVNormalTangentBlend

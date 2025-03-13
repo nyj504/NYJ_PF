@@ -9,16 +9,6 @@ SubChunk::~SubChunk()
 {
 }
 
-
-void SubChunk::Update()
-{
-}
-
-void SubChunk::Render()
-{
-	
-}
-
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1])
 {
 	blocks.clear(); 
@@ -164,6 +154,8 @@ void SubChunk::FindSurroundedBlocks()
 
 					visibleInstanceData.curFrame = uvInfo.uvStart;
 					visibleInstanceData.maxFrame = uvInfo.uvEnd;
+					
+					visibleInstanceData.key = block->GetItemKey();
 
 					visibleSingleInstanceDatas.push_back(visibleInstanceData);
 				}
@@ -179,6 +171,8 @@ void SubChunk::FindSurroundedBlocks()
 
 					visibleInstanceData.curFrame = uvInfo.uvStart;
 					visibleInstanceData.maxFrame = uvInfo.uvEnd;
+
+					visibleInstanceData.key = block->GetItemKey();
 
 					visibleMultiInstanceDatas.push_back(visibleInstanceData);
 				}
