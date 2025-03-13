@@ -1,12 +1,4 @@
 #pragma once
-struct pair_hash
-{
-	template <class T1, class T2>
-	size_t operator()(const pair<T1, T2>& p) const
-	{
-		return hash<T1>{}(p.first) ^ (hash<T2>{}(p.second) << 1);
-	}
-};
 
 class WorldGenerator
 {
@@ -22,10 +14,12 @@ public:
 	void Render();
 
 	void CreateWorld();
-	void UpdateChunks();
+
+	vector<MainChunk*> GetClosestMainChunks();
+
 	void SetInstanceData(MainChunk* chunk);
 	void UpdateInstanceBuffer();
-	void ActivateBlocks();
+
 	void ReserveInstanceData(size_t singleSize, size_t multiSize);
 
 	vector<MainChunk*> GetChunksInRange(int distance);
@@ -33,10 +27,7 @@ private:
 	TerrainType terrainType = TerrainType::PLAINS;
 
 	unordered_map<UINT64, MainChunk*>mainChunks;
-	queue<UINT> availableChunkIndices;  // 사용할 수 있는 인덱스 목록
-	UINT nextChunkIndex = 0; 
-
-	vector<SubChunk*>subchunks;
+	vector<MainChunk*>closestChunks;
 
 	Cube* singleFaceBlock;
 	Cube* multiFaceBlock;

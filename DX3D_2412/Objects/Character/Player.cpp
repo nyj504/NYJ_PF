@@ -16,34 +16,30 @@ Player::~Player()
 
 void Player::Update()
 {
-	if (KEY->Down('C'))
+	//if (KEY->Down('C'))
+	//{
+	//	isCreativeMode = !isCreativeMode;
+	//}
+	//
+	//if (isCreativeMode)
+	//{
+	//	velocity = Vector3(0, 0, 0);
+	//
+	//	velocity.y = 0;
+	//}
+	if (jumpTime > 0)
 	{
-		isCreativeMode = !isCreativeMode;
-		if (isCreativeMode)
-		{
-			velocity = Vector3(0, 0, 0); 
-		}
-	}
-
-	if (isCreativeMode)
-	{
-		velocity.y = 0; 
-	}
-	else
-	{
-		if (jumpTime >= 0)
-		{
-			jumpTime -= DELTA;
-		}
+		jumpTime -= DELTA;
 	}
 
 	Character::Update();
-
+	PlayerStateMachine();
 	UpdateWorld();
 	BuildAndMining();
 	SetCursor();
 	Control();
 	Move();
+
 	CAM->UpdateWorld();
 }
 
@@ -56,17 +52,18 @@ void Player::PostRender()
 {
 }
 
-void Player::SetPlayerState(PlayerState playerState)
+void Player::PlayerStateMachine()
 {
-	this->playerState = playerState;
-
 	switch (playerState)
 	{
 	case Player::IDLE:
 		break;
 	case Player::MOVE:
+		isMove = true;
 		break;
 	case Player::JUMP:
+		if (jumpTime <= 0)
+			playerState = FALL;
 		break;
 	case Player::EDIT:
 		break;
@@ -82,6 +79,11 @@ void Player::SetPlayerState(PlayerState playerState)
 	}
 }
 
+void Player::SetPlayerState(PlayerState state)
+{
+	this->playerState = state;
+}
+
 void Player::SetLand()
 {
 	if (jumpTime <= 0)
@@ -90,10 +92,7 @@ void Player::SetLand()
 
 void Player::SetFall()
 {
-	if (jumpTime <= 0) 
-	{
-		SetPlayerState(FALL);
-	}
+	SetPlayerState(FALL);
 }
 
 void Player::Control()
@@ -109,17 +108,25 @@ void Player::Control()
 	if (KEY->Press('D'))
 		dir += GetRight();
 
-	if (isCreativeMode) 
+	if (KEY->Press('W') || KEY->Press('S') || KEY->Press('A') || KEY->Press('D'))
 	{
-		if (KEY->Press(VK_SPACE)) 
-			dir.y += 1.0f;
-		if (KEY->Press(VK_SHIFT)) 
-			dir.y -= 1.0f;
+		SetPlayerState(MOVE);
 	}
+
+	//if (isCreativeMode) 
+	//{
+	//	if (KEY->Press(VK_SPACE)) 
+	//		dir.y += 1.0f;
+	//	if (KEY->Press(VK_SHIFT)) 
+	//		dir.y -= 1.0f;
+	//}
 
 	dir.Normalize();
 
-	velocity = dir;
+	//velocity = dir;
+
+	velocity.x = dir.x;
+	velocity.z = dir.z;
 
 	if (CAM->IsFPSView() && !UIManager::Get()->IsPopup())
 	{

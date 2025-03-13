@@ -14,10 +14,7 @@ void SubChunk::Update()
 	for (auto& pair : blocks)
 	{
 		Block& block = pair.second;
-		if (!block.HasCollider())
-		{
-			block.EnableCollider();
-		}
+		block.Update();  // 블록 렌더링
 	}
 }
 
@@ -26,10 +23,7 @@ void SubChunk::Render()
 	for (auto& pair : blocks)
 	{
 		Block& block = pair.second;
-		if (block.HasCollider())
-		{
-			block.Render();
-		}
+		block.Render();  // 블록 렌더링
 	}
 }
 
@@ -100,8 +94,6 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 						else if (randValue < 4) blockType = 11;  // 다이아몬드 (4% 확률) 
 					}
 				}
-
-
 				UINT gridIndex = (x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (y * CHUNK_DEPTH) + z;
 
 				pair<unordered_map<UINT, Block>::iterator, bool> result = blocks.emplace(gridIndex, Block(blockType));
@@ -163,17 +155,19 @@ void SubChunk::FindSurroundedBlocks()
 					continue;
 				} // 오클루젼 
 
-				//if (abs(playerPos.x - blockWorldPos.x) < 16 &&
-				//	abs(playerPos.z - blockWorldPos.z) < 16)
+				if (blockWorldPos.y <= playerPos.y - 7)
+				{
+					continue;
+				}
+
 				InstanceData visibleInstanceData;
 				UVInfo uvInfo = block->GetUVInfo();
-\
+
 				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
 				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
 
 				visibleInstanceData.curFrame = uvInfo.uvStart;
 				visibleInstanceData.maxFrame = uvInfo.uvEnd;
-				visibleInstanceData.block = block;
 
 				if (block->IsNormal())
 				{
@@ -191,5 +185,16 @@ void SubChunk::FindSurroundedBlocks()
 void SubChunk::CheckVisibleBlocks()
 {
 	FindSurroundedBlocks();
+}
+
+void SubChunk::ActiveCollider()
+{
+	for (auto& pair : blocks)
+	{
+		Block& block = pair.second;
+		block.EnableCollider();  
+	}
+
+	hasCollider = true;
 }
 

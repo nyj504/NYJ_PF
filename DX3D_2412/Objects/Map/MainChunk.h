@@ -14,6 +14,7 @@ public:
 
     void GenerateTerrain(Vector3 pos);
     void MergeHeightMap(MainChunk* neighbor);
+    void ActivateSubChunk();
     void SetInstanceData();
   
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
@@ -25,6 +26,7 @@ public:
 
 private:
     TerrainType terrainType = TerrainType::PLAINS;
+    int activeChunkIndex = 0;
 
     bool terrainGenerated = false;
     UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1];

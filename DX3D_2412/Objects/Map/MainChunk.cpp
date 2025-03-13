@@ -7,26 +7,27 @@ MainChunk::MainChunk(Vector3 pos, TerrainType terrainType) : terrainType(terrain
 
 MainChunk::~MainChunk()
 {
-    for (SubChunk* subChunk : subChunks)
-    {
-        delete subChunk;
-    }
 }
 
 void MainChunk::Update()
 {
-    for (SubChunk* subChunk : subChunks)
-    {
-        subChunk->Update();
-    }
+    int playerY = PLAYER->GetGlobalPosition().y;
+    int baseY = GetGlobalPosition().y; 
+
+    activeChunkIndex = (baseY - playerY) / SUBCHUNK_HEIGHT;
+
+    activeChunkIndex = max(0, min(activeChunkIndex, SUBCHUNK_SIZE - 1));
+
+    if (!subChunks[activeChunkIndex]->HasCollider())
+        subChunks[activeChunkIndex]->ActiveCollider();
+
+    subChunks[activeChunkIndex]->Update();
 }
 
 void MainChunk::Render()
 {
-    for (SubChunk* subChunk : subChunks)
-    {
-        subChunk->Render();
-    }
+    if (subChunks[activeChunkIndex]->HasCollider())
+    subChunks[activeChunkIndex]->Render();
 }
 
 void MainChunk::GenerateTerrain(Vector3 pos)
@@ -68,7 +69,7 @@ void MainChunk::GenerateTerrain(Vector3 pos)
 
     for (int i = 0; i < SUBCHUNK_SIZE; i++)
     {
-        Vector3 subChunkPos = Vector3(pos.x, pos.y - (MAINCHUNK_HEIGHT)+(SUBCHUNK_HEIGHT * (i + 1)), pos.z);
+        Vector3 subChunkPos = Vector3(pos.x, pos.y - (SUBCHUNK_HEIGHT * i), pos.z);
 
         SubChunk* subChunk = new SubChunk(i);
         subChunk->SetParent(this);
@@ -98,14 +99,22 @@ void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
     }
 }
 
+void MainChunk::ActivateSubChunk()
+{
+    activeChunkIndex = PLAYER->GetGlobalPosition().y / SUBCHUNK_HEIGHT;
+}
+
 void MainChunk::SetInstanceData()
 {
+    totalSingleInstanceDatas.clear(); 
+    totalMultiInstanceDatas.clear();
+
     for (SubChunk* subChunk : subChunks)
     {
         subChunk->CheckVisibleBlocks();
 
-        vector<InstanceData> newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
-        vector<InstanceData> newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
+        const vector<InstanceData>& newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
+        const vector<InstanceData>& newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
 
         totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
         totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());

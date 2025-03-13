@@ -10,7 +10,7 @@ TestScene::TestScene() : isPaused(false)
 
 	skybox = new Skybox(L"Resources/Textures/Landscape/SpaceSky.dds");
 
-	PLAYER->SetLocalPosition(0, 1, 0);
+	PLAYER->SetLocalPosition(0, 4, 0);
 }
 
 TestScene::~TestScene()

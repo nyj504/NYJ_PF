@@ -22,12 +22,15 @@ public:
 	void Render();
 	void PostRender();
 
-	void SetPlayerState(PlayerState playerState);
+	void PlayerStateMachine();
+	void SetPlayerState(PlayerState state);
+
 	float GetPlayerReach(bool interationType) { return interationType ? MAX_INTERACT_REACH : MAX_BLOCK_REACH; } 
 
 	int GetDamage() { return atk; }
 	void SetLand();
 	void SetFall();
+	bool IsMove() { return isMove; }
 
 private:
 	void Control();
@@ -38,12 +41,13 @@ private:
 	void SetCursor();
 private:
 	bool isCreativeMode = false;
+	bool isMove = false;
 	int atk = 10;
 	float jumpTime = 0.0f;
-	float moveSpeed = 20.0f;
+	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
 
-	PlayerState playerState = FALL;
+	PlayerState playerState = LAND;
 
 	Vector3 velocity;
 

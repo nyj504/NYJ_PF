@@ -13,6 +13,9 @@ public:
 	
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1]);
 	void CheckVisibleBlocks();
+	void ActiveCollider();
+
+	bool HasCollider() { return hasCollider; }
 	
 	vector<InstanceData> GetVisibleSingleInstanceData() { return visibleSingleInstanceDatas; }
 	vector<InstanceData> GetVisibleMultiInstanceData() { return visibleMultiInstanceDatas; }
@@ -21,6 +24,8 @@ private:
 	void FindSurroundedBlocks();
 
 private:
+	bool hasCollider = false;
+
 	UINT index;
 
 	unordered_map<UINT,Block>blocks; //청크 내 블록

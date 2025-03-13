@@ -10,7 +10,6 @@ struct InstanceData
 	Matrix transform = XMMatrixIdentity();
 	Vector2 curFrame;
 	Vector2 maxFrame;
-	class Block* block;
 };
 
 class Block : public Transform

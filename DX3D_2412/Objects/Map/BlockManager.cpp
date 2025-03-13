@@ -5,6 +5,7 @@ BlockManager::BlockManager()
 	worldGenerator = new WorldGenerator();
 
 	lastPlayerPos = PLAYER->GetGlobalPosition();
+	ActivateRenderingChunks();
 	//Load();
 }
 
@@ -36,18 +37,13 @@ void BlockManager::Update()
 	Vector3 currentPlayerPos = PLAYER->GetGlobalPosition();
 	float distanceMoved = Vector3::Distance(currentPlayerPos, lastPlayerPos);
 	
-	if (distanceMoved >= 1)
-	{
-		worldGenerator->ActivateBlocks();
-		worldGenerator->Update();
-	}
-
+	worldGenerator->Update();
+	
 	if (distanceMoved >= updateThreshold)
 	{
 		lastPlayerPos = currentPlayerPos;
 		ActivateRenderingChunks();
 	}
-
 }
 
 void BlockManager::Render()
@@ -202,8 +198,8 @@ void BlockManager::ActivateRenderingChunks()
 	{
 		worldGenerator->SetInstanceData(chunk.second);
 	}
-	worldGenerator->UpdateInstanceBuffer();
 
+	worldGenerator->UpdateInstanceBuffer();
 }
 
 //Block* BlockManager::GetSelectedBlock()

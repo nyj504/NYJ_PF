@@ -16,24 +16,34 @@ Block::Block(UINT key)
   
     if (key == 35) tag = "CraftingTable";
     if (key == 37) tag = "Furnace";
-
+  
     SetBlockUV();
 }
 
 Block::~Block()
 {
+    delete collider;
 }
 
 void Block::Update()
 {
-    //UpdateWorld();
-    //CheckPlayerCollision();
+    Vector3 playerPos = PLAYER->GetGlobalPosition();
+    Vector3 blockPos = this->GetGlobalPosition();
+
+    float xDistance = abs(playerPos.x - blockPos.x);
+    float yDistance = abs(playerPos.y - blockPos.y);
+    float zDistance = abs(playerPos.z - blockPos.z);
+
+    if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
+    {
+        CheckPlayerCollision();
+    }
 }
 
 void Block::Render()
 {
-    if (collider)
-        collider->Render();
+    if(collider)
+    collider->Render();
 }
 
 void Block::EnableCollider()
@@ -63,53 +73,62 @@ void Block::Damage()
 
 void Block::CheckPlayerCollision()
 {
-    //Vector3 overlap;
-    //
-    //Vector3 maxPlayerPosition = PLAYER->GetLocalPosition() + PLAYER->GetCollider()->HalfSize();
-    //Vector3 maxBoxPosition = this->GetLocalPosition() + HalfSize();
-    //
-    //Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
-    //Vector3 minBoxPosition = this->GetLocalPosition() - HalfSize();
-    //
-    //Vector3 playerPosition = PLAYER->GetLocalPosition();
-    //Vector3 blockPosition = this->GetLocalPosition();
-    //
-    //Ray ray(PLAYER->GetLocalPosition(), Vector3::Down());
-    //RaycastHit hit;
-    //float maxHeight = 0.0f;
-    //
-    //if (IsRayCollision(ray, &hit))
-    //{
-    //    if (hit.point.y >= minPlayerPosition.y)
-    //    {
-    //        PLAYER->SetLand();
-    //    }
-    //    else
-    //    {
-    //        PLAYER->SetFall();
-    //    }
-    //}
-    //
-    //if (IsBoxCollision(PLAYER->GetCollider(), &overlap) && minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
-    //{
-    //    if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
-    //    {
-    //        if (abs(overlap.x) < abs(overlap.z))
-    //        {
-    //            if (playerPosition.x < blockPosition.x)
-    //                PLAYER->Translate(-overlap.x, 0, 0);
-    //            else
-    //                PLAYER->Translate(overlap.x, 0, 0);
-    //        }
-    //        else
-    //        {
-    //            if (playerPosition.z < blockPosition.z)
-    //                PLAYER->Translate(0, 0, -overlap.z);
-    //            else
-    //                PLAYER->Translate(0, 0, overlap.z);
-    //        }
-    //    }
-    //}
+    Vector3 overlap;
+
+    Vector3 maxPlayerPosition = PLAYER->GetGlobalPosition() + PLAYER->GetCollider()->HalfSize();
+    Vector3 maxBoxPosition = this->GetGlobalPosition() + collider->HalfSize();
+
+    Vector3 minPlayerPosition = PLAYER->GetGlobalPosition() - PLAYER->GetCollider()->HalfSize();
+    Vector3 minBoxPosition = this->GetGlobalPosition() - collider->HalfSize();
+
+    Vector3 playerPosition = PLAYER->GetGlobalPosition();
+    Vector3 blockPosition = this->GetGlobalPosition();
+
+    Ray ray(PLAYER->GetGlobalPosition(), Vector3::Down());
+    RaycastHit hit;
+
+    float maxHeight = 0.0f;
+    
+    if (collider->IsRayCollision(ray, &hit))
+    {
+        if (hit.distance <= 0.3f && PLAYER->IsMove())
+        {
+            PLAYER->SetFall();
+        }
+    }
+    
+    if (collider->IsBoxCollision(PLAYER->GetCollider(), &overlap))
+    {
+        if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
+        {
+            if (overlap.y < abs(overlap.x) && overlap.y < abs(overlap.z))
+            {
+                if (playerPosition.y > blockPosition.y)
+                {
+                    PLAYER->Translate(0, overlap.y, 0);
+                    PLAYER->SetLand();
+                }
+                else
+                {
+                    PLAYER->Translate(0, -overlap.y, 0);
+                }
+            }
+            else if (abs(overlap.x) < abs(overlap.z))
+            {
+                if (playerPosition.x < blockPosition.x)
+                    PLAYER->Translate(-overlap.x, 0, 0);
+                else
+                    PLAYER->Translate(overlap.x, 0, 0);
+            }
+            else
+            {
+                if (playerPosition.z < blockPosition.z)
+                    PLAYER->Translate(0, 0, -overlap.z);
+                else
+                    PLAYER->Translate(0, 0, overlap.z);
+            }
+        }
+    }
 }
 
 void Block::SetBlockUV()

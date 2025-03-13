@@ -20,23 +20,28 @@ WorldGenerator::~WorldGenerator()
     delete singleFaceBlock;
     delete multiFaceBlock;
 
-    for (SubChunk* subchunk : subchunks)
-    {
-        delete subchunk;
-    }
-
     if (singleInstanceBuffer)
         delete singleInstanceBuffer;
 
     if (multiInstanceBuffer)
         delete multiInstanceBuffer;
+
+    for (const pair<UINT64, MainChunk*>& chunk : mainChunks)
+    {
+        delete chunk.second;
+    }
 }
 
 void WorldGenerator::Update()
 {
-    for (SubChunk* subchunk : subchunks)
+    closestChunks = GetClosestMainChunks();
+
+    if (!closestChunks.empty())
     {
-        subchunk->Update();
+        for (MainChunk* chunk : closestChunks)
+        {
+            chunk->Update();
+        }
     }
 }
 
@@ -56,9 +61,12 @@ void WorldGenerator::Render()
         multiFaceBlock->RenderInstanced(totalMultiInstanceDatas.size());
     }
 
-    for (SubChunk* subchunk : subchunks)
+    if (!closestChunks.empty())
     {
-        subchunk->Render();
+        for (MainChunk* chunk : closestChunks)
+        {
+            chunk->Render();
+        }
     }
 }
 
@@ -109,8 +117,76 @@ void WorldGenerator::CreateWorld()
     }
 }
 
-void WorldGenerator::UpdateChunks()
+vector<MainChunk*> WorldGenerator::GetClosestMainChunks()
 {
+    vector<MainChunk*> closestChunks;
+
+    float playerX = PLAYER->GetGlobalPosition().x;
+    float playerZ = PLAYER->GetGlobalPosition().z;
+
+    int chunkX = (int)(floor(playerX / CHUNK_WIDTH));
+    int chunkZ = (int)(floor(playerZ / CHUNK_DEPTH));
+
+    float localX = playerX - (chunkX * CHUNK_WIDTH);
+    float localZ = playerZ - (chunkZ * CHUNK_DEPTH);
+
+    float halfX = CHUNK_WIDTH / 2;
+    float halfZ = CHUNK_DEPTH / 2;
+
+    vector<pair<int, int>> chunkOffsets;
+
+    if (localX >= halfX && localZ > halfZ) // 오른쪽 위
+    {
+        chunkOffsets = {
+            {0, 0},   // 현재 청크
+            {1, 0},   // 오른쪽 청크
+            {0, 1},   // 위쪽 청크
+            {1, 1}    // 오른쪽 위 대각선 청크
+        };
+    }
+    else if (localX >= halfX && localZ < halfZ) // 오른쪽 아래 
+    {
+        chunkOffsets = {
+            {0, 0},   // 현재 청크
+            {1, 0},   // 오른쪽 청크
+            {0, -1},  // 아래쪽 청크
+            {1, -1}   // 오른쪽 아래 대각선 청크
+        };
+    }
+    else if (localX < halfX && localZ > halfZ) // 왼쪽 위
+    {
+        chunkOffsets = {
+            {0, 0},   // 현재 청크
+            {-1, 0},  // 왼쪽 청크
+            {0, 1},   // 위쪽 청크
+            {-1, 1}   // 왼쪽 위 대각선 청크
+        };
+    }
+    else // (localX < 0.5f && localZ < 0.5f) // 왼쪽 아래
+    {
+        chunkOffsets = {
+            {0, 0},   // 현재 청크
+            {-1, 0},  // 왼쪽 청크
+            {0, -1},  // 아래쪽 청크
+            {-1, -1}  // 왼쪽 아래 대각선 청크
+        };
+    }
+
+    for (const auto& offset : chunkOffsets)
+    {
+        int targetX = chunkX + offset.first;
+        int targetZ = chunkZ + offset.second;
+
+        UINT64 chunkKey = GameMath::ChunkPosToKey(targetX, targetZ);
+
+        auto it = mainChunks.find(chunkKey);
+        if (it != mainChunks.end())
+        {
+            closestChunks.push_back(it->second);
+        }
+    }
+
+    return closestChunks;
 }
 
 void WorldGenerator::SetInstanceData(MainChunk* chunk)
@@ -174,21 +250,6 @@ void WorldGenerator::UpdateInstanceBuffer()
                 totalMultiInstanceDatas.data(),
                 sizeof(InstanceData) * (UINT)totalMultiInstanceDatas.size()
             );
-        }
-    }
-}
-
-void WorldGenerator::ActivateBlocks()
-{
-    vector<MainChunk*>chunks = GetChunksInRange(1);
-   
-    for (MainChunk* chunk : chunks)
-    {
-        vector<SubChunk*> chunkSubchunks = chunk->GetSubchunks();
-
-        for (SubChunk* subchunk : chunkSubchunks)
-        {
-            subchunks.push_back(subchunk);
         }
     }
 }
