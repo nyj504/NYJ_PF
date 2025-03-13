@@ -88,45 +88,36 @@ void Block::CheckPlayerCollision()
     RaycastHit hit;
 
     float maxHeight = 0.0f;
+
+    if (!collider->IsBoxCollision(PLAYER->GetCollider(), &overlap))
+        return;
     
-    if (collider->IsRayCollision(ray, &hit))
+    float absOverlapX = abs(overlap.x);
+    float absOverlapZ = abs(overlap.z);
+    float absOverlapY = abs(overlap.y);
+
+    if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
     {
-        if (hit.distance <= 0.3f && PLAYER->IsMove())
+        if (absOverlapY < absOverlapX && absOverlapY < absOverlapZ)
         {
-            PLAYER->SetFall();
-        }
-    }
-    
-    if (collider->IsBoxCollision(PLAYER->GetCollider(), &overlap))
-    {
-        if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
-        {
-            if (overlap.y < abs(overlap.x) && overlap.y < abs(overlap.z))
+            if (playerPosition.y > blockPosition.y)
             {
-                if (playerPosition.y > blockPosition.y)
-                {
-                    PLAYER->Translate(0, overlap.y, 0);
-                    PLAYER->SetLand();
-                }
-                else
-                {
-                    PLAYER->Translate(0, -overlap.y, 0);
-                }
-            }
-            else if (abs(overlap.x) < abs(overlap.z))
-            {
-                if (playerPosition.x < blockPosition.x)
-                    PLAYER->Translate(-overlap.x, 0, 0);
-                else
-                    PLAYER->Translate(overlap.x, 0, 0);
+                PLAYER->Translate(0, overlap.y, 0);
+                PLAYER->SetLand();
             }
             else
             {
-                if (playerPosition.z < blockPosition.z)
-                    PLAYER->Translate(0, 0, -overlap.z);
-                else
-                    PLAYER->Translate(0, 0, overlap.z);
+                PLAYER->Translate(0, -overlap.y, 0);
+                PLAYER->SetFall();
             }
+        }
+        else if (absOverlapX < absOverlapZ)
+        {
+            PLAYER->Translate(playerPosition.x < blockPosition.x ? -overlap.x : overlap.x, 0, 0);
+        }
+        else
+        {
+            PLAYER->Translate(0, 0, playerPosition.z < blockPosition.z ? -overlap.z : overlap.z);
         }
     }
 }

@@ -7,6 +7,8 @@ MainChunk::MainChunk(Vector3 pos, TerrainType terrainType) : terrainType(terrain
 
 MainChunk::~MainChunk()
 {
+    for (SubChunk* chunk : subChunks)
+        delete chunk;
 }
 
 void MainChunk::Update()

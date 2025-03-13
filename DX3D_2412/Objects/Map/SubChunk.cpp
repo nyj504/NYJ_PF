@@ -11,7 +11,7 @@ SubChunk::~SubChunk()
 
 void SubChunk::Update()
 {
-	for (auto& pair : blocks)
+	for (pair<const UINT, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
 		block.Update();  // ºí·Ï ·»´õ¸µ
@@ -20,7 +20,7 @@ void SubChunk::Update()
 
 void SubChunk::Render()
 {
-	for (auto& pair : blocks)
+	for (pair<const UINT, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
 		block.Render();  // ºí·Ï ·»´õ¸µ

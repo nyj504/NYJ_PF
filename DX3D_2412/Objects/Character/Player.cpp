@@ -108,11 +108,6 @@ void Player::Control()
 	if (KEY->Press('D'))
 		dir += GetRight();
 
-	if (KEY->Press('W') || KEY->Press('S') || KEY->Press('A') || KEY->Press('D'))
-	{
-		SetPlayerState(MOVE);
-	}
-
 	//if (isCreativeMode) 
 	//{
 	//	if (KEY->Press(VK_SPACE)) 
