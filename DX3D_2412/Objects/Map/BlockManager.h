@@ -12,13 +12,14 @@ public:
 	void PostRender();
 
 	//void BuildBlock();
-	//void MiningBlock();
+	void MiningBlock();
 	void InteractingBlock();
 
 	void ActivateCollisionBlocks();
 	void ActivateRenderingChunks();
 
-	//Block* GetSelectedBlock();
+	Block* GetSelectedBlock() { return selectedBlock; }
+	void SetSelectedBlock(Block* block) { selectedBlock = block; }
 
 	//void Save();  
 	//void Load();

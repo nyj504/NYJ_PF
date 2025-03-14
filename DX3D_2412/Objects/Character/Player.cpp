@@ -148,25 +148,26 @@ void Player::Move()
 
 void Player::BuildAndMining()
 {
-	//if (UIManager::Get()->IsPopup()) return;
-	//if (BlockManager::Get()->GetSelectedBlock() == nullptr) return;
-	//
-	//if (KEY->Down(VK_RBUTTON))
-	//{
-	//	if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1)
-	//		BlockManager::Get()->InteractingBlock();
-	//	else
-	//	{
-	//		BlockManager::Get()->BuildBlock();
-	//	}
-	//}
-	//else if (KEY->Down(VK_LBUTTON))
-	//{
-	//	if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
-	//		return;
-	//
-	//	BlockManager::Get()->MiningBlock();
-	//}
+	if (UIManager::Get()->IsPopup()) return;
+	Block* block = BlockManager::Get()->GetSelectedBlock();
+	if (BlockManager::Get()->GetSelectedBlock() == nullptr) return;
+	
+	if (KEY->Down(VK_RBUTTON))
+	{
+		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1)
+			BlockManager::Get()->InteractingBlock();
+		else
+		{
+			//BlockManager::Get()->BuildBlock();
+		}
+	}
+	else if (KEY->Down(VK_LBUTTON))
+	{
+		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
+			return;
+	
+		BlockManager::Get()->MiningBlock();
+	}
 }
 
 void Player::SetCursor()

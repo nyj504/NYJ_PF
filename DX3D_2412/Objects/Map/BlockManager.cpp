@@ -112,31 +112,31 @@ void BlockManager::PostRender()
 //	//UpdateInstanceBuffer();
 //}
 //
-//void BlockManager::MiningBlock()
-//{
-//	//if (!selectedBlock) return;
-//	//
-//	//size_t index = selectedBlock->GetIndex();
-//	//
-//	//selectedBlock->Damage();
-//	//
-//	//if (blocks[index]->IsMining())
-//	//{
-//	//	instanceDatas.erase(instanceDatas.begin() + index);
-//	//
-//	//	delete blocks[index]; 
-//	//	blocks.erase(blocks.begin() + index);
-//	//
-//	//	for (size_t i = index; i < blocks.size(); i++)
-//	//	{
-//	//		blocks[i]->SetIndex(i); 
-//	//	}
-//	//
-//	//	UpdateInstanceBuffer();
-//	//
-//	//	selectedBlock = nullptr;
-//	//}
-//}
+void BlockManager::MiningBlock()
+{
+	if (!selectedBlock) return;
+	
+	size_t index = selectedBlock->GetIndex();
+	
+	selectedBlock->Damage();
+	
+	//if (blocks[index]->IsMining())
+	//{
+	//	instanceDatas.erase(instanceDatas.begin() + index);
+	//
+	//	delete blocks[index]; 
+	//	blocks.erase(blocks.begin() + index);
+	//
+	//	for (size_t i = index; i < blocks.size(); i++)
+	//	{
+	//		blocks[i]->SetIndex(i); 
+	//	}
+	//
+	//	UpdateInstanceBuffer();
+	//
+	//	selectedBlock = nullptr;
+	//}
+}
 
 void BlockManager::InteractingBlock()
 {
@@ -166,7 +166,6 @@ void BlockManager::ActivateCollisionBlocks()
 		}
 	}
 }
-
 
 
 void BlockManager::ActivateRenderingChunks()

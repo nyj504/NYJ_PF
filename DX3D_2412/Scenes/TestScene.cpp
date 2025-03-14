@@ -42,8 +42,8 @@ void TestScene::Update()
 
 	if (!isPaused)
 	{
-		PLAYER->Update();
 		BlockManager::Get()->Update();
+		PLAYER->Update();
 		UIManager::Get()->Update();
 	}
 }

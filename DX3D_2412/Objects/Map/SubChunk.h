@@ -32,6 +32,8 @@ private:
 	unordered_map<UINT,Block>blocks; //청크 내 블록
 	vector<Block*>visibleBlocks; //청크 내 보이는 블록
 
+	Block* selectedBlock = nullptr;
+
 	vector<InstanceData> visibleSingleInstanceDatas;
 	vector<InstanceData> visibleMultiInstanceDatas;
 };

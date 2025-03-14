@@ -12,6 +12,7 @@ SubChunk::~SubChunk()
 void SubChunk::Update()
 {
 	GetSelectedBlock();
+	BlockManager::Get()->SetSelectedBlock(selectedBlock);
 
 	for (pair<const UINT, Block>& pair : blocks)
 	{
@@ -213,6 +214,7 @@ Block* SubChunk::GetSelectedBlock()
 	for (pair<const UINT, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
+		if (&block == nullptr) continue;
 
 		float dist = Vector3::Distance(block.GetGlobalPosition(), rayStartPos);
 		float maxDistance = PLAYER->GetPlayerReach(block.GetBlockType());
@@ -223,6 +225,7 @@ Block* SubChunk::GetSelectedBlock()
 			{
 				minDistance = hit.distance;
 				closestBlock = &block;
+				selectedBlock = closestBlock;
 			}
 		}
 	}
@@ -234,6 +237,7 @@ Block* SubChunk::GetSelectedBlock()
 		else
 			pair.second.GetCollider()->SetColor(0, 1, 0);
 	}
+
 
 	return closestBlock;
 }
