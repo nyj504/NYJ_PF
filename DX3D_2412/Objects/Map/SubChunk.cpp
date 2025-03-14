@@ -11,10 +11,12 @@ SubChunk::~SubChunk()
 
 void SubChunk::Update()
 {
+	GetSelectedBlock();
+
 	for (pair<const UINT, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
-		block.Update();  // ºí·Ï ·»´õ¸µ
+		block.Update();  
 	}
 }
 
@@ -198,3 +200,40 @@ void SubChunk::ActiveCollider()
 	hasCollider = true;
 }
 
+Block* SubChunk::GetSelectedBlock()
+{
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+
+	float minDistance = FLT_MAX;
+	RaycastHit hit;
+	Block* closestBlock = nullptr;
+
+	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
+
+	for (pair<const UINT, Block>& pair : blocks)
+	{
+		Block& block = pair.second;
+
+		float dist = Vector3::Distance(block.GetGlobalPosition(), rayStartPos);
+		float maxDistance = PLAYER->GetPlayerReach(block.GetBlockType());
+
+		if (block.GetCollider()->IsRayCollision(ray, &hit) && hit.distance < maxDistance)
+		{
+			if (hit.distance < minDistance)
+			{
+				minDistance = hit.distance;
+				closestBlock = &block;
+			}
+		}
+	}
+
+	for (pair<const UINT, Block>& pair : blocks)
+	{
+		if (&pair.second == closestBlock)
+			pair.second.GetCollider()->SetColor(1, 0, 0);
+		else
+			pair.second.GetCollider()->SetColor(0, 1, 0);
+	}
+
+	return closestBlock;
+}

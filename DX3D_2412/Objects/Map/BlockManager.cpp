@@ -202,42 +202,7 @@ void BlockManager::ActivateRenderingChunks()
 	worldGenerator->UpdateInstanceBuffer();
 }
 
-//Block* BlockManager::GetSelectedBlock()
-//{
-//	Ray ray = CAM->ScreenPointToRay(mousePos);
-//
-//	float minDistance = FLT_MAX;
-//	RaycastHit hit;
-//	Block* closestBlock = nullptr;
-//
-//	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
-//
-//	for (Block* block : blocks)
-//	{
-//		float dist = Vector3::Distance(block->GetGlobalPosition(), rayStartPos);
-//		float maxDistance = PLAYER->GetPlayerReach(block->GetBlockType());
-//
-//		if (block->IsRayCollision(ray, &hit) && hit.distance < maxDistance)
-//		{
-//			if (hit.distance < minDistance)
-//			{
-//				minDistance = hit.distance;
-//				closestBlock = block;
-//			}
-//		}
-//	}
-//
-//	for (Block* block : blocks)
-//	{
-//		if (block == closestBlock)
-//			block->SetColor(1, 0, 0); 
-//		else
-//			block->SetColor(0, 1, 0); 
-//	}
-//	selectedBlock = closestBlock;
-//
-//	return closestBlock;
-//}
+
 //
 //void BlockManager::Save()
 //{

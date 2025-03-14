@@ -37,6 +37,9 @@ public:
 	virtual void Damage();
 	
 	bool HasCollider() { return hasCollider; }
+
+	BoxCollider* GetCollider() { return collider; }
+
 	int GetHp() { return curHp; }
 	void SetIndex(UINT index) { this->index = index; }
 	UINT GetIndex() { return index; }

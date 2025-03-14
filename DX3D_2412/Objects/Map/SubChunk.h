@@ -14,6 +14,7 @@ public:
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1]);
 	void CheckVisibleBlocks();
 	void ActiveCollider();
+	Block* GetSelectedBlock();
 
 	bool HasCollider() { return hasCollider; }
 	
