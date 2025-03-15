@@ -72,7 +72,7 @@ void BlockManager::MiningBlock()
 	
 	selectedBlock->Damage();
 	if (selectedBlock->GetHp() <= 0)
-		worldGenerator->RefreshInstanceData(selectedBlock);
+		worldGenerator->MiningBlock(selectedBlock);
 }
 
 void BlockManager::InteractingBlock()

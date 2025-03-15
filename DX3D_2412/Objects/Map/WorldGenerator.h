@@ -21,7 +21,7 @@ public:
 	void SetInstanceData(MainChunk* chunk);
 	void UpdateInstanceBuffer();
 
-	void RefreshInstanceData(Block* block);
+	void MiningBlock(Block* block);
 	void BuildBlock(Vector3 pos, UINT index);
 
 	void ReserveInstanceData(size_t singleSize, size_t multiSize);
