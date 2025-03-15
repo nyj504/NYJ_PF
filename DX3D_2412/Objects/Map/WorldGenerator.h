@@ -35,6 +35,7 @@ private:
 	Block* builtBlock = nullptr;
 
 	vector<MainChunk*>closestChunks;
+	UINT test;
 
 	SubChunk* activeSubChunk;
 

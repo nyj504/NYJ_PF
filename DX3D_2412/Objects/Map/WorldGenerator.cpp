@@ -203,6 +203,7 @@ void WorldGenerator::SetInstanceData(MainChunk* chunk)
     for (const auto& data : newMultiInstanceData)
     {
         UINT64 id = data.blockID;
+
         totalMultiInstanceDatas[id] = data;
     }
 }
@@ -299,7 +300,11 @@ void WorldGenerator::BuildBlock(Vector3 pos, UINT index)
 {
     if (!closestChunks.empty())
     {
-        activeSubChunk = mainChunks[BlockManager::Get()->GetSelectedBlock()->GetParentIndex()]->GetActiveSubChunk();
+        for (MainChunk* chunk : closestChunks)
+        {
+            activeSubChunk = chunk->GetActiveSubChunk();
+            if (activeSubChunk) break;
+        }
     }
 
     activeSubChunk->BuildBlock(pos, index);

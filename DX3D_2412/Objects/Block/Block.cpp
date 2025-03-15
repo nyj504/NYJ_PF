@@ -72,6 +72,7 @@ void Block::Damage()
         INVEN->AddItem(itemData.dropItemKey, itemData.dropsAmount);
         isActive = false;
         isMining = true;
+        isOcclusion = false;
     }
 }
 

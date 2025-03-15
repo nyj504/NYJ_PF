@@ -23,15 +23,9 @@ void MainChunk::Update()
     if (!subChunks[activeChunkIndex]->HasCollider())
         subChunks[activeChunkIndex]->ActiveCollider();
 
-    if (this->GetGlobalPosition().x - CHUNK_WIDTH < (int)PLAYER->GetGlobalPosition().x % CHUNK_WIDTH
-        && this->GetGlobalPosition().x + CHUNK_WIDTH >(int)PLAYER->GetGlobalPosition().x % CHUNK_WIDTH
-        && this->GetGlobalPosition().z - CHUNK_WIDTH < (int)PLAYER->GetGlobalPosition().z % CHUNK_WIDTH
-        && this->GetGlobalPosition().z + CHUNK_WIDTH >(int)PLAYER->GetGlobalPosition().z % CHUNK_WIDTH)
-    {
-        subChunks[activeChunkIndex]->CheckSelectedBlock();
-    }
-
-    if (subChunks[activeChunkIndex]->GetSelectedBlock())
+    subChunks[activeChunkIndex]->CheckSelectedBlock();
+    
+    if (subChunks[activeChunkIndex]->IsMouseOverChunk())
     {
         BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
     }
@@ -136,3 +130,10 @@ void MainChunk::SetInstanceData()
     }
 }
 
+SubChunk* MainChunk::GetActiveSubChunk()
+{
+    if (subChunks[activeChunkIndex]->IsMouseOverChunk())
+    {
+        return subChunks[activeChunkIndex];
+    }
+}

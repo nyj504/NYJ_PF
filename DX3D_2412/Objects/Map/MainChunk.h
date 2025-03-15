@@ -17,7 +17,7 @@ public:
     void ActivateSubChunk();
     void SetInstanceData();
 
-    SubChunk* GetActiveSubChunk() { return subChunks[activeChunkIndex]; }
+    SubChunk* GetActiveSubChunk();
   
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }

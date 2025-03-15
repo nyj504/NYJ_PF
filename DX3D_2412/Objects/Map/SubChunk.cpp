@@ -23,7 +23,7 @@ void SubChunk::Render()
 	for (pair<const UINT64, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
-		block.Render();  // ºí·Ï ·»´õ¸µ
+		block.Render();  
 	}
 }
 
@@ -209,26 +209,30 @@ void SubChunk::MiningBlock(Block* block)
 
 	auto it = blocks.find(blockID);
 	blocks.erase(blockID);
+
+	FindVisibleBlocks();
 }
 
 void SubChunk::BuildBlock(Vector3 pos, int blockType)
 {
 	UINT64 blockID = GameMath::GenerateBlockID(pos);
-	pair<unordered_map<UINT64, Block>::iterator, bool> result = blocks.emplace(blockID, Block(blockType));
+	Block& newBlock = blocks[blockID];
 
-	if (result.second)
-	{
-		Block& newBlock = result.first->second;
-		newBlock.SetParent(this);
-		newBlock.EnableCollider();
-		newBlock.SetLocalPosition(pos);
-		newBlock.SetBlockID(blockID);
-		newBlock.UpdateWorld();
-	}
+	newBlock = Block(blockType);
+	newBlock.SetParent(this);
+	newBlock.EnableCollider();
+	newBlock.SetLocalPosition(pos);
+	newBlock.SetActive(true);
+	newBlock.SetBlockID(blockID);
+	newBlock.UpdateWorld();
+
+	FindVisibleBlocks();
 }
 
 void SubChunk::CheckSelectedBlock()
 {
+	isMouseOver = false;
+
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
 	float minDistance = FLT_MAX;
@@ -244,18 +248,20 @@ void SubChunk::CheckSelectedBlock()
 		if (!block.IsActive()) continue;
 
 		float dist = Vector3::Distance(block.GetGlobalPosition(), rayStartPos);
-		float maxDistance = PLAYER->GetPlayerReach(block.GetBlockType());
+		float maxDistance = PLAYER->GetPlayerReach(false);
 
-		if (block.GetCollider()->IsRayCollision(ray, &hit) && hit.distance < maxDistance)
+		if (block.GetCollider()->IsRayCollision(ray, &hit) && hit.distance <= maxDistance)
 		{
 			if (hit.distance < minDistance)
 			{
 				minDistance = hit.distance;
 				closestBlock = &block;
-				selectedBlock = closestBlock;
+				isMouseOver = true;
 			}
 		}
 	}
+
+	selectedBlock = closestBlock;
 
 	for (pair<const UINT64, Block>& pair : blocks)
 	{
@@ -265,3 +271,4 @@ void SubChunk::CheckSelectedBlock()
 			pair.second.GetCollider()->SetColor(0, 1, 0);
 	}
 }
+

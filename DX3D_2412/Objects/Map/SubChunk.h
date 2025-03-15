@@ -25,6 +25,7 @@ public:
 	void CheckSelectedBlock();
 
 	bool HasCollider() { return hasCollider; }
+	bool IsMouseOverChunk() { return isMouseOver; }
 	
 	vector<InstanceData> GetVisibleSingleInstanceData() { return visibleSingleInstanceDatas; }
 	vector<InstanceData> GetVisibleMultiInstanceData() { return visibleMultiInstanceDatas; }
@@ -34,6 +35,7 @@ private:
 
 private:
 	bool hasCollider = false;
+	bool isMouseOver = false;
 	Vector3 worldPos;
 	UINT64 parentIndex;
 	UINT index;
