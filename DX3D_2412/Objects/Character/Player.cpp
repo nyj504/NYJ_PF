@@ -157,8 +157,8 @@ void Player::BuildAndMining()
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1)
 			BlockManager::Get()->InteractingBlock();
 		else
-		{
-			//BlockManager::Get()->BuildBlock();
+		{	
+			BlockManager::Get()->BuildBlock();
 		}
 	}
 	else if (KEY->Down(VK_LBUTTON))

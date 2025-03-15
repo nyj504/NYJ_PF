@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-MainChunk::MainChunk(Vector3 pos, TerrainType terrainType) : terrainType(terrainType)
+MainChunk::MainChunk(Vector3 pos, TerrainType terrainType, UINT64 myIndex) : terrainType(terrainType), myIndex(myIndex)
 {
     subChunks.reserve(SUBCHUNK_SIZE);
 }
@@ -22,6 +22,19 @@ void MainChunk::Update()
 
     if (!subChunks[activeChunkIndex]->HasCollider())
         subChunks[activeChunkIndex]->ActiveCollider();
+
+    if (this->GetGlobalPosition().x - CHUNK_WIDTH < (int)PLAYER->GetGlobalPosition().x % CHUNK_WIDTH
+        && this->GetGlobalPosition().x + CHUNK_WIDTH >(int)PLAYER->GetGlobalPosition().x % CHUNK_WIDTH
+        && this->GetGlobalPosition().z - CHUNK_WIDTH < (int)PLAYER->GetGlobalPosition().z % CHUNK_WIDTH
+        && this->GetGlobalPosition().z + CHUNK_WIDTH >(int)PLAYER->GetGlobalPosition().z % CHUNK_WIDTH)
+    {
+        subChunks[activeChunkIndex]->CheckSelectedBlock();
+    }
+
+    if (subChunks[activeChunkIndex]->GetSelectedBlock())
+    {
+        BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
+    }
 
     subChunks[activeChunkIndex]->Update();
 }

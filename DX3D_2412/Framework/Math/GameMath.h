@@ -31,6 +31,15 @@ public:
         return ((UINT64)(x) << 32) | ((UINT64)(z) & 0xFFFFFFFF);
     }
 
+    static UINT64 GenerateBlockID(const Vector3 globalPos)
+    {
+        UINT64 x = (UINT64)(globalPos.x) & 0x1FFFFF;
+        UINT64 y = (UINT64)(globalPos.y) & 0x3FF;
+        UINT64 z = (UINT64)(globalPos.z) & 0x1FFFFF;
+
+        return (x << 42) | (y << 32) | z;
+    }
+
     static void KeyToChunkPos(UINT64 key, int& x, int& z)
     {
         x = (int)(key >> 32);

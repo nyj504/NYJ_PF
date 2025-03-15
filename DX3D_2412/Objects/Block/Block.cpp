@@ -27,6 +27,8 @@ Block::~Block()
 
 void Block::Update()
 {
+    if (!isActive) return;
+
     Vector3 playerPos = PLAYER->GetGlobalPosition();
     Vector3 blockPos = this->GetGlobalPosition();
 
@@ -42,6 +44,8 @@ void Block::Update()
 
 void Block::Render()
 {
+    if (!isActive) return;
+
     if(collider)
     collider->Render();
 }
@@ -66,7 +70,7 @@ void Block::Damage()
     if (curHp <= 0)
     {
         INVEN->AddItem(itemData.dropItemKey, itemData.dropsAmount);
-        SetActive(false);
+        isActive = false;
         isMining = true;
     }
 }
@@ -124,14 +128,12 @@ void Block::CheckPlayerCollision()
 
 void Block::SetBlockUV()
 {
-    int index = itemData.textureType == "Normal" ? 0 : 1;
-
     int atlasWidth;
     int atlasHeight;
 
-    switch (index)
-    {       
-    case 0:
+    switch (isNormal)
+    {
+    case 1:
     {
         atlasWidth = 8;
         atlasHeight = 8;
@@ -146,8 +148,9 @@ void Block::SetBlockUV()
         uvInfo.uvStart = uvStart;
         uvInfo.uvEnd = { uvStart.x + gridSize, uvStart.y + gridSize };
         break;
+
     }
-    case 1:
+    case 0:
     {
         atlasWidth = 4;
         atlasHeight = 7;
@@ -162,8 +165,7 @@ void Block::SetBlockUV()
 
         uvInfo.uvStart = uvStart;
         uvInfo.uvEnd = { uvStart.x + (4 * gridUSize), uvStart.y + gridVSize };
-    }
-    default:
         break;
+    }
     }
 }

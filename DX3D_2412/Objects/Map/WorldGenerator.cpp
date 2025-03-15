@@ -91,7 +91,7 @@ void WorldGenerator::CreateWorld()
             TerrainType terrainType = TerrainType::PLAINS;
 
             Vector3 chunkPosition = { chunkX, 0, chunkZ };
-            MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType);
+            MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType, chunkKey);
 
             for (int dx = -1; dx <= 1; dx++)
             {
@@ -194,13 +194,33 @@ void WorldGenerator::SetInstanceData(MainChunk* chunk)
     vector<InstanceData> newSingleInstanceData = chunk->GetTotalSingleInstanceDatas();
     vector<InstanceData> newMultiInstanceData = chunk->GetTotalMultiInstanceDatas();
 
-    totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
-    totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
+    for (const auto& data : newSingleInstanceData)
+    {
+        UINT64 id = data.blockID; 
+        totalSingleInstanceDatas[id] = data;
+    }
+
+    for (const auto& data : newMultiInstanceData)
+    {
+        UINT64 id = data.blockID;
+        totalMultiInstanceDatas[id] = data;
+    }
 }
 
 void WorldGenerator::UpdateInstanceBuffer()
 {
-    if (totalSingleInstanceDatas.empty())
+    // 1. unordered_map → vector 변환
+    vector<InstanceData> singleInstanceVec;
+    vector<InstanceData> multiInstanceVec;
+
+    for (const auto& pair : totalSingleInstanceDatas)
+        singleInstanceVec.push_back(pair.second);
+
+    for (const auto& pair : totalMultiInstanceDatas)
+        multiInstanceVec.push_back(pair.second);
+
+    // 2. GPU 버퍼 업데이트
+    if (singleInstanceVec.empty())
     {
         if (singleInstanceBuffer)
         {
@@ -213,20 +233,21 @@ void WorldGenerator::UpdateInstanceBuffer()
         if (!singleInstanceBuffer)
         {
             singleInstanceBuffer = new VertexBuffer(
-                totalSingleInstanceDatas.data(),
+                singleInstanceVec.data(),
                 sizeof(InstanceData),
-                (UINT)totalSingleInstanceDatas.size()
+                (UINT)singleInstanceVec.size()
             );
         }
         else
         {
             singleInstanceBuffer->Update(
-                totalSingleInstanceDatas.data(),
-                sizeof(InstanceData) * (UINT)totalSingleInstanceDatas.size()
+                singleInstanceVec.data(),
+                sizeof(InstanceData) * (UINT)singleInstanceVec.size()
             );
         }
     }
-    if (totalMultiInstanceDatas.empty())
+
+    if (multiInstanceVec.empty())
     {
         if (multiInstanceBuffer)
         {
@@ -239,19 +260,76 @@ void WorldGenerator::UpdateInstanceBuffer()
         if (!multiInstanceBuffer)
         {
             multiInstanceBuffer = new VertexBuffer(
-                totalMultiInstanceDatas.data(),
+                multiInstanceVec.data(),
                 sizeof(InstanceData),
-                (UINT)totalMultiInstanceDatas.size()
+                (UINT)multiInstanceVec.size()
             );
         }
         else
         {
             multiInstanceBuffer->Update(
-                totalMultiInstanceDatas.data(),
-                sizeof(InstanceData) * (UINT)totalMultiInstanceDatas.size()
+                multiInstanceVec.data(),
+                sizeof(InstanceData) * (UINT)multiInstanceVec.size()
             );
         }
     }
+}
+
+void WorldGenerator::MiningBlock(Block* block)
+{
+    if (!block) return;
+
+    UINT64 blockID = block->GetBlockID();
+
+    if (block->IsNormal())
+    {
+        if (totalSingleInstanceDatas.count(blockID))
+            totalSingleInstanceDatas.erase(blockID);
+    }
+    else
+    {
+        if (totalMultiInstanceDatas.count(blockID))
+            totalMultiInstanceDatas.erase(blockID);
+    }
+
+    UpdateInstanceBuffer();
+}
+
+void WorldGenerator::BuildBlock(Vector3 pos, UINT index)
+{
+    if (!closestChunks.empty())
+    {
+        activeSubChunk = mainChunks[BlockManager::Get()->GetSelectedBlock()->GetParentIndex()]->GetActiveSubChunk();
+    }
+
+    activeSubChunk->BuildBlock(pos, index);
+    builtBlock = activeSubChunk->GetBlock(pos);
+
+    InstanceData instanceData;
+
+    UVInfo uvInfo = builtBlock->GetUVInfo();
+    UINT64 blockID = builtBlock->GetBlockID();
+
+    Vector3 blockPos = builtBlock->GetGlobalPosition();
+
+    instanceData.transform = XMMatrixTranslation(blockPos.x, blockPos.y, blockPos.z);
+    instanceData.transform = XMMatrixTranspose(instanceData.transform);
+        
+    instanceData.curFrame = uvInfo.uvStart;
+    instanceData.maxFrame = uvInfo.uvEnd;
+
+    instanceData.blockID = builtBlock->GetBlockID();
+
+    if (builtBlock->IsNormal())
+    {
+        totalSingleInstanceDatas[blockID] = instanceData;
+    }
+    else
+    {
+        totalMultiInstanceDatas[blockID] = instanceData;
+    }
+
+    UpdateInstanceBuffer();
 }
 
 void WorldGenerator::ReserveInstanceData(size_t singleSize, size_t multiSize)
@@ -259,8 +337,8 @@ void WorldGenerator::ReserveInstanceData(size_t singleSize, size_t multiSize)
     totalSingleInstanceDatas.clear();
     totalMultiInstanceDatas.clear();
 
-    totalSingleInstanceDatas.reserve(singleSize);
-    totalMultiInstanceDatas.reserve(multiSize);
+    totalSingleInstanceDatas.reserve(singleSize + SURPLUS_SIZE);
+    totalMultiInstanceDatas.reserve(multiSize + SURPLUS_SIZE);
 }
 
 vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)

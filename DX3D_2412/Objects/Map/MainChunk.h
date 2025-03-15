@@ -6,7 +6,7 @@ private:
     const int SUBCHUNK_SIZE = 4;
 
 public:
-    MainChunk(Vector3 pos, TerrainType terrainType);
+    MainChunk(Vector3 pos, TerrainType terrainType, UINT64 myIndex);
     ~MainChunk();
 
     void Update();
@@ -16,6 +16,8 @@ public:
     void MergeHeightMap(MainChunk* neighbor);
     void ActivateSubChunk();
     void SetInstanceData();
+
+    SubChunk* GetActiveSubChunk() { return subChunks[activeChunkIndex]; }
   
     vector<InstanceData> GetTotalSingleInstanceDatas() { return totalSingleInstanceDatas; }
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
@@ -25,6 +27,7 @@ public:
     pair<int, int> GetIndex() const { return chunkIndex; }
 
 private:
+    UINT64 myIndex;
     TerrainType terrainType = TerrainType::PLAINS;
     int activeChunkIndex = 0;
 

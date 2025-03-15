@@ -11,10 +11,7 @@ SubChunk::~SubChunk()
 
 void SubChunk::Update()
 {
-	GetSelectedBlock();
-	BlockManager::Get()->SetSelectedBlock(selectedBlock);
-
-	for (pair<const UINT, Block>& pair : blocks)
+	for (pair<const UINT64, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
 		block.Update();  
@@ -23,7 +20,7 @@ void SubChunk::Update()
 
 void SubChunk::Render()
 {
-	for (pair<const UINT, Block>& pair : blocks)
+	for (pair<const UINT64, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
 		block.Render();  // 블록 렌더링
@@ -32,6 +29,7 @@ void SubChunk::Render()
 
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1])
 {
+	worldPos = pos;
 	blocks.clear(); 
 
 	for (UINT x = 0; x < CHUNK_WIDTH; x++)
@@ -97,16 +95,18 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 						else if (randValue < 4) blockType = 11;  // 다이아몬드 (4% 확률) 
 					}
 				}
-				UINT gridIndex = (x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (y * CHUNK_DEPTH) + z;
-
-				pair<unordered_map<UINT, Block>::iterator, bool> result = blocks.emplace(gridIndex, Block(blockType));
+				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
+				UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+			
+				pair<unordered_map<UINT64, Block>::iterator, bool> result = blocks.emplace(blockID, Block(blockType));
 
 				if (result.second) 
 				{
 					Block& newBlock = result.first->second;
 					newBlock.SetParent(this);
-					newBlock.SetLocalPosition(pos.x + x, worldY, pos.z + z);
-					newBlock.SetIndex(gridIndex);
+					newBlock.SetLocalPosition(globalPos);
+					newBlock.SetBlockID(blockID);
+					newBlock.SetParentIndex(parentIndex);
 					newBlock.UpdateWorld();
 				}
 			}
@@ -114,25 +114,17 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 	}
 }
 
-
-Block* SubChunk::GetBlock(int x, int y, int z)
+Block* SubChunk::GetBlock(Vector3 globalPos)
 {
-	if (x < 0 || x >= CHUNK_WIDTH ||
-		y < 0 || y >= SUBCHUNK_HEIGHT ||
-		z < 0 || z >= CHUNK_DEPTH)
+	UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+
+	if (blocks.count(blockID) > 0) 
 	{
-		return nullptr;
+		return &blocks[blockID];
 	}
-
-	UINT index = (x * SUBCHUNK_HEIGHT * CHUNK_DEPTH) + (y * CHUNK_DEPTH) + z;
-
-	auto it = blocks.find(index);
-	if (it == blocks.end()) return nullptr;
-
-	return &(it->second); 
 }
 
-void SubChunk::FindSurroundedBlocks()
+void SubChunk::FindVisibleBlocks()
 {
 	visibleBlocks.clear();
 	visibleSingleInstanceDatas.clear();
@@ -146,15 +138,21 @@ void SubChunk::FindSurroundedBlocks()
 		{
 			for (int y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
-				Block* block = GetBlock(x, y, z);
-				if (!block) continue;
+				Vector3 blockPos = { worldPos.x + x, worldPos.y + y, worldPos.z + z };
+				Block* block = GetBlock(blockPos);
+
+				if (!block || block->IsMining()) continue;
 
 				Vector3 blockWorldPos = block->GetGlobalPosition();
 
-				if (GetBlock(x + 1, y, z) && GetBlock(x - 1, y, z) &&
-					GetBlock(x, y + 1, z) && GetBlock(x, y - 1, z) &&
-					GetBlock(x, y, z + 1) && GetBlock(x, y, z - 1))
+				if (GetBlock({ blockWorldPos.x + 1, blockWorldPos.y, blockWorldPos.z }) &&
+					GetBlock({ blockWorldPos.x - 1, blockWorldPos.y, blockWorldPos.z }) &&
+					GetBlock({ blockWorldPos.x, blockWorldPos.y + 1, blockWorldPos.z }) &&
+					GetBlock({ blockWorldPos.x, blockWorldPos.y - 1, blockWorldPos.z }) &&
+					GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z + 1 }) &&
+					GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z - 1 }))
 				{
+					block->SetOcclusion(true);
 					continue;
 				} // 오클루젼 
 
@@ -166,11 +164,15 @@ void SubChunk::FindSurroundedBlocks()
 				InstanceData visibleInstanceData;
 				UVInfo uvInfo = block->GetUVInfo();
 
+				block->SetOcclusion(false);
+
 				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
 				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
 
 				visibleInstanceData.curFrame = uvInfo.uvStart;
 				visibleInstanceData.maxFrame = uvInfo.uvEnd;
+
+				visibleInstanceData.blockID = block->GetBlockID();
 
 				if (block->IsNormal())
 				{
@@ -187,7 +189,7 @@ void SubChunk::FindSurroundedBlocks()
 
 void SubChunk::CheckVisibleBlocks()
 {
-	FindSurroundedBlocks();
+	FindVisibleBlocks();
 }
 
 void SubChunk::ActiveCollider()
@@ -201,7 +203,31 @@ void SubChunk::ActiveCollider()
 	hasCollider = true;
 }
 
-Block* SubChunk::GetSelectedBlock()
+void SubChunk::MiningBlock(Block* block)
+{
+	UINT64 blockID = block->GetBlockID();
+
+	auto it = blocks.find(blockID);
+	blocks.erase(blockID);
+}
+
+void SubChunk::BuildBlock(Vector3 pos, int blockType)
+{
+	UINT64 blockID = GameMath::GenerateBlockID(pos);
+	pair<unordered_map<UINT64, Block>::iterator, bool> result = blocks.emplace(blockID, Block(blockType));
+
+	if (result.second)
+	{
+		Block& newBlock = result.first->second;
+		newBlock.SetParent(this);
+		newBlock.EnableCollider();
+		newBlock.SetLocalPosition(pos);
+		newBlock.SetBlockID(blockID);
+		newBlock.UpdateWorld();
+	}
+}
+
+void SubChunk::CheckSelectedBlock()
 {
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
@@ -211,10 +237,11 @@ Block* SubChunk::GetSelectedBlock()
 
 	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
 
-	for (pair<const UINT, Block>& pair : blocks)
+	for (pair<const UINT64, Block>& pair : blocks)
 	{
 		Block& block = pair.second;
-		if (&block == nullptr) continue;
+		if (block.IsOcclusion()) continue;
+		if (!block.IsActive()) continue;
 
 		float dist = Vector3::Distance(block.GetGlobalPosition(), rayStartPos);
 		float maxDistance = PLAYER->GetPlayerReach(block.GetBlockType());
@@ -230,14 +257,11 @@ Block* SubChunk::GetSelectedBlock()
 		}
 	}
 
-	for (pair<const UINT, Block>& pair : blocks)
+	for (pair<const UINT64, Block>& pair : blocks)
 	{
 		if (&pair.second == closestBlock)
 			pair.second.GetCollider()->SetColor(1, 0, 0);
 		else
 			pair.second.GetCollider()->SetColor(0, 1, 0);
 	}
-
-
-	return closestBlock;
 }

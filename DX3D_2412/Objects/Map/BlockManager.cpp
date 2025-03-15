@@ -12,11 +12,6 @@ BlockManager::BlockManager()
 BlockManager::~BlockManager()
 {
 	delete worldGenerator;
-	//for (Block* block : blocks)
-	//	delete block;
-	//
-	//delete block;
-	//delete instanceBuffer;
 	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 	{
 		delete chunk.second;
@@ -26,14 +21,6 @@ BlockManager::~BlockManager()
 
 void BlockManager::Update()
 {
-	//GetSelectedBlock();
-	//
-	//for (Block* block : blocks)
-	//	if (abs(PLAYER->GetGlobalPosition().x - block->GetGlobalPosition().x) < 16
-	//		&& abs(PLAYER->GetGlobalPosition().z - block->GetGlobalPosition().z) < 16)
-	//	{
-	//		block->Update();
-	//	}
 	Vector3 currentPlayerPos = PLAYER->GetGlobalPosition();
 	float distanceMoved = Vector3::Distance(currentPlayerPos, lastPlayerPos);
 	
@@ -48,17 +35,6 @@ void BlockManager::Update()
 
 void BlockManager::Render()
 {
-	//instanceBuffer->Set(1);
-	//
-	//UINT instanceCount = (UINT)instanceDatas.size();
-	//block->RenderInstanced(instanceDatas.size());
-	//
-	//for (Block* block : blocks)
-	//	if (abs(PLAYER->GetGlobalPosition().x - block->GetGlobalPosition().x) < 16
-	//		&& abs(PLAYER->GetGlobalPosition().z - block->GetGlobalPosition().z) < 16)
-	//	{
-	//		block->Render();
-	////	}
 	worldGenerator->Render();
 }
 
@@ -66,76 +42,37 @@ void BlockManager::PostRender()
 {
 }
 
-//void BlockManager::BuildBlock()
-//{
-//	if (!selectedBlock) return;
-//
-//	pair<UINT, UINT>quickSlotData = QUICKSLOT->GetSelectedIndexData();
-//	
-//	if (quickSlotData.first == 0) return;
-//
-//	ItemData data = DataManager::Get()->GetItemData(quickSlotData.first);
-//	
-//	if (!data.canBuild) return;
-//
-//	Block* newBlock = nullptr;
-//
-//	newBlock = new Block(quickSlotData.first);
-//		
-//	Ray ray = CAM->ScreenPointToRay(CENTER);
-//	RaycastHit hit;
-//
-//	//if (selectedBlock->IsRayCollision(ray, &hit))
-//	//{
-//	//	newBlock->SetActive(true);
-//	//	newBlock->SetLocalPosition(selectedBlock->GetGlobalPosition() + hit.normal);
-//	//	newBlock->UpdateWorld();
-//	//
-//	//	size_t index = blocks.size();
-//	//	newBlock->SetIndex(index);
-//	//
-//	//	blocks.push_back(newBlock);
-//	//
-//	//	Vector3 pos = { (float)newBlock->GetGlobalPosition().x, (float)newBlock->GetGlobalPosition().y, (float)newBlock->GetGlobalPosition().z};
-//	//
-//	//	InstanceData newInstanceData;
-//	//	newInstanceData.transform = XMMatrixTranslation(pos.x, pos.y, pos.z);
-//	//	newInstanceData.transform = XMMatrixTranspose(newInstanceData.transform);
-//	//
-//	//	instanceDatas.push_back(newInstanceData);
-//	//}
-//	//else
-//	//{
-//	//	delete newBlock;
-//	//}
-//	//
-//	//UpdateInstanceBuffer();
-//}
-//
+void BlockManager::BuildBlock()
+{
+	if (!selectedBlock) return;
+
+	pair<UINT, UINT>quickSlotData = QUICKSLOT->GetSelectedIndexData();
+	
+	if (quickSlotData.first == 0) return;
+
+	ItemData data = DataManager::Get()->GetItemData(quickSlotData.first);
+	
+	if (!data.canBuild) return;
+
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+
+	float minDistance = FLT_MAX;
+	RaycastHit hit;
+
+	if (selectedBlock->GetCollider()->IsRayCollision(ray, &hit))
+	{
+		Vector3 buildPosition = selectedBlock->GetGlobalPosition() + hit.normal;
+		worldGenerator->BuildBlock(buildPosition, quickSlotData.first);
+	}
+}
+
 void BlockManager::MiningBlock()
 {
 	if (!selectedBlock) return;
 	
-	size_t index = selectedBlock->GetIndex();
-	
 	selectedBlock->Damage();
-	
-	//if (blocks[index]->IsMining())
-	//{
-	//	instanceDatas.erase(instanceDatas.begin() + index);
-	//
-	//	delete blocks[index]; 
-	//	blocks.erase(blocks.begin() + index);
-	//
-	//	for (size_t i = index; i < blocks.size(); i++)
-	//	{
-	//		blocks[i]->SetIndex(i); 
-	//	}
-	//
-	//	UpdateInstanceBuffer();
-	//
-	//	selectedBlock = nullptr;
-	//}
+	if (selectedBlock->GetHp() <= 0)
+		worldGenerator->RefreshInstanceData(selectedBlock);
 }
 
 void BlockManager::InteractingBlock()
@@ -159,7 +96,7 @@ void BlockManager::ActivateCollisionBlocks()
 		{
 			UINT64 chunkKey = GameMath::ChunkPosToKey(chunkX + dx, chunkZ + dz);
 
-			if (activeChunks.find(chunkKey) != activeChunks.end())
+			if (activeChunks.find(chunkKey) != activeChunks.end())	
 			{
 				MainChunk* mainChunk = activeChunks[chunkKey];
 			}

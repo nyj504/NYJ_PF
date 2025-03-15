@@ -11,7 +11,7 @@ public:
 	void Render();
 	void PostRender();
 
-	//void BuildBlock();
+	void BuildBlock();
 	void MiningBlock();
 	void InteractingBlock();
 
