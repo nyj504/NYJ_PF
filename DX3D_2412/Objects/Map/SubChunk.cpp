@@ -268,6 +268,8 @@ void SubChunk::MiningBlock(Block* block)
 		blocks.erase(it);
 		selectedBlock = nullptr;
 	}	
+
+	BlockManager::Get()->SetSelectedBlock(nullptr);
 }
 
 void SubChunk::BuildBlock(Vector3 pos, int blockType)

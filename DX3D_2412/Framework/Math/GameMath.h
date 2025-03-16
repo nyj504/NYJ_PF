@@ -36,14 +36,14 @@ public:
 
     static UINT64 GenerateBlockID(const Vector3 globalPos)
     {
-        int CHUNK_OFFSET = 100000;
-        int Y_OFFSET = 128;
+        int CHUNK_OFFSET = 524288;  
+        int Y_OFFSET = 512;      
 
-        UINT64 x = (UINT64)((int)globalPos.x + CHUNK_OFFSET) & 0x3FFFF; 
-        UINT64 y = (UINT64)((int)globalPos.y + Y_OFFSET) & 0xFF;
-        UINT64 z = (UINT64)((int)globalPos.z + CHUNK_OFFSET) & 0x3FFFF;
+        UINT64 x = (UINT64)((int)globalPos.x + CHUNK_OFFSET) & 0xFFFFF; 
+        UINT64 y = (UINT64)((int)globalPos.y + Y_OFFSET) & 0x3FF;      
+        UINT64 z = (UINT64)((int)globalPos.z + CHUNK_OFFSET) & 0xFFFFF; 
 
-        return (x << 36) | (y << 28) | z;
+        return (x << 42) | (y << 32) | z;
     }
 
     static void KeyToChunkPos(UINT64 key, int& x, int& z)
@@ -51,7 +51,6 @@ public:
         x = (int)(key >> 32);
         z = (int)(key & 0xFFFFFFFF);
     }
-
 };
 
 template<typename T>

@@ -3,6 +3,8 @@
 MainChunk::MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex) : chunkPosition(position), terrainType(terrainType), myIndex(myIndex)
 {
     subChunks.reserve(SUBCHUNK_SIZE);
+    totalSingleInstanceDatas.reserve(SUBCHUNK_SIZE * CHUNK_WIDTH * CHUNK_DEPTH * SUBCHUNK_HEIGHT);
+    totalMultiInstanceDatas.reserve(SUBCHUNK_SIZE * CHUNK_WIDTH * CHUNK_DEPTH * SUBCHUNK_HEIGHT);
 }
 
 MainChunk::~MainChunk()
