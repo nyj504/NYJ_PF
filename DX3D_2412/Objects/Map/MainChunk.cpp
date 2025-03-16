@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-MainChunk::MainChunk(Vector3 pos, TerrainType terrainType, UINT64 myIndex) : terrainType(terrainType), myIndex(myIndex)
+MainChunk::MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex) : chunkPosition(position), terrainType(terrainType), myIndex(myIndex)
 {
     subChunks.reserve(SUBCHUNK_SIZE);
 }
@@ -14,23 +14,19 @@ MainChunk::~MainChunk()
 void MainChunk::Update()
 {
     int playerY = PLAYER->GetGlobalPosition().y;
-    int baseY = GetGlobalPosition().y; 
+    int baseY = chunkPosition.y;
 
-    activeChunkIndex = (baseY - playerY) / SUBCHUNK_HEIGHT;
-
-    activeChunkIndex = max(0, min(activeChunkIndex, SUBCHUNK_SIZE - 1));
+    activeChunkIndex = abs((baseY - playerY) / SUBCHUNK_HEIGHT);
 
     if (!subChunks[activeChunkIndex]->HasCollider())
         subChunks[activeChunkIndex]->ActiveCollider();
 
-    subChunks[activeChunkIndex]->CheckSelectedBlock();
-    
+    subChunks[activeChunkIndex]->Update();
+
     if (subChunks[activeChunkIndex]->IsMouseOverChunk())
     {
         BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
     }
-
-    subChunks[activeChunkIndex]->Update();
 }
 
 void MainChunk::Render()
@@ -39,18 +35,18 @@ void MainChunk::Render()
     subChunks[activeChunkIndex]->Render();
 }
 
-void MainChunk::GenerateTerrain(Vector3 pos)
+void MainChunk::GenerateTerrain()
 {
     PerlinNoise perlin((int)terrainType * 100);
 
-    UINT heightMap[CHUNK_WIDTH +1][CHUNK_DEPTH +1];
+    UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH];
 
     for (int x = 0; x < CHUNK_WIDTH; x++)
     {
         for (int z = 0; z < CHUNK_DEPTH; z++)
         {
-            float worldX = (pos.x + x) / 20.0f;
-            float worldZ = (pos.z + z) / 20.0f;
+            float worldX = (chunkPosition.x + x) / 20.0f;
+            float worldZ = (chunkPosition.z + z) / 20.0f;
 
             float baseHeight = 0.0f;
             float noiseFactor = 0.0f;
@@ -78,12 +74,11 @@ void MainChunk::GenerateTerrain(Vector3 pos)
 
     for (int i = 0; i < SUBCHUNK_SIZE; i++)
     {
-        Vector3 subChunkPos = Vector3(pos.x, pos.y - (SUBCHUNK_HEIGHT * i), pos.z);
+        Vector3 subChunkPos = Vector3(chunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), chunkPosition.z);
 
         SubChunk* subChunk = new SubChunk(i);
-        subChunk->SetParent(this);
+        subChunk->SetParentIndex(myIndex);
         subChunk->GenerateTerrain(subChunkPos, heightMap);
-        subChunk->UpdateWorld();
 
         subChunks.push_back(subChunk);
     }
@@ -113,7 +108,7 @@ void MainChunk::ActivateSubChunk()
     activeChunkIndex = PLAYER->GetGlobalPosition().y / SUBCHUNK_HEIGHT;
 }
 
-void MainChunk::SetInstanceData()
+void MainChunk::SetInstanceData(bool isChange)
 {
     totalSingleInstanceDatas.clear(); 
     totalMultiInstanceDatas.clear();
@@ -121,9 +116,9 @@ void MainChunk::SetInstanceData()
     for (SubChunk* subChunk : subChunks)
     {
         subChunk->CheckVisibleBlocks();
-
-        const vector<InstanceData>& newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
-        const vector<InstanceData>& newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
+       
+        vector<InstanceData> newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
+        vector<InstanceData> newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
 
         totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
         totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());

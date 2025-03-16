@@ -24,7 +24,7 @@ key,name,image,hp,canBuild,canCraft,textureType,craftingType,textureStartUV,text
 23,아카시아판자,acacia_plank_block,50,1,1,Normal,CraftingBox,26,26,23,1,25,Block,1,0,4
 24,참나무,cham_oak_block,50,1,0,UVMapping,None,5,8,24,1,42,Block,1,1,1
 25,아카시아나무,acacia_oak_block,50,1,0,UVMapping,None,9,12,25,1,42,Block,1,1,1
-26,수박,WaterMelon_block,50,1,0,UVMapping,None,31,32,55,4,None,Block,0,0,0
+26,수박,WaterMelon_block,50,1,0,UVMapping,None,13,16,55,4,None,Block,0,0,0
 27,계단,stone_stair_block,50,1,1,Model,CraftingBox,2,2,27,1,2_0_0_2_2_0_2_2_2,Block,0,0,4
 28,반블럭,stone_halfsize_block,50,1,1,Model,CraftingBox,2,2,28,1,0_0_0_0_0_0_2_2_2,Block,0,0,4
 29,돌계단,cobblestone_stair_block,50,1,1,Model,CraftingBox,16,16,29,1,15_0_0_15_15_0_15_15_15,Block,0,0,4
@@ -33,11 +33,11 @@ key,name,image,hp,canBuild,canCraft,textureType,craftingType,textureStartUV,text
 32,참나무반블럭,cham_oak_halfplank_block,50,1,1,Model,CraftingBox,25,25,32,1,0_0_0_22_22_22_22_22_22,Block,1,0,4
 33,아카시아계단,acacia_stair_block,50,1,1,Model,CraftingBox,26,26,33,1,23_0_0_23_23_0_23_23_23,Block,1,0,4
 34,아카시아반블럭,acacia_halfplank_block,50,1,1,Model,CraftingBox,26,26,34,1,0_0_0_23_23_23_23_23_23,Block,1,0,4
-35,작업대,craftingTable_block,50,1,1,UVMapping,CraftingBox,33,36,35,1,22_22_22_22,CraftBlock,0,0,1
+35,작업대,craftingTable_block,50,1,1,UVMapping,CraftingBox,17,20,35,1,22_22_22_22,CraftBlock,0,0,1
 36,인챈트테이블,enchantingTable_block,50,1,1,Model,CraftingBox,37,38,36,1,0_96_0_0_49_0_14_14_14,CraftBlock,0,0,1
-37,화로,furnace_block,50,1,1,UVMapping,CraftingBox,39,41,37,1,15_15_15_15_0_15_15_15_15,CraftBlock,0,0,1
+37,화로,furnace_block,50,1,1,UVMapping,CraftingBox,21,24,37,1,15_15_15_15_0_15_15_15_15,CraftBlock,0,0,1
 38,보관함,chest_block,50,1,1,Model,CraftingBox,0,0,38,1,22_22_22_22_0_22_22_22_22,CraftBlock,0,0,1
-39,책장,bookShelf_block,100,1,1,UVMapping,CraftingBox,42,44,39,1,22_22_22_96_96_96_22_22_22,Block,0,0,1
+39,책장,bookShelf_block,100,1,1,UVMapping,CraftingBox,25,28,39,1,22_22_22_96_96_96_22_22_22,Block,0,0,1
 40,모루,anvil_block,100,1,1,Model,CraftingBox,0,0,40,1,8_8_8_0_46_0_46_46_46,CraftBlock,0,0,1
 41,비콘,beacon_block,100,1,1,Normal,CraftingBox,0,0,41,1,56_56_56_56_41_56_14_14_14,CraftBlock,0,0,1
 42,석탄,coal,0,0,0,None,None,0,0,0,0,None,Fuel,1,0,0

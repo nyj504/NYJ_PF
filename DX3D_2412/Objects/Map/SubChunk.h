@@ -1,6 +1,6 @@
 #pragma once
 
-class SubChunk : public Transform
+class SubChunk
 {
 public:
 	SubChunk(int index);
@@ -12,7 +12,7 @@ public:
 	Block* GetBlock(Vector3 globalPos);
 	Block* GetSelectedBlock() { return selectedBlock; }
 	
-	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1]);
+	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
 	void CheckVisibleBlocks();
 	void ActiveCollider();
 
@@ -36,11 +36,13 @@ private:
 private:
 	bool hasCollider = false;
 	bool isMouseOver = false;
+	bool test = false;
+
 	Vector3 worldPos;
 	UINT64 parentIndex;
 	UINT index;
 
-	unordered_map<UINT64,Block>blocks; //청크 내 블록
+	unordered_map<UINT64,Block*>blocks; //청크 내 블록
 	vector<Block*>visibleBlocks; //청크 내 보이는 블록
 
 	Block* selectedBlock = nullptr;

@@ -81,30 +81,6 @@ void BlockManager::InteractingBlock()
 	UIManager::Get()->SetTopSlot(selectedBlock->GetTag());
 }
 
-void BlockManager::ActivateCollisionBlocks()
-{
-	UINT updateDistance = 7;
-
-	Vector3 playerPos = PLAYER->GetGlobalPosition();
-
-	int chunkX = (int)(playerPos.x / CHUNK_WIDTH);
-	int chunkZ = (int)(playerPos.z / CHUNK_DEPTH);
-
-	for (int dx = 0; dx <= 1; dx++)
-	{
-		for (int dz = 0; dz <= 1; dz++)
-		{
-			UINT64 chunkKey = GameMath::ChunkPosToKey(chunkX + dx, chunkZ + dz);
-
-			if (activeChunks.find(chunkKey) != activeChunks.end())	
-			{
-				MainChunk* mainChunk = activeChunks[chunkKey];
-			}
-		}
-	}
-}
-
-
 void BlockManager::ActivateRenderingChunks()
 {
 	int renderDistance = 4; 
@@ -113,14 +89,14 @@ void BlockManager::ActivateRenderingChunks()
 
 	vector<MainChunk*> surroundingChunks = worldGenerator->GetChunksInRange(renderDistance);
 
-	size_t totalSingleInstanceSize = 0;
-	size_t totalMultiInstanceSize = 0;
+	UINT totalSingleInstanceSize = 0;
+	UINT totalMultiInstanceSize = 0;
 
 	for (MainChunk* chunk : surroundingChunks)
 	{
-		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetGlobalPosition().x / CHUNK_WIDTH,
-			chunk->GetGlobalPosition().z / CHUNK_DEPTH);
-		chunk->SetInstanceData();
+		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetChunkPosition().x / CHUNK_WIDTH,
+			chunk->GetChunkPosition().z / CHUNK_DEPTH);
+		chunk->SetInstanceData(false);
 		
 		totalSingleInstanceSize += chunk->GetTotalSingleInstanceDatas().size();
 		totalMultiInstanceSize += chunk->GetTotalMultiInstanceDatas().size();

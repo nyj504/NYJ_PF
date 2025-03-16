@@ -12,8 +12,6 @@ Block::Block(UINT key)
         curHp = itemData.hp;
     }
 
-    //GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
-  
     if (key == 35) tag = "CraftingTable";
     if (key == 37) tag = "Furnace";
   
@@ -27,8 +25,6 @@ Block::~Block()
 
 void Block::Update()
 {
-    if (!isActive) return;
-
     Vector3 playerPos = PLAYER->GetGlobalPosition();
     Vector3 blockPos = this->GetGlobalPosition();
 
@@ -44,8 +40,6 @@ void Block::Update()
 
 void Block::Render()
 {
-    if (!isActive) return;
-
     if(collider)
     collider->Render();
 }
@@ -72,7 +66,6 @@ void Block::Damage()
         INVEN->AddItem(itemData.dropItemKey, itemData.dropsAmount);
         isActive = false;
         isMining = true;
-        isOcclusion = false;
     }
 }
 

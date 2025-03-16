@@ -15,7 +15,6 @@ public:
 	void MiningBlock();
 	void InteractingBlock();
 
-	void ActivateCollisionBlocks();
 	void ActivateRenderingChunks();
 
 	Block* GetSelectedBlock() { return selectedBlock; }

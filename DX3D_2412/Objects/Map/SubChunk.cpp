@@ -7,41 +7,93 @@ SubChunk::SubChunk(int index) : index(index)
 
 SubChunk::~SubChunk()
 {
+	for (auto& pair : blocks)
+	{
+		delete pair.second;
+	}
+	blocks.clear();
 }
 
 void SubChunk::Update()
 {
-	for (pair<const UINT64, Block>& pair : blocks)
+	isMouseOver = false;
+
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+
+	float minDistance = FLT_MAX;
+	RaycastHit hit;
+	Block* closestBlock = nullptr;
+
+	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
+
+	for (const pair<UINT64, Block*> pair : blocks)
 	{
-		Block& block = pair.second;
-		block.Update();  
+		Block* block = pair.second;
+
+		block->Update();
+
+		float dist = Vector3::Distance(block->GetGlobalPosition(), rayStartPos);
+		float maxDistance = PLAYER->GetPlayerReach(false);
+
+		if (block->GetCollider()->IsRayCollision(ray, &hit))
+		{
+			if (hit.distance > 0.0f && hit.distance <= maxDistance && hit.distance < minDistance)
+			{
+				minDistance = hit.distance;
+				closestBlock = block;
+			}
+		}
 	}
+
+	selectedBlock = closestBlock;
+
+	if (selectedBlock)
+	{
+		isMouseOver = true;
+	}
+
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		if (block == closestBlock)
+			block->GetCollider()->SetColor(1, 0, 0);
+		else
+			block->GetCollider()->SetColor(0, 1, 0);
+	}
+	//CheckSelectedBlock();
 }
 
 void SubChunk::Render()
 {
-	for (pair<const UINT64, Block>& pair : blocks)
+
+	for (const pair<UINT64, Block*> pair : blocks)
 	{
-		Block& block = pair.second;
-		block.Render();  
+		Block* block = pair.second;
+			block->Render();
 	}
+	
+	//for (Block* visibleBlock : visibleBlocks)
+	//{
+	//	visibleBlock->Render();
+	//}
 }
 
-void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUNK_DEPTH + 1])
+void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH])
 {
 	worldPos = pos;
 	blocks.clear(); 
 
 	for (UINT x = 0; x < CHUNK_WIDTH; x++)
 	{
-		for (UINT z = 0; z < SUBCHUNK_HEIGHT; z++)
+		for (UINT z = 0; z < CHUNK_DEPTH; z++)
 		{
 			int minY = pos.y;
 			int maxY = minY + SUBCHUNK_HEIGHT;
 
 			int terrainHeight = heightMap[x][z];
 
-			for (UINT y = 0; y < CHUNK_DEPTH; y++)
+			for (UINT y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
 				int worldY = minY + y;
 
@@ -66,20 +118,20 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 				{
 					int randValue = GameMath::Random(1, 100);
 
-					if (worldY < terrainHeight - 5 && worldY >= terrainHeight - 16) // Y=33~48 (¾èÀº ÁöÇÏÃþ)
+					if (worldY < terrainHeight - 5 && worldY >= terrainHeight - 16) 
 					{
 						if (randValue < 15) blockType = 7;  // ¼®Åº (15% È®·ü)
 						else if (randValue < 5) blockType = 8; // ±¸¸®±¤¼® (5% È®·ü)
 						else if (randValue < 2) blockType = 10; // ±Ý±¤¼® (2% È®·ü) 
 					}
-					else if (worldY < terrainHeight - 16 && worldY >= terrainHeight - 32) // Y=17~32 (Áß°£ ÁöÇÏÃþ)
+					else if (worldY < terrainHeight - 16 && worldY >= terrainHeight - 32) 
 					{
 						if (randValue < 12) blockType = 9;  // Ã¶±¤¼® (12% È®·ü)
 						else if (randValue < 5) blockType = 10;  // ±Ý±¤¼® (5% È®·ü) 
-						else if (randValue < 4) blockType = 12; // Ã»±Ý¼®(¶óÇÇ½º ¶óÁÙ¸®) (4% È®·ü) 
+						else if (randValue < 4) blockType = 12; // Ã»±Ý¼®(4% È®·ü) 
 						else if (randValue < 1) blockType = 11; // ´ÙÀÌ¾Æ¸óµå (1% È®·ü) 
 					}
-					else if (worldY < terrainHeight - 32 && worldY >= terrainHeight - 40) // Y=9~16 (±íÀº ÁöÇÏÃþ)
+					else if (worldY < terrainHeight - 32 && worldY >= terrainHeight - 40) 
 					{
 						if (randValue < 14) blockType = 9;  // Ã¶±¤¼® (14% È®·ü)
 						else if (randValue < 6) blockType = 10;  // ±Ý±¤¼® (6% È®·ü) 
@@ -87,7 +139,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 						else if (randValue < 3) blockType = 13; // ·¹µå½ºÅæ (3% È®·ü)
 						else if (randValue < 2) blockType = 11; // ´ÙÀÌ¾Æ¸óµå (2% È®·ü) 
 					}
-					else if (worldY < terrainHeight - 40 && worldY >= terrainHeight - 48) // Y=1~8 (½ÉÃþ ÁöÇÏÃþ)
+					else if (worldY < terrainHeight - 40 && worldY >= terrainHeight - 48) 
 					{
 						if (randValue < 7) blockType = 13;  // ·¹µå½ºÅæ (7% È®·ü)
 						else if (randValue < 5) blockType = 12;  // Ã»±Ý¼® (5% È®·ü) 
@@ -98,17 +150,14 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH + 1][CHUN
 				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
 				UINT64 blockID = GameMath::GenerateBlockID(globalPos);
 			
-				pair<unordered_map<UINT64, Block>::iterator, bool> result = blocks.emplace(blockID, Block(blockType));
+				Block* newBlock = new Block(blockType);
+				newBlock->SetActive(true);
+				newBlock->SetLocalPosition(globalPos);
+				newBlock->SetBlockID(blockID);
+				newBlock->SetParentIndex(parentIndex);
+				newBlock->UpdateWorld();
 
-				if (result.second) 
-				{
-					Block& newBlock = result.first->second;
-					newBlock.SetParent(this);
-					newBlock.SetLocalPosition(globalPos);
-					newBlock.SetBlockID(blockID);
-					newBlock.SetParentIndex(parentIndex);
-					newBlock.UpdateWorld();
-				}
+				blocks[blockID] = newBlock;
 			}
 		}
 	}
@@ -118,15 +167,16 @@ Block* SubChunk::GetBlock(Vector3 globalPos)
 {
 	UINT64 blockID = GameMath::GenerateBlockID(globalPos);
 
-	if (blocks.count(blockID) > 0) 
+	if (blocks.count(blockID) > 0 && blocks[blockID]->IsActive())
 	{
-		return &blocks[blockID];
+		return blocks[blockID];
 	}
 }
 
 void SubChunk::FindVisibleBlocks()
 {
 	visibleBlocks.clear();
+	visibleBlocks.reserve(CHUNK_WIDTH * SUBCHUNK_HEIGHT * CHUNK_DEPTH);
 	visibleSingleInstanceDatas.clear();
 	visibleMultiInstanceDatas.clear();
 
@@ -141,7 +191,7 @@ void SubChunk::FindVisibleBlocks()
 				Vector3 blockPos = { worldPos.x + x, worldPos.y + y, worldPos.z + z };
 				Block* block = GetBlock(blockPos);
 
-				if (!block || block->IsMining()) continue;
+				if (!block) continue;
 
 				Vector3 blockWorldPos = block->GetGlobalPosition();
 
@@ -165,6 +215,7 @@ void SubChunk::FindVisibleBlocks()
 				UVInfo uvInfo = block->GetUVInfo();
 
 				block->SetOcclusion(false);
+				visibleBlocks.push_back(block);
 
 				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
 				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
@@ -194,10 +245,10 @@ void SubChunk::CheckVisibleBlocks()
 
 void SubChunk::ActiveCollider()
 {
-	for (auto& pair : blocks)
+	for (const pair<UINT64, Block*> pair : blocks)
 	{
-		Block& block = pair.second;
-		block.EnableCollider();  
+		Block* block = pair.second;
+		block->EnableCollider();  
 	}
 
 	hasCollider = true;
@@ -207,26 +258,31 @@ void SubChunk::MiningBlock(Block* block)
 {
 	UINT64 blockID = block->GetBlockID();
 
-	auto it = blocks.find(blockID);
-	blocks.erase(blockID);
+	unordered_map<UINT64, Block*>::iterator it = blocks.find(blockID);
+	
+	if (it == blocks.end()) return;
 
-	FindVisibleBlocks();
+	if (selectedBlock == it->second)
+	{
+		delete it->second;
+		blocks.erase(it);
+		selectedBlock = nullptr;
+	}	
 }
 
 void SubChunk::BuildBlock(Vector3 pos, int blockType)
 {
 	UINT64 blockID = GameMath::GenerateBlockID(pos);
-	Block& newBlock = blocks[blockID];
+	
+	Block* newBlock = new Block(blockType);
+	newBlock->EnableCollider();
+	newBlock->SetLocalPosition(pos);
+	newBlock->SetParentIndex(parentIndex);
+	newBlock->SetActive(true);
+	newBlock->SetBlockID(blockID);
+	newBlock->UpdateWorld();
 
-	newBlock = Block(blockType);
-	newBlock.SetParent(this);
-	newBlock.EnableCollider();
-	newBlock.SetLocalPosition(pos);
-	newBlock.SetActive(true);
-	newBlock.SetBlockID(blockID);
-	newBlock.UpdateWorld();
-
-	FindVisibleBlocks();
+	blocks[blockID] = newBlock;
 }
 
 void SubChunk::CheckSelectedBlock()
@@ -241,21 +297,17 @@ void SubChunk::CheckSelectedBlock()
 
 	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
 
-	for (pair<const UINT64, Block>& pair : blocks)
+	for (Block* visibleBlock : visibleBlocks)
 	{
-		Block& block = pair.second;
-		if (block.IsOcclusion()) continue;
-		if (!block.IsActive()) continue;
-
-		float dist = Vector3::Distance(block.GetGlobalPosition(), rayStartPos);
+		float dist = Vector3::Distance(visibleBlock->GetGlobalPosition(), rayStartPos);
 		float maxDistance = PLAYER->GetPlayerReach(false);
 
-		if (block.GetCollider()->IsRayCollision(ray, &hit) && hit.distance <= maxDistance)
+		if (visibleBlock->GetCollider()->IsRayCollision(ray, &hit) && hit.distance <= maxDistance)
 		{
 			if (hit.distance < minDistance)
 			{
 				minDistance = hit.distance;
-				closestBlock = &block;
+				closestBlock = visibleBlock;
 				isMouseOver = true;
 			}
 		}
@@ -263,12 +315,12 @@ void SubChunk::CheckSelectedBlock()
 
 	selectedBlock = closestBlock;
 
-	for (pair<const UINT64, Block>& pair : blocks)
+	for (pair<const UINT64, Block*> pair : blocks)
 	{
-		if (&pair.second == closestBlock)
-			pair.second.GetCollider()->SetColor(1, 0, 0);
+		if (pair.second == closestBlock)
+			pair.second->GetCollider()->SetColor(1, 0, 0);
 		else
-			pair.second.GetCollider()->SetColor(0, 1, 0);
+			pair.second->GetCollider()->SetColor(0, 1, 0);
 	}
 }
 

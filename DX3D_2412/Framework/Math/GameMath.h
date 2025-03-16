@@ -28,16 +28,22 @@ public:
 
     static UINT64 ChunkPosToKey(int x, int z)
     {
-        return ((UINT64)(x) << 32) | ((UINT64)(z) & 0xFFFFFFFF);
+        UINT64 ux = (UINT64)(x + 2147483648LL);
+        UINT64 uz = (UINT64)(z + 2147483648LL);
+
+        return (ux << 32) | uz;
     }
 
     static UINT64 GenerateBlockID(const Vector3 globalPos)
     {
-        UINT64 x = (UINT64)(globalPos.x) & 0x1FFFFF;
-        UINT64 y = (UINT64)(globalPos.y) & 0x3FF;
-        UINT64 z = (UINT64)(globalPos.z) & 0x1FFFFF;
+        int CHUNK_OFFSET = 100000;
+        int Y_OFFSET = 128;
 
-        return (x << 42) | (y << 32) | z;
+        UINT64 x = (UINT64)((int)globalPos.x + CHUNK_OFFSET) & 0x3FFFF; 
+        UINT64 y = (UINT64)((int)globalPos.y + Y_OFFSET) & 0xFF;
+        UINT64 z = (UINT64)((int)globalPos.z + CHUNK_OFFSET) & 0x3FFFF;
+
+        return (x << 36) | (y << 28) | z;
     }
 
     static void KeyToChunkPos(UINT64 key, int& x, int& z)

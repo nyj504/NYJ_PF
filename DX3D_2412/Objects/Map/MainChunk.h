@@ -1,21 +1,23 @@
 #pragma once
-class MainChunk : public Transform
+class MainChunk
 {
 private:
     const int MAINCHUNK_HEIGHT = 64;
     const int SUBCHUNK_SIZE = 4;
 
 public:
-    MainChunk(Vector3 pos, TerrainType terrainType, UINT64 myIndex);
+    MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex);
     ~MainChunk();
 
     void Update();
     void Render();
 
-    void GenerateTerrain(Vector3 pos);
+    void GenerateTerrain();
     void MergeHeightMap(MainChunk* neighbor);
     void ActivateSubChunk();
-    void SetInstanceData();
+    void SetInstanceData(bool isChange);
+ 
+    Vector3 GetChunkPosition() { return chunkPosition; }
 
     SubChunk* GetActiveSubChunk();
   
@@ -23,10 +25,9 @@ public:
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
 
     vector<SubChunk*>GetSubchunks() { return subChunks; }
-
-    pair<int, int> GetIndex() const { return chunkIndex; }
-
 private:
+    Vector3 chunkPosition;
+
     UINT64 myIndex;
     TerrainType terrainType = TerrainType::PLAINS;
     int activeChunkIndex = 0;

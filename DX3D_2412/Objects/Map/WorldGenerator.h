@@ -5,7 +5,7 @@ class WorldGenerator
 private:
 	const int MAINCHUNK_HEIGHT = 64;
 	const UINT MAX_MAINCHUNK = 10000;
-	const int SURPLUS_SIZE = 1000;
+	const int SURPLUS_SIZE = 10000;
 
 public:
 	WorldGenerator();
@@ -24,7 +24,7 @@ public:
 	void MiningBlock(Block* block);
 	void BuildBlock(Vector3 pos, UINT index);
 
-	void ReserveInstanceData(size_t singleSize, size_t multiSize);
+	void ReserveInstanceData(UINT singleSize, UINT multiSize);
 
 	vector<MainChunk*> GetChunksInRange(int distance);
 private:
@@ -38,6 +38,9 @@ private:
 	UINT test;
 
 	SubChunk* activeSubChunk;
+
+	vector<InstanceData> singleInstanceVec;
+	vector<InstanceData> multiInstanceVec;
 
 	Cube* singleFaceBlock;
 	Cube* multiFaceBlock;
