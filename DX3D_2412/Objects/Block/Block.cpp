@@ -60,6 +60,10 @@ void Block::EnableCollider()
 
         hasCollider = true;
     }
+    else
+    {
+        collider->UpdateWorld();
+    }
 }
 
 void Block::Damage()

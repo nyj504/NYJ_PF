@@ -196,11 +196,13 @@ void WorldGenerator::SetInstanceData(MainChunk* chunk, bool isChange)
 
     for (const auto& data : newSingleInstanceData)
     {
+        if(data.isActive)
         totalSingleInstanceDatas[singleCount++] = data;
     }
 
     for (const auto& data : newMultiInstanceData)
     {
+        if (data.isActive)
         totalMultiInstanceDatas[multiCount++] = data;
     }
 }
@@ -274,6 +276,8 @@ void WorldGenerator::MiningBlock(Block* block)
     }
 
     SetInstanceData(mainChunks[blockParentChunk], true);
+
+
    
     UpdateInstanceBuffer();
 }

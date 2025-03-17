@@ -205,7 +205,7 @@ void SubChunk::FindVisibleBlocks()
 					continue;
 				} // 오클루젼 
 
-				if (blockWorldPos.y <= playerPos.y - 7)
+				if (blockWorldPos.y <= playerPos.y - 7 || !block->IsActive())
 				{
 					continue;
 				}
@@ -222,9 +222,9 @@ void SubChunk::FindVisibleBlocks()
 
 				visibleInstanceData.curFrame = uvInfo.uvStart;
 				visibleInstanceData.maxFrame = uvInfo.uvEnd;
-					
-				visibleInstanceData.isActive = block->IsActive();
 
+				visibleInstanceData.isActive = block->IsActive();
+					
 				if (block->IsNormal())
 				{
 					visibleSingleInstanceDatas.push_back(visibleInstanceData);
@@ -279,18 +279,20 @@ void SubChunk::BuildBlock(Vector3 pos, int blockType)
 	
 	unordered_map<UINT64, Block*>::iterator it = blocks.find(blockID);
 	
-	if (it == blocks.end())
-	{
-		Block* newBlock = new Block(blockType);
-		newBlock->SetLocalPosition(pos);
-		newBlock->UpdateWorld();
-		newBlock->EnableCollider();
-		newBlock->SetActive(true);
-		newBlock->SetParentIndex(parentIndex);
-		newBlock->SetBlockID(blockID);
+	Block* newBlock = new Block(blockType);
+	newBlock->SetLocalPosition(pos);
+	newBlock->UpdateWorld();
+	newBlock->EnableCollider();
+	newBlock->SetActive(true);
+	newBlock->SetParentIndex(parentIndex);
+	newBlock->SetBlockID(blockID);
 
-		blocks[blockID] = newBlock;
+	if (it != blocks.end())
+	{
+		it->second = newBlock;
 	}
+	else
+		blocks[blockID] = newBlock;
 
 	FindVisibleBlocks();
 }
