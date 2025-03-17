@@ -27,19 +27,15 @@ void Player::Update()
 	//
 	//	velocity.y = 0;
 	//}
-	if (jumpTime > 0)
-	{
-		jumpTime -= DELTA;
-	}
 
 	Character::Update();
+
 	PlayerStateMachine();
 	UpdateWorld();
 	BuildAndMining();
 	SetCursor();
 	Control();
 	Move();
-
 	CAM->UpdateWorld();
 }
 
@@ -59,11 +55,12 @@ void Player::PlayerStateMachine()
 	case Player::IDLE:
 		break;
 	case Player::MOVE:
-		isMove = true;
 		break;
 	case Player::JUMP:
-		if (jumpTime <= 0)
-			playerState = FALL;
+		if (jumpTime >= 0)
+		{
+			jumpTime -= DELTA;
+		}
 		break;
 	case Player::EDIT:
 		break;
@@ -92,7 +89,10 @@ void Player::SetLand()
 
 void Player::SetFall()
 {
-	SetPlayerState(FALL);
+	if (jumpTime <= 0)
+	{
+		SetPlayerState(FALL);
+	}
 }
 
 void Player::Control()
@@ -117,8 +117,6 @@ void Player::Control()
 	//}
 
 	dir.Normalize();
-
-	//velocity = dir;
 
 	velocity.x = dir.x;
 	velocity.z = dir.z;

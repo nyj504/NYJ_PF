@@ -3,6 +3,12 @@
 
 BlockTestScene::BlockTestScene()
 {
+	PlayerSingleton::Get();
+	PLAYER->SetLocalPosition(4, 4, 4);
+	CAM->SetTarget(PLAYER);
+	CAM->TargetOptionLoad("FPSMode");
+	CAM->SetFPSView(true);
+
 	ShowCursor(true);
 
 	cube = new Cube();
@@ -16,25 +22,26 @@ BlockTestScene::BlockTestScene()
 	{
 		for (int z = 0; z < 10; z++)
 		{
-			for (int y = 0; y < 2; y++)
-			{
-				Vector3 pos = { (float)x, (float)y, (float)z };
-				Block* block = new Block(2);
-				block->SetLocalPosition(pos.x, pos.y, pos.z);
-				block->UpdateWorld();
-				blocks.push_back(block);
+			int y = (x + z) / 2; 
 
-				InstanceData visibleInstanceData;
-				UVInfo uvInfo = block->GetUVInfo();
+			Vector3 pos = { (float)x, (float)y, (float)z };
+			Block* block = new Block(2);
+			block->SetLocalPosition(pos);
+			block->UpdateWorld();
+			block->EnableCollider();
+			blocks.push_back(block);
 
-				visibleInstanceData.transform = XMMatrixTranslation(pos.x, pos.y, pos.z);
-				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
+			InstanceData visibleInstanceData;
+			UVInfo uvInfo = block->GetUVInfo();
 
-				visibleInstanceData.curFrame = uvInfo.uvStart;
-				visibleInstanceData.maxFrame = uvInfo.uvEnd;
+			visibleInstanceData.transform = XMMatrixTranslation(pos.x, pos.y, pos.z);
+			visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
 
-				instanceData.push_back(visibleInstanceData);
-			}
+			visibleInstanceData.curFrame = uvInfo.uvStart;
+			visibleInstanceData.maxFrame = uvInfo.uvEnd;
+
+			instanceData.push_back(visibleInstanceData);
+			
 		}
 	}
 
@@ -49,7 +56,13 @@ BlockTestScene::~BlockTestScene()
 
 void BlockTestScene::Update()
 {
-}
+	for (Block* block : blocks)
+	{
+		block->Update();
+	}
+
+	PLAYER->Update();
+}	
 
 void BlockTestScene::PreRender()
 {
@@ -60,7 +73,13 @@ void BlockTestScene::Render()
 	instanceBuffer->Set(1);
 
 	cube->RenderInstanced(instanceData.size());
-	//cube->Render();
+
+	for (Block* block : blocks)
+	{
+		block->Render();
+	}
+
+	PLAYER->Render();
 }
 
 void BlockTestScene::PostRender()
