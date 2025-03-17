@@ -19,15 +19,20 @@ public:
 	vector<MainChunk*> GetClosestMainChunks();
 
 	void SetInstanceData(MainChunk* chunk, bool isChange);
+	void AddInstanceData(Block* block, Vector3 position);
 	void UpdateInstanceBuffer();
 
 	void MiningBlock(Block* block);
-	void BuildBlock(Vector3 pos, UINT index);
-
-	void ReserveInstanceData(UINT singleSize, UINT multiSize);
+	void BuildBlock(Vector3 pos, UINT key);
 
 	vector<MainChunk*> GetChunksInRange(int distance);
+
+	UINT GetBlockInstanceIndex() { return globalBlockIndex++; }
+	void SetActiveSubChunk(SubChunk* subChunk) {activeSubChunk = subChunk;}
+
 private:
+	UINT globalBlockIndex = 0;
+
 	TerrainType terrainType = TerrainType::PLAINS;
 
 	unordered_map<UINT64, MainChunk*>mainChunks;
@@ -35,21 +40,15 @@ private:
 	Block* builtBlock = nullptr;
 
 	vector<MainChunk*>closestChunks;
-	UINT multiCount = 0;
-	UINT singleCount = 0;
 
 	SubChunk* activeSubChunk;
-
-	vector<InstanceData> singleInstanceVec;
-	vector<InstanceData> multiInstanceVec;
 
 	Cube* singleFaceBlock;
 	Cube* multiFaceBlock;
 
-	unordered_map<UINT64, InstanceData> totalSingleInstanceDatas;
-	unordered_map<UINT64, InstanceData> totalMultiInstanceDatas;
+	unordered_map<UINT, InstanceData> totalSingleInstanceDatas;
+	unordered_map<UINT, InstanceData> totalMultiInstanceDatas;
 
 	VertexBuffer* singleInstanceBuffer;
 	VertexBuffer* multiInstanceBuffer;
-
 };

@@ -30,17 +30,7 @@ void Block::Update()
 {
     if (!isActive) return;
 
-    Vector3 playerPos = PLAYER->GetGlobalPosition();
-    Vector3 blockPos = this->GetGlobalPosition();
-
-    float xDistance = abs(playerPos.x - blockPos.x);
-    float yDistance = abs(playerPos.y - blockPos.y);
-    float zDistance = abs(playerPos.z - blockPos.z);
-
-    if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
-    {
-        CheckPlayerCollision();
-    }
+     CheckPlayerCollision();
 }
 
 void Block::Render()

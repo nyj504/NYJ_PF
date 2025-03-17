@@ -1,6 +1,7 @@
 #include "Framework.h"
 
-MainChunk::MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex) : chunkPosition(position), terrainType(terrainType), myIndex(myIndex)
+MainChunk::MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex, WorldGenerator* worldGenerator)
+    : chunkPosition(position), terrainType(terrainType), myIndex(myIndex), worldGenerator(worldGenerator)
 {
     subChunks.reserve(SUBCHUNK_SIZE);
     totalSingleInstanceDatas.reserve(SUBCHUNK_SIZE * CHUNK_WIDTH * CHUNK_DEPTH * SUBCHUNK_HEIGHT);
@@ -23,11 +24,14 @@ void MainChunk::Update()
     if (!subChunks[activeChunkIndex]->HasCollider())
         subChunks[activeChunkIndex]->ActiveCollider();
 
-    subChunks[activeChunkIndex]->Update();
-
-    if (subChunks[activeChunkIndex]->IsMouseOverChunk())
+     subChunks[activeChunkIndex]->Update();
+    
+    for (SubChunk* chunk : subChunks)
     {
-        BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
+        if (chunk->IsMouseOverChunk())
+        {
+            BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
+        }
     }
 }
 
@@ -78,7 +82,7 @@ void MainChunk::GenerateTerrain()
     {
         Vector3 subChunkPos = Vector3(chunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), chunkPosition.z);
 
-        SubChunk* subChunk = new SubChunk(i);
+        SubChunk* subChunk = new SubChunk(i, worldGenerator);
         subChunk->SetParentIndex(myIndex);
         subChunk->GenerateTerrain(subChunkPos, heightMap);
 
@@ -86,29 +90,6 @@ void MainChunk::GenerateTerrain()
     }
 }
 
-void MainChunk::MergeHeightMap(MainChunk* neighborChunk)
-{
-    if (!neighborChunk) return;
-
-    for (int x = 0; x < CHUNK_WIDTH; x++)
-    {
-        for (int z = 0; z < CHUNK_DEPTH; z++)
-        {
-            int height = this->heightMap[x][z];
-            int neighborHeight = neighborChunk->heightMap[x][z];
-
-            if (abs(height - neighborHeight) > 3)
-            {
-                this->heightMap[x][z] = (height + neighborHeight) / 2;
-            }
-        }
-    }
-}
-
-void MainChunk::ActivateSubChunk()
-{
-    activeChunkIndex = PLAYER->GetGlobalPosition().y / SUBCHUNK_HEIGHT;
-}
 
 void MainChunk::SetInstanceData(bool isChange)
 {
@@ -117,20 +98,15 @@ void MainChunk::SetInstanceData(bool isChange)
 
     for (SubChunk* subChunk : subChunks)
     {
-        subChunk->CheckVisibleBlocks();
+        if (!isChange)
+        {
+            subChunk->CheckVisibleBlocks();
+        }
        
         vector<InstanceData> newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();
         vector<InstanceData> newMultiInstanceData = subChunk->GetVisibleMultiInstanceData();
 
         totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
         totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
-    }
-}
-
-SubChunk* MainChunk::GetActiveSubChunk()
-{
-    if (subChunks[activeChunkIndex]->IsMouseOverChunk())
-    {
-        return subChunks[activeChunkIndex];
     }
 }

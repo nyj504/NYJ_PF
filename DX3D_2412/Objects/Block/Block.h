@@ -44,8 +44,8 @@ public:
 	BoxCollider* GetCollider() { return collider; }
 
 	int GetHp() { return curHp; }
-	void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
-	UINT64 GetParentIndex() { return parentIndex; }
+	//void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
+	//UINT64 GetParentIndex() { return parentIndex; }
 
 	void CheckPlayerCollision();
 	bool GetBlockType() { return blockType; }
@@ -55,8 +55,8 @@ public:
 	bool IsOcclusion() { return isOcclusion; }
 	void SetOcclusion(bool isOcclusion) {this->isOcclusion= isOcclusion;}
 
-	UINT64 GetBlockID() { return blockID; }
-	void SetBlockID(UINT64 id) { this->blockID = id; }
+	UINT GetBlockInstanceID() { return blockInstanceID; }
+	void SetBlockInstanceID(UINT id) { this->blockInstanceID = id; }
 
 	UVInfo GetUVInfo() { return uvInfo; }
 
@@ -76,7 +76,7 @@ protected:
 
 private:
 	bool hasCollider = false;
-	UINT64 blockID;
+	UINT blockInstanceID;
 	UVInfo uvInfo;
 	BoxCollider* collider = nullptr;
 };

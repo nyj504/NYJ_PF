@@ -19,7 +19,6 @@ public:
 
 	Block* GetSelectedBlock() { return selectedBlock; }
 	void SetSelectedBlock(Block* block) { selectedBlock = block; }
-
 	//void Save();  
 	//void Load();
 private:

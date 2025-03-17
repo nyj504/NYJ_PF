@@ -38,7 +38,7 @@ public:
 
     static UINT64 GenerateBlockID(const Vector3 globalPos)
     {
-        int CHUNK_OFFSET = 3000;  
+        int CHUNK_OFFSET = 4000;  
         int Y_OFFSET = 128;      
 
         UINT64 x = (UINT64)((int)globalPos.x + CHUNK_OFFSET) & 0xFFFFF; 

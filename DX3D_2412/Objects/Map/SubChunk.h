@@ -3,7 +3,7 @@
 class SubChunk
 {
 public:
-	SubChunk(int index);
+	SubChunk(int index, class WorldGenerator* worldGenerator);
 	~SubChunk();
 
 	void Update();
@@ -22,8 +22,6 @@ public:
 	void MiningBlock(Block* block);
 	void BuildBlock(Vector3 pos, int blockType);
 
-	void CheckSelectedBlock();
-
 	bool HasCollider() { return hasCollider; }
 	bool IsMouseOverChunk() { return isMouseOver; }
 	
@@ -36,14 +34,14 @@ private:
 private:
 	bool hasCollider = false;
 	bool isMouseOver = false;
-	bool test = false;
+
+	class WorldGenerator* worldGenerator;
 
 	Vector3 worldPos;
 	UINT64 parentIndex;
 	UINT index;
 
-	unordered_map<UINT64,Block*>blocks; //청크 내 블록
-	vector<Block*>visibleBlocks; //청크 내 보이는 블록
+	unordered_map<UINT64,Block*>blocks; 
 
 	Block* selectedBlock = nullptr;
 
