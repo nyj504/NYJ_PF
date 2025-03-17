@@ -10,7 +10,9 @@ struct InstanceData
 	Matrix transform = XMMatrixIdentity();
 	Vector2 curFrame;
 	Vector2 maxFrame;
-	UINT64 blockID;
+
+	UINT index;
+	bool isActive;
 };
 
 class Block : public Transform
@@ -18,7 +20,7 @@ class Block : public Transform
 private:
 	enum ItemType
 	{
-		BLOCK, CRAFTBLOCK
+		BLOCK, CRAFTBLOCK, EMPTYBLOCK
 	};
 public:
 	Block() {};
@@ -69,7 +71,7 @@ protected:
 	bool isOcclusion = false;
 
 	bool isNormal = true;
-	ItemType blockType = BLOCK;
+	ItemType blockType = EMPTYBLOCK;
 	ItemData itemData;
 
 private:

@@ -96,7 +96,6 @@ void BlockManager::ActivateRenderingChunks()
 	{
 		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetChunkPosition().x / CHUNK_WIDTH,
 			chunk->GetChunkPosition().z / CHUNK_DEPTH);
-		chunk->SetInstanceData(false);
 		
 		totalSingleInstanceSize += chunk->GetTotalSingleInstanceDatas().size();
 		totalMultiInstanceSize += chunk->GetTotalMultiInstanceDatas().size();
@@ -104,11 +103,9 @@ void BlockManager::ActivateRenderingChunks()
 		activeChunks[chunkKey] = chunk;
 	}
 
-	worldGenerator->ReserveInstanceData(totalSingleInstanceSize, totalMultiInstanceSize);
-
 	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
 	{
-		worldGenerator->SetInstanceData(chunk.second);
+		worldGenerator->SetInstanceData(chunk.second, false);
 	}
 
 	worldGenerator->UpdateInstanceBuffer();

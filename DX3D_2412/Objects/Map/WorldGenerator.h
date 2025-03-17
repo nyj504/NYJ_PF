@@ -18,7 +18,7 @@ public:
 
 	vector<MainChunk*> GetClosestMainChunks();
 
-	void SetInstanceData(MainChunk* chunk);
+	void SetInstanceData(MainChunk* chunk, bool isChange);
 	void UpdateInstanceBuffer();
 
 	void MiningBlock(Block* block);
@@ -35,7 +35,8 @@ private:
 	Block* builtBlock = nullptr;
 
 	vector<MainChunk*>closestChunks;
-	UINT test;
+	UINT multiCount = 0;
+	UINT singleCount = 0;
 
 	SubChunk* activeSubChunk;
 

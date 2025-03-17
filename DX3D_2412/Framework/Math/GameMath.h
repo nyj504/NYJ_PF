@@ -28,16 +28,18 @@ public:
 
     static UINT64 ChunkPosToKey(int x, int z)
     {
-        UINT64 ux = (UINT64)(x + 2147483648LL);
-        UINT64 uz = (UINT64)(z + 2147483648LL);
+        int CHUNK_OFFSET = 3000;
+
+        UINT64 ux = (UINT64)(x + CHUNK_OFFSET);
+        UINT64 uz = (UINT64)(z + CHUNK_OFFSET);
 
         return (ux << 32) | uz;
     }
 
     static UINT64 GenerateBlockID(const Vector3 globalPos)
     {
-        int CHUNK_OFFSET = 524288;  
-        int Y_OFFSET = 512;      
+        int CHUNK_OFFSET = 3000;  
+        int Y_OFFSET = 128;      
 
         UINT64 x = (UINT64)((int)globalPos.x + CHUNK_OFFSET) & 0xFFFFF; 
         UINT64 y = (UINT64)((int)globalPos.y + Y_OFFSET) & 0x3FF;      

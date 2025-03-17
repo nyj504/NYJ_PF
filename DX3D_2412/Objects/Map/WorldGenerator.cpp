@@ -170,7 +170,7 @@ vector<MainChunk*> WorldGenerator::GetClosestMainChunks()
         };
     }
 
-    for (const auto& offset : chunkOffsets)
+    for (const pair<int, int>& offset : chunkOffsets)
     {
         int targetX = chunkX + offset.first;
         int targetZ = chunkZ + offset.second;
@@ -187,22 +187,21 @@ vector<MainChunk*> WorldGenerator::GetClosestMainChunks()
     return closestChunks;
 }
 
-void WorldGenerator::SetInstanceData(MainChunk* chunk)
+void WorldGenerator::SetInstanceData(MainChunk* chunk, bool isChange)
 {
+    chunk->SetInstanceData(isChange);
+
     vector<InstanceData> newSingleInstanceData = chunk->GetTotalSingleInstanceDatas();
     vector<InstanceData> newMultiInstanceData = chunk->GetTotalMultiInstanceDatas();
 
     for (const auto& data : newSingleInstanceData)
     {
-        UINT64 id = data.blockID; 
-        totalSingleInstanceDatas[id] = data;
+        totalSingleInstanceDatas[singleCount++] = data;
     }
 
     for (const auto& data : newMultiInstanceData)
     {
-        UINT64 id = data.blockID;
-
-        totalMultiInstanceDatas[id] = data;
+        totalMultiInstanceDatas[multiCount++] = data;
     }
 }
 
@@ -220,59 +219,35 @@ void WorldGenerator::UpdateInstanceBuffer()
     for (const auto& pair : totalMultiInstanceDatas)
         multiInstanceVec.push_back(pair.second);
 
-    if (singleInstanceVec.empty())
+  
+    if (!singleInstanceBuffer)
     {
-        if (singleInstanceBuffer)
-        {
-            delete singleInstanceBuffer;
-            singleInstanceBuffer = nullptr;
-        }
+        singleInstanceBuffer = new VertexBuffer(
+            singleInstanceVec.data(),
+            sizeof(InstanceData),
+            (UINT)singleInstanceVec.size()
+        );
     }
     else
     {
-        if (!singleInstanceBuffer)
-        {
-            singleInstanceBuffer = new VertexBuffer(
-                singleInstanceVec.data(),
-                sizeof(InstanceData),
-                (UINT)singleInstanceVec.size()
-            );
-        }
-        else
-        {
-            singleInstanceBuffer->Update(
-                singleInstanceVec.data(),
-                sizeof(InstanceData) * (UINT)singleInstanceVec.size()
-            );
-        }
+        singleInstanceBuffer->Update(singleInstanceVec.data(),(UINT)singleInstanceVec.size());
+    }
+   
+    if (!multiInstanceBuffer)
+    {
+        multiInstanceBuffer = new VertexBuffer(
+            multiInstanceVec.data(),
+            sizeof(InstanceData),
+            (UINT)multiInstanceVec.size()
+        );
+    }
+    else
+    {
+        multiInstanceBuffer->Update(multiInstanceVec.data(),(UINT)multiInstanceVec.size());
     }
 
-    if (multiInstanceVec.empty())
-    {
-        if (multiInstanceBuffer)
-        {
-            delete multiInstanceBuffer;
-            multiInstanceBuffer = nullptr;
-        }
-    }
-    else
-    {
-        if (!multiInstanceBuffer)
-        {
-            multiInstanceBuffer = new VertexBuffer(
-                multiInstanceVec.data(),
-                sizeof(InstanceData),
-                (UINT)multiInstanceVec.size()
-            );
-        }
-        else
-        {
-            multiInstanceBuffer->Update(
-                multiInstanceVec.data(),
-                sizeof(InstanceData) * (UINT)multiInstanceVec.size()
-            );
-        }
-    }
+    singleCount = 0;
+    multiCount = 0;
 }
 
 void WorldGenerator::MiningBlock(Block* block)
@@ -293,18 +268,12 @@ void WorldGenerator::MiningBlock(Block* block)
 
     activeSubChunk->MiningBlock(block);
 
-    if (isNormal)
+    for (MainChunk* chunk : closestChunks)
     {
-        if (totalSingleInstanceDatas.count(blockID))
-            totalSingleInstanceDatas.erase(blockID);
+        chunk->SetInstanceData(true);
     }
-    else
-    {
-        if (totalMultiInstanceDatas.count(blockID))
-            totalMultiInstanceDatas.erase(blockID);
-    }
-    mainChunks[blockParentChunk]->SetInstanceData(true);
-    SetInstanceData(mainChunks[blockParentChunk]);
+
+    SetInstanceData(mainChunks[blockParentChunk], true);
    
     UpdateInstanceBuffer();
 }
@@ -325,36 +294,10 @@ void WorldGenerator::BuildBlock(Vector3 pos, UINT index)
     {
         activeSubChunk->BuildBlock(pos, index);
 
-        builtBlock = activeSubChunk->GetBlock(pos);
-
-        mainChunks[builtBlock->GetParentIndex()]->SetInstanceData(true);
-        SetInstanceData(mainChunks[builtBlock->GetParentIndex()]);
+        SetInstanceData(mainChunks[activeSubChunk->GetParentIndex()], true);
+        
         UpdateInstanceBuffer();
     }
-
-    //InstanceData instanceData;
-
-    //UVInfo uvInfo = builtBlock->GetUVInfo();
-    //UINT64 blockID = builtBlock->GetBlockID();
-
-    //Vector3 blockPos = builtBlock->GetGlobalPosition();
-    
-    //instanceData.transform = XMMatrixTranslation(blockPos.x, blockPos.y, blockPos.z);
-    //instanceData.transform = XMMatrixTranspose(instanceData.transform);
-    //    
-    //instanceData.curFrame = uvInfo.uvStart;
-    //instanceData.maxFrame = uvInfo.uvEnd;
-    //
-    //instanceData.blockID = builtBlock->GetBlockID();
-
-    //if (builtBlock->IsNormal())
-    //{
-    //    totalSingleInstanceDatas[blockID] = instanceData;
-    //}
-    //else
-    //{
-    //    totalMultiInstanceDatas[blockID] = instanceData;
-    //}
 }
 
 void WorldGenerator::ReserveInstanceData(UINT singleSize, UINT multiSize)

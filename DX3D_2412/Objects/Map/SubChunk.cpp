@@ -66,7 +66,6 @@ void SubChunk::Update()
 
 void SubChunk::Render()
 {
-
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
 		Block* block = pair.second;
@@ -96,10 +95,10 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 			for (UINT y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
 				int worldY = minY + y;
-
+			
 				if (worldY > terrainHeight) continue;
 
-				int blockType = 3;  
+				int blockType = 3;
 
 				if (worldY == terrainHeight)
 					blockType = 4; 
@@ -215,6 +214,7 @@ void SubChunk::FindVisibleBlocks()
 				UVInfo uvInfo = block->GetUVInfo();
 
 				block->SetOcclusion(false);
+
 				visibleBlocks.push_back(block);
 
 				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
@@ -222,8 +222,8 @@ void SubChunk::FindVisibleBlocks()
 
 				visibleInstanceData.curFrame = uvInfo.uvStart;
 				visibleInstanceData.maxFrame = uvInfo.uvEnd;
-
-				visibleInstanceData.blockID = block->GetBlockID();
+					
+				visibleInstanceData.isActive = block->IsActive();
 
 				if (block->IsNormal())
 				{
@@ -264,27 +264,35 @@ void SubChunk::MiningBlock(Block* block)
 
 	if (selectedBlock == it->second)
 	{
-		delete it->second;
-		blocks.erase(it);
+		selectedBlock->SetActive(false);
 		selectedBlock = nullptr;
 	}	
 
 	BlockManager::Get()->SetSelectedBlock(nullptr);
+
+	FindVisibleBlocks();
 }
 
 void SubChunk::BuildBlock(Vector3 pos, int blockType)
 {
 	UINT64 blockID = GameMath::GenerateBlockID(pos);
 	
-	Block* newBlock = new Block(blockType);
-	newBlock->EnableCollider();
-	newBlock->SetLocalPosition(pos);
-	newBlock->SetParentIndex(parentIndex);
-	newBlock->SetActive(true);
-	newBlock->SetBlockID(blockID);
-	newBlock->UpdateWorld();
+	unordered_map<UINT64, Block*>::iterator it = blocks.find(blockID);
+	
+	if (it == blocks.end())
+	{
+		Block* newBlock = new Block(blockType);
+		newBlock->SetLocalPosition(pos);
+		newBlock->UpdateWorld();
+		newBlock->EnableCollider();
+		newBlock->SetActive(true);
+		newBlock->SetParentIndex(parentIndex);
+		newBlock->SetBlockID(blockID);
 
-	blocks[blockID] = newBlock;
+		blocks[blockID] = newBlock;
+	}
+
+	FindVisibleBlocks();
 }
 
 void SubChunk::CheckSelectedBlock()

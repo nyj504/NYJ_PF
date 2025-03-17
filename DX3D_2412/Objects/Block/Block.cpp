@@ -2,20 +2,23 @@
 
 Block::Block(UINT key)
 {
-    itemData = DataManager::Get()->GetItemData(key);
-    blockType = (itemData.itemType == "Block") ? BLOCK : CRAFTBLOCK;
-
-    isNormal = itemData.textureType == "Normal" ? 1 : 0;
-
-    if (itemData.canBuild)
+    if (key > 0)
     {
-        curHp = itemData.hp;
-    }
+        itemData = DataManager::Get()->GetItemData(key);
+        blockType = (itemData.itemType == "Block") ? BLOCK : CRAFTBLOCK;
 
-    if (key == 35) tag = "CraftingTable";
-    if (key == 37) tag = "Furnace";
-  
-    SetBlockUV();
+        isNormal = itemData.textureType == "Normal" ? 1 : 0;
+
+        if (itemData.canBuild)
+        {
+            curHp = itemData.hp;
+        }
+
+        if (key == 35) tag = "CraftingTable";
+        if (key == 37) tag = "Furnace";
+
+        SetBlockUV();
+    }
 }
 
 Block::~Block()
@@ -25,6 +28,8 @@ Block::~Block()
 
 void Block::Update()
 {
+    if (!isActive) return;
+
     Vector3 playerPos = PLAYER->GetGlobalPosition();
     Vector3 blockPos = this->GetGlobalPosition();
 
@@ -40,7 +45,8 @@ void Block::Update()
 
 void Block::Render()
 {
-    if(collider)
+    if (!isActive) return;
+
     collider->Render();
 }
 
