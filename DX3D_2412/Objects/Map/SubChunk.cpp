@@ -30,6 +30,8 @@ void SubChunk::Update()
 	{
 		Block* block = pair.second;
 
+		if (block->IsOcclusion()) continue;
+
 		Vector3 playerPos = PLAYER->GetGlobalPosition();
 		Vector3 blockPos = block->GetGlobalPosition();
 

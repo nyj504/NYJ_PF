@@ -17,12 +17,15 @@ MainChunk::~MainChunk()
 void MainChunk::Update()
 {
     int playerY = PLAYER->GetGlobalPosition().y;
-    int baseY = chunkPosition.y;
-
-    activeChunkIndex = abs((baseY - playerY) / SUBCHUNK_HEIGHT);
+    int minBaseY = chunkPosition.y;
+    int subChunkIndex = chunkPosition.y + SUBCHUNK_HEIGHT;
+    
+    activeChunkIndex = abs((minBaseY - playerY) / SUBCHUNK_HEIGHT);
 
     if (!subChunks[activeChunkIndex]->HasCollider())
+    {
         subChunks[activeChunkIndex]->ActiveCollider();
+    }
 
      subChunks[activeChunkIndex]->Update();
     

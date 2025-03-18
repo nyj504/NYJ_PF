@@ -335,6 +335,28 @@ void Material::UnselectMap(MaterialType type)
     }
 }
 
+void Material::SelectShader()
+{
+    string key = name + "Shader";
+
+    if (ImGui::Button(key.c_str()))
+        DIALOG->OpenDialog(key.c_str(), key.c_str(), ".hlsl");
+
+    if (DIALOG->Display(key.c_str()))
+    {
+        if (DIALOG->IsOk())
+        {
+            string file = DIALOG->GetFilePathName();
+            string shaderPath = "Resources/Shaders/";
+            file = file.substr(projectPath.size() + shaderPath.size() + 1, file.size());
+
+            SetShader(Utility::ToWString(file));
+        }
+
+        DIALOG->Close();
+    }
+}
+
 void Material::SaveDialog()
 {
     string key = "Save";
