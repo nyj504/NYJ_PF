@@ -37,9 +37,9 @@ public:
 	Vector3 GetGlobalPosition() const { return globalPosition; }
 	Vector3 GetGlobalRotation() const { return globalRotation; }
 	Vector3 GetGlobalScale() const { return globalScale; }
-	Vector3 GetGlobalPivot() const { return pivot; }
 
 	Matrix GetWorld() { return world; }
+	void SetWorld(const Matrix& matrix) { world = matrix; }
 
 	void SetLocalPosition(const Vector3& position) { localPosition = position; }
 	void SetLocalRotation(const Vector3& rotation) { localRotation = rotation; }

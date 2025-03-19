@@ -28,6 +28,7 @@ enum class TerrainType
 #define DELTA Timer::Get()->GetElapsedTime()
 #define KEY Keyboard::Get()
 #define SCENE SceneManager::Get()
+
 #define PLAYER PlayerSingleton::Get()->GetPlayer()
 #define INVEN InventorySingleton::Get()->GetInventory()
 #define QUICKSLOT UIManager::Get()->GetQuickSlot()
@@ -53,9 +54,11 @@ enum class TerrainType
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 
 using namespace std;
 using namespace DirectX;
+using namespace DirectX::TriangleTests;
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -175,6 +178,10 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Collider/CapsuleCollider.h"
 #include "Objects/Collider/RectCollider.h"
 
+#include "Objects/Algorithm/Node.h"
+#include "Objects/Algorithm/Heap.h"
+#include "Objects/Algorithm/AStar.h"
+
 #include "Objects/UI/Button.h"
 #include "Objects/UI/ProgressBar.h"
 
@@ -184,6 +191,12 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Manager/PoolingManager.h"
 #include "Objects/Manager/DataManager.h"
 #include "Objects/Manager/EventManager.h"
+
+#include "Objects/Particle/Particle.h"
+#include "Objects/Particle/Spark.h"
+#include "Objects/Particle/Sprite.h"
+#include "Objects/Particle/Rain.h"
+#include "Objects/Particle/Snow.h"
 
 #include "Objects/Block/Block.h"
 #include "Objects/Block/SimpleBlock.h"

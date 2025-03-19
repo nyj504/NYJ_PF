@@ -13,7 +13,6 @@
 #include "Scenes/ModelAnimationScene.h"
 #include "Scenes/BlockTestScene.h"
 
-
 GameManager::GameManager()
 {
 	//SCENE->Create("Grid", new GridScene());
