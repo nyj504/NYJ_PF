@@ -12,7 +12,7 @@ ModelExportScene::ModelExportScene()
     exporter->ExportMesh();
     delete exporter;
 
-    string clipName = "walking";
+    string clipName = "Walk";
     file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
     
     exporter = new ModelExporter(name, file);
@@ -67,6 +67,15 @@ ModelExportScene::ModelExportScene()
     exporter->ExportClip(clipName);
     delete exporter;
      clipName = "Dying";
+    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
+
+    exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+
+    exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+    delete exporter;
+    clipName = "Run";
     file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
 
     exporter = new ModelExporter(name, file);
