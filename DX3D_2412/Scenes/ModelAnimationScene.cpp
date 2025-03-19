@@ -5,9 +5,10 @@ ModelAnimationScene::ModelAnimationScene()
 {
 	model = new ModelAnimator("SteveRigged");
 
-	model->ReadClip("walking");
-	model->ReadClip("BowShoot");
+	model->ReadClip("Walk");
+	model->ReadClip("Run");
 	model->ReadClip("BowCharging");
+	model->ReadClip("BowShoot");
 	model->ReadClip("Jump");
 	model->ReadClip("Mining");
 	model->ReadClip("Dance");
@@ -64,6 +65,10 @@ void ModelAnimationScene::Update()
 	if (KEY->Down('0'))
 	{
 		model->PlayClip(9);
+	}
+	if (KEY->Down('U'))
+	{
+		model->PlayClip(10);
 	}
 
 	model->Update();
