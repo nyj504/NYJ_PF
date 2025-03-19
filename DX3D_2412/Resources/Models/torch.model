@@ -1,4 +1,0 @@
-<Components IsPlayer="false" Path="torch">
-    <Component Tag="Head" PosX="0.0" PosY="0.30000001" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.1" ScaleY="0.1" ScaleZ="0.1"/>
-    <Component Tag="Body" PosX="0.0" PosY="0" PosZ="0" RotX="0" RotY="0" RotZ="0" ScaleX="0.1" ScaleY="0.5" ScaleZ="0.1"/>
-</Components>

@@ -15,25 +15,25 @@
 
 GameManager::GameManager()
 {
-	//SCENE->Create("Grid", new GridScene());
+	SCENE->Create("Grid", new GridScene());
 	//SCENE->Create("Start", new LightScene());
 	//SCENE->Create("Start", new InstancingScene());
 	//SCENE->Create("Start", new TerrainScene());
 
-	SCENE->Create("Lobby", new LobbyScene());
-	SCENE->Create("Test", new TestScene());
+	//SCENE->Create("Lobby", new LobbyScene());
+	//SCENE->Create("Test", new TestScene());
 	//SCENE->Create("Edit", new EditScene());
 	//SCENE->Create("Model", new ModelExportScene());
-	//SCENE->Create("ModelRender", new ModelRenderScene());
+	SCENE->Create("ModelRender", new ModelRenderScene());
 	//SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
 	//SCENE->Create("Start", new BlockTestScene());
 
 
-	//SCENE->Add("Grid");
-	SCENE->Add("Lobby");
+	SCENE->Add("Grid");
+	//SCENE->Add("Lobby");
 	//SCENE->Add("Model");
-	//SCENE->Add("ModelRender");
+	SCENE->Add("ModelRender");
 
 	//SCENE->Add("Start");
 	//SCENE->Add("Edit");
@@ -76,9 +76,9 @@ void GameManager::Render()
 	string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
 	Font::Get()->RenderText(fps, { 100, SCREEN_HEIGHT - 10 });
 
-	string position = "Pos X:" + to_string((int)PLAYER->GetGlobalPosition().x) +
-		" Pos Y:" + to_string((int)PLAYER->GetGlobalPosition().y) + " Pos Z:" + to_string((int)PLAYER->GetGlobalPosition().z);
-	Font::Get()->RenderText(position, { 150, SCREEN_HEIGHT - 30 });
+	//string position = "Pos X:" + to_string((int)PLAYER->GetGlobalPosition().x) +
+	//	" Pos Y:" + to_string((int)PLAYER->GetGlobalPosition().y) + " Pos Z:" + to_string((int)PLAYER->GetGlobalPosition().z);
+	//Font::Get()->RenderText(position, { 150, SCREEN_HEIGHT - 30 });
 
 	Environment::Get()->SetPostRender();
 	SCENE->PostRender();
