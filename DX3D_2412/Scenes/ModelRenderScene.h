@@ -13,5 +13,5 @@ public:
 	virtual void GUIRender() override;
 
 private:
-	vector<Model*> models;
+	Model* model;
 };

@@ -3,12 +3,18 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	model = new ModelAnimator("Agatha");
-	FOR(12)
-		model->ReadClip("Agatha", i);
-	//model->ReadClip("Idle");
-	//model->ReadClip("Run");
-	//model->ReadClip("Attack");
+	model = new ModelAnimator("SteveRigged");
+
+	model->ReadClip("walking");
+	model->ReadClip("BowShoot");
+	model->ReadClip("BowCharging");
+	model->ReadClip("Jump");
+	model->ReadClip("Mining");
+	model->ReadClip("Dance");
+	model->ReadClip("Swimming");
+	model->ReadClip("HandAttack");
+	model->ReadClip("Dying");
+
 	model->CreateTexture();
 }
 
@@ -34,6 +40,30 @@ void ModelAnimationScene::Update()
 	if (KEY->Down('4'))
 	{
 		model->PlayClip(3);
+	}
+	if (KEY->Down('5'))
+	{
+		model->PlayClip(4);
+	}
+	if (KEY->Down('6'))
+	{
+		model->PlayClip(5);
+	}
+	if (KEY->Down('7'))
+	{
+		model->PlayClip(6);
+	}
+	if (KEY->Down('8'))
+	{
+		model->PlayClip(7);
+	}
+	if (KEY->Down('9'))
+	{
+		model->PlayClip(8);
+	}
+	if (KEY->Down('0'))
+	{
+		model->PlayClip(9);
 	}
 
 	model->Update();

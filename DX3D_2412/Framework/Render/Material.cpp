@@ -38,10 +38,21 @@ void Material::Edit()
 
     if (ImGui::TreeNode(title.c_str()))
     {
-        ImGui::ColorEdit3("Diffuse", (float*)&buffer->GetData()->diffuse);
-        ImGui::ColorEdit3("Specular", (float*)&buffer->GetData()->specular);
-        ImGui::ColorEdit3("Ambient", (float*)&buffer->GetData()->ambient);
-        ImGui::ColorEdit3("Emissive", (float*)&buffer->GetData()->emissive);
+        char str[128];
+        strcpy_s(str, 128, editName.c_str());
+        ImGui::InputText("Name", str, 128);
+        editName = str;
+
+        string vertexPath = Utility::ToString(vertexShader->GetFile());
+        ImGui::Text(vertexPath.c_str());
+        string pixelPath = Utility::ToString(pixelShader->GetFile());
+        ImGui::Text(pixelPath.c_str());
+        SelectShader();
+
+        ImGui::ColorEdit4("Diffuse", (float*)&buffer->GetData()->diffuse);
+        ImGui::ColorEdit4("Specular", (float*)&buffer->GetData()->specular);
+        ImGui::ColorEdit4("Ambient", (float*)&buffer->GetData()->ambient);
+        ImGui::ColorEdit4("Emissive", (float*)&buffer->GetData()->emissive);
 
         ImGui::SliderFloat("Shininess", &buffer->GetData()->shininess, 1, 50);
 

@@ -3,22 +3,18 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	Model* model = new Model("steve");
-	model->SetLocalPosition(Vector3(1, 0, 0));
-	model->UpdateWorld();
-	models.push_back(model);
+	model = new Model("SteveRigged");
 	
 }
 
 ModelRenderScene::~ModelRenderScene()
 {
-	for (Model* model : models)
-		delete model;
+	delete model;
 }
 
 void ModelRenderScene::Update()
 {
-
+	model->UpdateWorld();
 }
 
 void ModelRenderScene::PreRender()
@@ -27,7 +23,6 @@ void ModelRenderScene::PreRender()
 
 void ModelRenderScene::Render()
 {
-	for (Model* model : models)
 	model->Render();
 }
 
