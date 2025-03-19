@@ -41,6 +41,8 @@ private:
 	void SelectMap(string name, MaterialType type);
 	void UnselectMap(MaterialType type);
 
+	void SelectShader();
+
 	void SaveDialog();
 	void LoadDialog();
 

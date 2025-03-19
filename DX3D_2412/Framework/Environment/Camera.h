@@ -10,14 +10,16 @@ public:
     void Edit();
 
     void SetView(UINT slot = 1);
-    void SetProjection(float width, float height);
-        
+ 
     class Ray ScreenPointToRay(const Vector3& screenPoint);
 
     Vector3 WorldToScreenPoint(Vector3 world);
    
     void TargetOptionSave(string file);
     void TargetOptionLoad(string file);
+
+    bool ContainPoint(Vector3 point);
+    bool ContainSphere(Vector3 center, float radius);
 
     void SetTarget(Transform* target) { this->target = target; }
 
@@ -42,6 +44,8 @@ public:
 private:
     void FreeMode();
     void FollowMode();
+
+    void Frustum();
 
 private:
     ViewBuffer* viewBuffer;
@@ -76,4 +80,6 @@ private:
     bool isLookAtTargetY = true;
 
     char file[128];
+    Vector3 planes[6];
+    float a, b, c, d;
 };

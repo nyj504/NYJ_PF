@@ -127,16 +127,22 @@ typedef function<void(int)> IntParamEvent;
 #include "Framework/Shader/Shader.h"
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
+#include "Framework/Shader/ComputeShader.h"
+#include "Framework/Shader/GeometryShader.h"
 
 #include "Framework/Buffer/VertexBuffer.h"
 #include "Framework/Buffer/IndexBuffer.h"
 #include "Framework/Buffer/ConstBuffer.h"
+#include "Framework/Buffer/RawBuffer.h"
+#include "Framework/Buffer/StructuredBuffer.h"
 #include "Framework/Buffer/GlobalBuffer.h"
 #include "Framework/Buffer/VertexLayouts.h"
 
 #include "Framework/Render/Texture.h"
 #include "Framework/Render/Material.h"
 #include "Framework/Render/Mesh.h"
+#include "Framework/Render/DepthStencil.h"
+#include "Framework/Render/RenderTarget.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
@@ -145,6 +151,8 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
+#include "Framework/Environment/Reflection.h"
+#include "Framework/Environment/Refraction.h"
 
 #include "Framework/Model/ModelData.h"
 #include "Framework/Model/ModelExporter.h"

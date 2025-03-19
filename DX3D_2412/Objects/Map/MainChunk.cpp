@@ -20,7 +20,7 @@ void MainChunk::Update()
     int minBaseY = chunkPosition.y;
     int subChunkIndex = chunkPosition.y + SUBCHUNK_HEIGHT;
     
-    activeChunkIndex = abs((minBaseY - playerY) / SUBCHUNK_HEIGHT);
+    activeChunkIndex = (playerY - minBaseY) / SUBCHUNK_HEIGHT;
 
     if (!subChunks[activeChunkIndex]->HasCollider())
     {
