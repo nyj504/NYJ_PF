@@ -164,6 +164,8 @@
     <ClInclude Include="Framework\Render\Material.h" />
     <ClInclude Include="Framework\Render\Mesh.h" />
     <ClInclude Include="Framework\Render\Texture.h" />
+    <ClInclude Include="Framework\Shader\ComputeShader.h" />
+    <ClInclude Include="Framework\Shader\GeometryShader.h" />
     <ClInclude Include="Framework\Shader\PixelShader.h" />
     <ClInclude Include="Framework\Shader\Shader.h" />
     <ClInclude Include="Framework\Shader\VertexShader.h" />
@@ -268,6 +270,8 @@
     <ClCompile Include="Framework\Model\ModelMesh.cpp" />
     <ClCompile Include="Framework\Render\Material.cpp" />
     <ClCompile Include="Framework\Render\Texture.cpp" />
+    <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
+    <ClCompile Include="Framework\Shader\GeometryShader.cpp" />
     <ClCompile Include="Framework\Shader\PixelShader.cpp" />
     <ClCompile Include="Framework\Shader\Shader.cpp" />
     <ClCompile Include="Framework\Shader\VertexShader.cpp" />
