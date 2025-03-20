@@ -193,6 +193,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Manager/EventManager.h"
 
 #include "Objects/Particle/Particle.h"
+#include "Objects/Particle/ParticleSystem.h"
 #include "Objects/Particle/Spark.h"
 #include "Objects/Particle/Sprite.h"
 #include "Objects/Particle/Rain.h"
