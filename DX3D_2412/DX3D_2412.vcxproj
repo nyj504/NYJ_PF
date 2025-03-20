@@ -145,11 +145,15 @@
     <ClInclude Include="Framework\Buffer\ConstBuffer.h" />
     <ClInclude Include="Framework\Buffer\GlobalBuffer.h" />
     <ClInclude Include="Framework\Buffer\IndexBuffer.h" />
+    <ClInclude Include="Framework\Buffer\RawBuffer.h" />
+    <ClInclude Include="Framework\Buffer\StructuredBuffer.h" />
     <ClInclude Include="Framework\Buffer\VertexBuffer.h" />
     <ClInclude Include="Framework\Buffer\VertexLayouts.h" />
     <ClInclude Include="Framework\Device\Device.h" />
     <ClInclude Include="Framework\Environment\Camera.h" />
     <ClInclude Include="Framework\Environment\Environment.h" />
+    <ClInclude Include="Framework\Environment\Reflection.h" />
+    <ClInclude Include="Framework\Environment\Refraction.h" />
     <ClInclude Include="Framework\Math\GameMath.h" />
     <ClInclude Include="Framework\Math\Transform.h" />
     <ClInclude Include="Framework\Math\Vector2.h" />
@@ -161,8 +165,10 @@
     <ClInclude Include="Framework\Model\ModelExporter.h" />
     <ClInclude Include="Framework\Model\ModelInstancing.h" />
     <ClInclude Include="Framework\Model\ModelMesh.h" />
+    <ClInclude Include="Framework\Render\DepthStencil.h" />
     <ClInclude Include="Framework\Render\Material.h" />
     <ClInclude Include="Framework\Render\Mesh.h" />
+    <ClInclude Include="Framework\Render\RenderTarget.h" />
     <ClInclude Include="Framework\Render\Texture.h" />
     <ClInclude Include="Framework\Shader\ComputeShader.h" />
     <ClInclude Include="Framework\Shader\GeometryShader.h" />
@@ -221,6 +227,12 @@
     <ClInclude Include="Objects\Map\WorldGenerator.h" />
     <ClInclude Include="Objects\Map\BlockManager.h" />
     <ClInclude Include="Objects\Map\SubChunk.h" />
+    <ClInclude Include="Objects\Particle\Particle.h" />
+    <ClInclude Include="Objects\Particle\ParticleSystem.h" />
+    <ClInclude Include="Objects\Particle\Rain.h" />
+    <ClInclude Include="Objects\Particle\Snow.h" />
+    <ClInclude Include="Objects\Particle\Spark.h" />
+    <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="Objects\Robot\ObjectModel.h" />
     <ClInclude Include="Objects\Shooting\Bullet.h" />
     <ClInclude Include="Objects\Shooting\Enemy.h" />
@@ -256,10 +268,14 @@
     </ClCompile>
     <ClCompile Include="Framework\Buffer\ConstBuffer.cpp" />
     <ClCompile Include="Framework\Buffer\IndexBuffer.cpp" />
+    <ClCompile Include="Framework\Buffer\RawBuffer.cpp" />
+    <ClCompile Include="Framework\Buffer\StructuredBuffer.cpp" />
     <ClCompile Include="Framework\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Framework\Device\Device.cpp" />
     <ClCompile Include="Framework\Environment\Camera.cpp" />
     <ClCompile Include="Framework\Environment\Environment.cpp" />
+    <ClCompile Include="Framework\Environment\Reflection.cpp" />
+    <ClCompile Include="Framework\Environment\Refraction.cpp" />
     <ClCompile Include="Framework\Math\GameMath.cpp" />
     <ClCompile Include="Framework\Math\Transform.cpp" />
     <ClCompile Include="Framework\Model\Model.cpp" />
@@ -268,7 +284,9 @@
     <ClCompile Include="Framework\Model\ModelExporter.cpp" />
     <ClCompile Include="Framework\Model\ModelInstancing.cpp" />
     <ClCompile Include="Framework\Model\ModelMesh.cpp" />
+    <ClCompile Include="Framework\Render\DepthStencil.cpp" />
     <ClCompile Include="Framework\Render\Material.cpp" />
+    <ClCompile Include="Framework\Render\RenderTarget.cpp" />
     <ClCompile Include="Framework\Render\Texture.cpp" />
     <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
     <ClCompile Include="Framework\Shader\GeometryShader.cpp" />
@@ -322,6 +340,12 @@
     <ClCompile Include="Objects\Map\MainChunk.cpp" />
     <ClCompile Include="Objects\Map\SubChunk.cpp" />
     <ClCompile Include="Objects\Map\WorldGenerator.cpp" />
+    <ClCompile Include="Objects\Particle\Particle.cpp" />
+    <ClCompile Include="Objects\Particle\ParticleSystem.cpp" />
+    <ClCompile Include="Objects\Particle\Rain.cpp" />
+    <ClCompile Include="Objects\Particle\Snow.cpp" />
+    <ClCompile Include="Objects\Particle\Spark.cpp" />
+    <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Robot\ObjectModel.cpp" />
     <ClCompile Include="Objects\Shooting\Bullet.cpp" />
     <ClCompile Include="Objects\Shooting\Enemy.cpp" />

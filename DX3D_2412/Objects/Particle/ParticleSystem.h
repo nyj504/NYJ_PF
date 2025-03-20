@@ -50,7 +50,7 @@ public:
     void Update();
     void Render();
 
-    void Play(Vector3 pos, Vector3 rot = Vector3());
+    void Play(Vector3 pos);
     void Stop();
 
     bool IsActive() { return quad->IsActive(); }
@@ -75,8 +75,4 @@ private:
     float lifeTime = 0.0f;
     UINT drawCount = 0;
     UINT particleCount = 100;
-
-    BlendState* blendState[2];
-    DepthStencilState* depthState[2];
-
 };

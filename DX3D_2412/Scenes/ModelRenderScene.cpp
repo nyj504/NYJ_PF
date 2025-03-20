@@ -3,8 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("SteveRigged");
-	
+	model = new Model("IronLeggings_Right");
 }
 
 ModelRenderScene::~ModelRenderScene()
@@ -32,4 +31,5 @@ void ModelRenderScene::PostRender()
 
 void ModelRenderScene::GUIRender()
 {
+	model->Edit();
 }
