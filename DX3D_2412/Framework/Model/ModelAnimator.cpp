@@ -4,7 +4,7 @@ ModelAnimator::ModelAnimator(string name) : Model(name)
 {
     frameBuffer = new FrameBuffer();
 
-    SetShader(L"Model/Model.hlsl");    
+    SetShader(L"Custom/UnitOpaque.hlsl");    
 }
 
 ModelAnimator::~ModelAnimator()

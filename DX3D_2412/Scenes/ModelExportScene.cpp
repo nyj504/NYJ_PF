@@ -3,19 +3,19 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "IronLeggings_Right";
+    string name = "IronChestPlate";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
-
+    
     ModelExporter* exporter = new ModelExporter(name, file);
     exporter->ExportMaterial();
     exporter->ExportMesh();
     delete exporter;
 
-    //string clipName = "Walk";
-    //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
+    //string clipName = "Idle";
+    //string file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
     //
-    //exporter = new ModelExporter(name, file);
+    //ModelExporter * exporter = new ModelExporter(name, file);
     //exporter->ExportClip(clipName);
     //delete exporter;
     //

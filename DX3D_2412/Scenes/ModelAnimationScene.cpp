@@ -5,7 +5,7 @@ ModelAnimationScene::ModelAnimationScene()
 {
 	model = new ModelAnimator("SteveRigged");
 
-	model->ReadClip("Walk");
+	model->ReadClip("Idle");
 	model->ReadClip("Run");
 	model->ReadClip("BowCharging");
 	model->ReadClip("BowShoot");

@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("IronLeggings_Right");
+	model = new Model("GoldChestPlate");
 }
 
 ModelRenderScene::~ModelRenderScene()

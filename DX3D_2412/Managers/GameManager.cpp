@@ -12,6 +12,7 @@
 #include "Scenes/ModelInstancingScene.h"
 #include "Scenes/ModelAnimationScene.h"
 #include "Scenes/BlockTestScene.h"
+#include "Scenes/ModelEquipScene.h"
 
 GameManager::GameManager()
 {
@@ -23,16 +24,17 @@ GameManager::GameManager()
 	//SCENE->Create("Lobby", new LobbyScene());
 	//SCENE->Create("Test", new TestScene());
 	//SCENE->Create("Edit", new EditScene());
-	SCENE->Create("Model", new ModelExportScene());
+	//SCENE->Create("Model", new ModelExportScene());
 	SCENE->Create("ModelRender", new ModelRenderScene());
 	//SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
 	//SCENE->Create("Start", new BlockTestScene());
+	//SCENE->Create("Start", new ModelEquipScene());
 
 
 	SCENE->Add("Grid");
 	//SCENE->Add("Lobby");
-	SCENE->Add("Model");
+	//SCENE->Add("Model");
 	SCENE->Add("ModelRender");
 
 	//SCENE->Add("Start");
