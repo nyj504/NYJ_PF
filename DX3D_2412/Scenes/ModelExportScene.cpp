@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "IronChestPlate";
+    string name = "WoodShovel";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
     

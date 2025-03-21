@@ -14,8 +14,32 @@ public:
 
 private:
 	ModelAnimator* modelAnimator;
-	Model* weapon;
+	
+	Transform* leftBootsSocket;
+	Transform* rightBootsSocket;
+
+	Model* leftBoots;
+	Model* rightBoots;
+
+	Transform* leftLegSocket;
+	Transform* rightLegSocket;
+
+	Model* leftLeg;
+	Model* rightLeg;
+
+	Transform* chestPlateSocket;
+	Transform* leftArmSocket;
+	Transform* rightArmSocket;
+
+	Model* chestPlate;
+	Model* leftArm;
+	Model* rightArm;
+	
+	Transform* helmetSocket;
+
+	Model* helmet;
+	
 	Transform* weaponSocket;
-	Model* arrow;
-	Transform* arrowSocket;
+
+	Model* weapon;
 };

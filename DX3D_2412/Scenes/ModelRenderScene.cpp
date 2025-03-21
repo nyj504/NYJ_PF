@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("GoldChestPlate");
+	model = new Model("WoodShovel");
 }
 
 ModelRenderScene::~ModelRenderScene()
