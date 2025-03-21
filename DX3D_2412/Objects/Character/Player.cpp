@@ -8,10 +8,21 @@ Player::Player() : Character("Resources/Models/Player.model")
 	ClientToScreen(hWnd, &clientCenterPos);
 	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
 	ShowCursor(false);
+
+	modelAnimator->SetParent(this);
+	modelAnimator->UpdateWorld();
+
+	weapon = new Model("DiamondPickAxe");
+	weapon->Load();
+
+	weaponSocket = new Transform();
+	weapon->SetParent(weaponSocket);
 }
 
 Player::~Player()
 {
+	delete weapon;
+	delete weaponSocket;
 }
 
 void Player::Update()
@@ -27,12 +38,16 @@ void Player::Update()
 	//
 	//	velocity.y = 0;
 	//}
+	weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+	modelAnimator->Update();
+	collider->UpdateWorld();
 
-	Character::Update();
-
-	PlayerStateMachine();
+	weapon->UpdateWorld();
 	UpdateWorld();
+	
+	PlayerStateMachine();
 	BuildAndMining();
+
 	SetCursor();
 	Control();
 	Move();
@@ -41,7 +56,9 @@ void Player::Update()
 
 void Player::Render()
 {
-	Character::Render();
+	modelAnimator->Render();
+	collider->Render();
+	weapon->Render();
 }
 
 void Player::PostRender()
@@ -57,12 +74,12 @@ void Player::PlayerStateMachine()
 	case Player::MOVE:
 		break;
 	case Player::JUMP:
+		modelAnimator->PlayClip(2);
+
 		if (jumpTime >= 0)
 		{
 			jumpTime -= DELTA;
 		}
-		break;
-	case Player::EDIT:
 		break;
 	case Player::FALL:
 		velocity.y -= GRAVITY * DELTA;
@@ -85,8 +102,10 @@ void Player::SetLand()
 {
 	if (jumpTime <= 0)
 	SetPlayerState(LAND);
-}
 
+	modelAnimator->PlayClip(0);
+}
+	
 void Player::SetFall()
 {
 	if (jumpTime <= 0)
@@ -100,13 +119,21 @@ void Player::Control()
 	Vector3 dir;
 
 	if (KEY->Press('W'))
+	{
 		dir += GetForward();
+	}
 	if (KEY->Press('S'))
+	{
 		dir += GetBack();
+	}
 	if (KEY->Press('A'))
+	{
 		dir += GetLeft();
+	}
 	if (KEY->Press('D'))
+	{
 		dir += GetRight();
+	}
 
 	//if (isCreativeMode) 
 	//{
@@ -135,12 +162,25 @@ void Player::Jump()
 	{
 		velocity.y += JUMP_POWER;
 		jumpTime = 0.2f;
+
+		modelAnimator->PlayClip(2);
 		SetPlayerState(JUMP);
 	}
 }
 
 void Player::Move()
 {
+	if (velocity.x == 0 && velocity.z == 0)
+	{
+		isMove = false;
+		modelAnimator->PlayClip(0);
+	}
+
+	if (velocity.x > 0 || velocity.z > 0 || isMove != true)
+	{
+		isMove = true;
+		modelAnimator->PlayClip(5);
+	}
 	Translate(velocity * moveSpeed * DELTA);
 }
 
@@ -156,6 +196,7 @@ void Player::BuildAndMining()
 			BlockManager::Get()->InteractingBlock();
 		else
 		{	
+			modelAnimator->PlayClip(7);
 			BlockManager::Get()->BuildBlock();
 		}
 	}
@@ -163,7 +204,8 @@ void Player::BuildAndMining()
 	{
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
 			return;
-	
+
+		modelAnimator->PlayClip(7);
 		BlockManager::Get()->MiningBlock();
 	}
 }

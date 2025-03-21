@@ -42,4 +42,6 @@ private:
 	Transform* weaponSocket;
 
 	Model* weapon;
+
+	BoxCollider* collider;
 };

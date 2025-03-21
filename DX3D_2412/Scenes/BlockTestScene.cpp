@@ -4,10 +4,10 @@
 BlockTestScene::BlockTestScene()
 {
 	PlayerSingleton::Get();
-	PLAYER->SetLocalPosition(4, 4, 4);
-	CAM->SetTarget(PLAYER);
-	CAM->TargetOptionLoad("FPSMode");
-	CAM->SetFPSView(true);
+	PLAYER->SetLocalPosition(2, 4, 2);
+	//CAM->SetTarget(PLAYER);
+	//CAM->TargetOptionLoad("FPSMode");
+	//CAM->SetFPSView(true);
 
 	ShowCursor(true);
 

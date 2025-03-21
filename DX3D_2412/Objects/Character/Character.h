@@ -2,19 +2,15 @@
 class Character : public Transform
 {
 public:
-	Character(string path = "Resources/Models/zombie.model");
+	Character(string name);
 	~Character();
 	
 	virtual void Update();
 	virtual void Render();
 
-	void ApplySkinUVMapping();
+	BoxCollider* GetCollider() { return collider; }
 
-	void Load(string path);
-
-	BoxCollider* GetCollider() { return boxCollider; }
-
-private:
-	vector<Cube*>bodyComponents;
-	BoxCollider* boxCollider;
+protected:
+	ModelAnimator* modelAnimator;
+	BoxCollider* collider;
 };

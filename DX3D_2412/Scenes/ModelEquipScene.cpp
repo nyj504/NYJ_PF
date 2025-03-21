@@ -5,11 +5,17 @@ ModelEquipScene::ModelEquipScene()
 {
 	modelAnimator = new ModelAnimator("SteveRigged");
 	modelAnimator->Load();
-	//modelAnimator->ReadClip("Dance");
-	modelAnimator->ReadClip("Mining");
+	modelAnimator->ReadClip("Dance");
+	//modelAnimator->ReadClip("Mining");
 	modelAnimator->CreateTexture();
 
-	weapon = new Model("DiamondShovel");
+	collider = new BoxCollider();
+	collider->SetTag("PlayerCollider");
+	collider->SetParent(modelAnimator);
+	collider->UpdateWorld();
+	collider->Load();
+
+	weapon = new Model("IronSword");
 	weapon->Load();
 
 	weaponSocket = new Transform();
@@ -18,18 +24,18 @@ ModelEquipScene::ModelEquipScene()
 	leftBootsSocket = new Transform();
 	rightBootsSocket = new Transform();
 
-	leftBoots = new Model("DiamondBoots_Left");
+	leftBoots = new Model("IronBoots_Left");
 	leftBoots->SetParent(leftBootsSocket);
 	leftBoots->Load();
 
-	rightBoots = new Model("DiamondBoots_Right");
+	rightBoots = new Model("IronBoots_Right");
 	rightBoots->SetParent(rightBootsSocket);
 	rightBoots->Load();
 
 	leftLegSocket = new Transform();
 	rightLegSocket = new Transform();
 	
-	leftLeg = new Model("DiamondLeggings_Left");
+	leftLeg = new Model("IronLeggings_Left");
 	leftLeg->SetParent(leftLegSocket);
 	leftLeg->Load();
 
@@ -41,21 +47,21 @@ ModelEquipScene::ModelEquipScene()
 	leftArmSocket = new Transform();
 	rightArmSocket = new Transform();
 	
-	chestPlate = new Model("DiamondChestPlate");
+	chestPlate = new Model("IronChestPlate");
 	chestPlate->SetParent(chestPlateSocket);
 	chestPlate->Load();
 	
-	leftArm = new Model("DiamondChestplate_LeftArm");
+	leftArm = new Model("IronChestplate_LeftArm");
 	leftArm->SetParent(leftArmSocket);
 	leftArm->Load();
 	
-	rightArm = new Model("DiamondChestplate_RightArm");
+	rightArm = new Model("IronChestplate_RightArm");
 	rightArm->SetParent(rightArmSocket);
 	rightArm->Load();
 	
 	helmetSocket = new Transform();
 	
-	helmet = new Model("DiamondHelmet");
+	helmet = new Model("IronHelmet");
 	helmet->SetParent(helmetSocket);
 	helmet->Load();
 }
@@ -63,8 +69,22 @@ ModelEquipScene::ModelEquipScene()
 ModelEquipScene::~ModelEquipScene()
 {
 	delete modelAnimator;
+
 	delete weapon;
-	delete weaponSocket;
+
+	delete leftBoots;
+	delete rightBoots;
+
+	delete leftLeg;
+	delete rightLeg;
+
+	delete chestPlate;
+	delete leftArm;
+	delete rightArm;
+
+	delete helmet;
+	delete collider;
+
 }
 
 void ModelEquipScene::Update()
@@ -98,6 +118,9 @@ void ModelEquipScene::Update()
 	rightArm->UpdateWorld();
 
 	helmet->UpdateWorld();
+
+	collider->UpdateWorld();
+
 }
 
 void ModelEquipScene::PreRender()
@@ -122,6 +145,8 @@ void ModelEquipScene::Render()
 
 	helmet->Render();
 
+	collider->Render();
+
 }
 
 void ModelEquipScene::PostRender()
@@ -145,4 +170,6 @@ void ModelEquipScene::GUIRender()
 	rightArm->Edit();
 
 	helmet->Edit();
+
+	collider->Edit();
 }

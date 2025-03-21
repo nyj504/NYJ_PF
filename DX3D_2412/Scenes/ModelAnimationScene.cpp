@@ -4,6 +4,7 @@
 ModelAnimationScene::ModelAnimationScene()
 {
 	model = new ModelAnimator("SteveRigged");
+	model->Load();
 
 	model->ReadClip("Idle");
 	model->ReadClip("Run");

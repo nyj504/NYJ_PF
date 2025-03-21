@@ -5,7 +5,7 @@ class Player : public Character
 private:
 	enum PlayerState
 	{
-		IDLE, MOVE, JUMP, EDIT, FALL, LAND
+		IDLE, MOVE, JUMP, FALL, LAND
 	};
 
 private:
@@ -47,8 +47,10 @@ private:
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
 
-	PlayerState playerState = FALL;
-
+	PlayerState playerState = IDLE;
+	
+	Model* weapon;
+	Transform* weaponSocket;
 	Vector3 velocity;
 
 	POINT clientCenterPos;
