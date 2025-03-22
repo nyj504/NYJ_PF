@@ -155,6 +155,26 @@ void EquipManager::Render()
 	}
 }
 
+void EquipManager::EquipTotalArmor(const unordered_map<AmoType, UINT>& equips)
+{
+	curDefense = 0;
+
+	for (const pair<AmoType, UINT>& equip : equips)
+	{
+		if (equip.second == 0)
+		{
+			UnequipArmor(equip.first);
+			continue;
+		}
+
+		EquipmentData data = DataManager::Get()->GetEquipmentData(equip.second);
+
+		curDefense += data.defense;
+
+		EquipArmor(equip.first, data.equipType); 
+	}
+}
+
 void EquipManager::EquipArmor(AmoType type, string name)
 {
 	vector<string> slotNames;
@@ -197,13 +217,13 @@ void EquipManager::EquipArmor(AmoType type, string name)
 					chestPlate = it->second;
 				else if (partName == "Chestplate_LeftArm")
 					leftArm = it->second;
-				else if (partName == "Chestplate_RightArm") 
+				else if (partName == "Chestplate_RightArm")
 					rightArm = it->second;
 			}
 			if (type == AmoType::LEGGINGS)
 			{
 				isEquipLeggings = true;
-				if (partName == "Leggings_Left")  
+				if (partName == "Leggings_Left")
 					leftLeg = it->second;
 				else if (partName == "Leggings_Right")
 					rightLeg = it->second;
@@ -211,12 +231,35 @@ void EquipManager::EquipArmor(AmoType type, string name)
 			if (type == AmoType::BOOTS)
 			{
 				isEquipBoots = true;
-				if (partName == "Boots_Left") 
+				if (partName == "Boots_Left")
 					leftBoots = it->second;
 				else if (partName == "Boots_Right")
 					rightBoots = it->second;
 			}
 		}
+	}
+}
+
+void EquipManager::UnequipArmor(AmoType type)
+{
+	switch (type)
+	{
+	case AmoType::HELMET:
+		isEquipHelmet = false;
+		helmet = nullptr;
+		break;
+	case AmoType::CHESTPLATE:
+		isEquipChestPlate = false;
+		chestPlate = leftArm = rightArm = nullptr;
+		break;
+	case AmoType::LEGGINGS:
+		isEquipLeggings = false;
+		leftLeg = rightLeg = nullptr;
+		break;
+	case AmoType::BOOTS:
+		isEquipBoots = false;
+		leftBoots = rightBoots = nullptr;
+		break;
 	}
 }
 

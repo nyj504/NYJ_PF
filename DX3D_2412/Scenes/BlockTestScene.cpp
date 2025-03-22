@@ -6,6 +6,10 @@ BlockTestScene::BlockTestScene()
 	PlayerSingleton::Get();
 	UIManager::Get();
 	InventorySingleton::Get();
+	EquipManager::Get();
+	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
+	hpBar = new HUDBar();
+	hpBar->Create("Resources/Textures/UI/heart.png");
 
 	PLAYER->SetLocalPosition(2, 4, 2);
 
@@ -56,6 +60,7 @@ BlockTestScene::~BlockTestScene()
 {
 	delete cube;
 	delete instanceBuffer;
+	delete hpBar;
 }
 
 void BlockTestScene::Update()
@@ -67,6 +72,7 @@ void BlockTestScene::Update()
 
 	PLAYER->Update();
 	UIManager::Get()->Update();
+	EquipManager::Get()->Update();
 }	
 
 void BlockTestScene::PreRender()
@@ -85,12 +91,16 @@ void BlockTestScene::Render()
 	}
 
 	PLAYER->Render();
+	EquipManager::Get()->Render();
+	
+
 
 }
 
 void BlockTestScene::PostRender()
 {
 	UIManager::Get()->PostRender();
+	hpBar->Render();
 }
 
 void BlockTestScene::GUIRender()

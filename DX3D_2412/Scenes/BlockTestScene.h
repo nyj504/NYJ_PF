@@ -17,8 +17,9 @@ public:
 	void GUIRender() override;
 
 private:
+	HUDBar* hpBar;
+
 	Cube* cube;
-	Armor* armor;
 	vector<Block*> blocks;
 	vector<InstanceData> instanceData;
 	VertexBuffer* instanceBuffer;

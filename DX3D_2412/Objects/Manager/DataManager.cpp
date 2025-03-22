@@ -3,6 +3,7 @@
 DataManager::DataManager()
 {
     LoadItemData();
+    LoadEquipmentData();
 }
 
 DataManager::~DataManager()

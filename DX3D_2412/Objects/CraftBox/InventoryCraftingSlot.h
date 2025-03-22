@@ -12,6 +12,7 @@ public:
 	void Update();
 	void PostRender() override;
 
+	void EquipArmor() override;
 	// CraftBox을(를) 통해 상속됨
 	void CreateSlot() override;
 

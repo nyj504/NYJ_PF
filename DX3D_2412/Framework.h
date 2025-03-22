@@ -217,7 +217,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Store/Slots/InventorySlot.h"
 #include "Objects/Store/Slots/CraftSlot.h"
 
-#include "Objects/Item/Armor.h"
+#include "Objects/Item/EquipManager.h"
 
 
 #include "Objects/Inventory/Inventory.h"
@@ -238,7 +238,9 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Objects/Character/PlayerSingleTon.h"
 
+#include "Objects/GUI/HUDBar.h"
 #include "Objects/GUI/PauseMenuUI.h"
+#include "Objects/GUI/PlayerHUD.h"
 
 #include "Objects/Store/UIManager.h"
 

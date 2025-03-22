@@ -12,11 +12,11 @@ Player::Player() : Character("Resources/Models/Player.model")
 	modelAnimator->SetParent(this);
 	modelAnimator->UpdateWorld();
 
-	armor = new Armor(modelAnimator);
-	armor->EquipArmor(AmoType::CHESTPLATE, "Diamond");
-	armor->EquipArmor(AmoType::HELMET, "Iron");
-	armor->EquipArmor(AmoType::LEGGINGS, "Gold");
-	armor->EquipArmor(AmoType::BOOTS, "Diamond");
+	//armor = new Armor(modelAnimator);
+	//armor->EquipArmor(AmoType::CHESTPLATE, "Diamond");
+	//armor->EquipArmor(AmoType::HELMET, "Iron");
+	//armor->EquipArmor(AmoType::LEGGINGS, "Gold");
+	//armor->EquipArmor(AmoType::BOOTS, "Diamond");
 
 	weapon = new Model("DiamondPickAxe");
 	weapon->Load();
@@ -29,7 +29,7 @@ Player::~Player()
 {
 	delete weapon;
 	delete weaponSocket;
-	delete armor;
+	//delete armor;
 }
 
 void Player::Update()
@@ -59,7 +59,7 @@ void Player::Update()
 	Control();
 	Move();
 	CAM->UpdateWorld();
-	armor->Update();
+	//armor->Update();
 
 }
 
@@ -68,7 +68,7 @@ void Player::Render()
 	modelAnimator->Render();
 	collider->Render();
 	weapon->Render();
-	armor->Render();
+	//armor->Render();
 }
 
 void Player::PostRender()

@@ -12,7 +12,15 @@ void CraftSlot::Update()
 {
 	InventorySlot::Update();
 	
-	TriggerCraftItem();
+	if (tag == "CraftSlot" || tag == "ResultSlot")
+	{
+		TriggerCraftItem();
+	}
+	else if (tag == "HelmetSlot" || tag == "ChestPlateSlot" || 
+		tag == "LeggingsSlot" || tag == "BootsSlot" || slotKey != 0)
+	{
+		TriggerEquipItem();
+	}
 }
 
 void CraftSlot::TriggerCraftItem()
@@ -20,6 +28,15 @@ void CraftSlot::TriggerCraftItem()
 	if (isChanged)
 	{
 		craftBox->CraftItem();
+		isChanged = false;
+	}
+}
+
+void CraftSlot::TriggerEquipItem()
+{
+	if (isChanged)
+	{
+		craftBox->EquipArmor();
 		isChanged = false;
 	}
 }

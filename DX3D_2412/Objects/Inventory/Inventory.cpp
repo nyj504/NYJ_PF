@@ -25,6 +25,10 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	AddItem(35, 1);
 	AddItem(37, 1);
 	AddItem(38, 1);
+	AddItem(93, 1);
+	AddItem(74, 1);
+	AddItem(86, 1);
+	AddItem(77, 1);
 
 	SetActive(false);
 }

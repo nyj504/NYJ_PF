@@ -9,6 +9,7 @@ public:
 	void Update();
 
 	void TriggerCraftItem();
+	void TriggerEquipItem();
 private:
 	CraftBox* craftBox;
 };

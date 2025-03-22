@@ -378,7 +378,13 @@
     <ClInclude Include="Scenes\ModelEquipScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Item\Armor.h">
+    <ClInclude Include="Objects\Item\EquipManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GUI\PlayerHUD.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GUI\HUDBar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -704,7 +710,13 @@
     <ClCompile Include="Scenes\ModelEquipScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Item\Armor.cpp">
+    <ClCompile Include="Objects\Item\EquipManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GUI\PlayerHUD.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GUI\HUDBar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

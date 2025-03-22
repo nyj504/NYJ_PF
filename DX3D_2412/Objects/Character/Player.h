@@ -48,7 +48,7 @@ private:
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
 
-	Armor* armor;
+	//Armor* armor;
 
 	PlayerState playerState = IDLE;
 	

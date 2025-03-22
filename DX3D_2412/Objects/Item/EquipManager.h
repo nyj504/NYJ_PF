@@ -11,12 +11,17 @@ public:
 	void Update();
 	void Render();
 
-	void EquipArmor(AmoType type, string name);
+	void EquipTotalArmor(const unordered_map<AmoType, UINT>& equips);
 
 	void EquipWeapon(string name);
 	void SetTarget(ModelAnimator* modelAnimator) { this->modelAnimator = modelAnimator; }
 
 private:
+	void EquipArmor(AmoType type, string name);
+	void UnequipArmor(AmoType type);
+
+private:
+	UINT curDefense = 0;
 	bool isEquipHelmet = false;
 	bool isEquipChestPlate = false;
 	bool isEquipLeggings = false;

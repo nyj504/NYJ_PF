@@ -12,6 +12,7 @@ public:
 
 	virtual void AddItem(UINT key, UINT count) {};
 	virtual void DecreaseItem(UINT key, UINT count) {};
+	virtual void EquipArmor() {};
 	
 	virtual void CraftItem() = 0;
 protected:

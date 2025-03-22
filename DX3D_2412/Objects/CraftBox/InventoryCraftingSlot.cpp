@@ -27,6 +27,28 @@ void InventoryCraftingSlot::PostRender()
         equipSlot->Render();
 }
 
+void InventoryCraftingSlot::EquipArmor()
+{
+    unordered_map<AmoType, UINT> equips;
+
+    for (CraftSlot* equipSlot : equipSlots)
+    {
+        UINT equipKey = equipSlot->GetKey();
+    
+        if (equipSlot->GetTag() == "HelmetSlot")
+            equips[AmoType::HELMET] = equipKey;
+        else if (equipSlot->GetTag() == "ChestPlateSlot")
+            equips[AmoType::CHESTPLATE] = equipKey;
+        else if (equipSlot->GetTag() == "LeggingsSlot")
+            equips[AmoType::LEGGINGS] = equipKey;
+        else if (equipSlot->GetTag() == "BootsSlot")
+            equips[AmoType::BOOTS] = equipKey;
+    }
+
+    if (!equips.empty())
+        EquipManager::Get()->EquipTotalArmor(equips);
+}
+
 void InventoryCraftingSlot::CreateSlot()
 {
 	Vector3 startPos = { CENTER.x + 36, CENTER.y + 197};
