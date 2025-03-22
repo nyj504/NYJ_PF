@@ -2,6 +2,7 @@
 
 CraftingTable::CraftingTable() : CraftBox(L"Resources/Textures/GUI/crafting_tableSlot.png")
 {
+    tag = "CraftingTable";
 	CreateSlot();
 }
 

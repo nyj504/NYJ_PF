@@ -51,3 +51,28 @@ void DataManager::LoadItemData()
     }
 }
 
+void DataManager::LoadEquipmentData()
+{
+    string fileName = "Resources/Tables/EquipmentTable.csv";
+
+    ifstream loadFile(fileName);
+
+    string line;
+
+    getline(loadFile, line);
+
+    while (getline(loadFile, line))
+    {
+        vector<string> rowData = Utility::SplitString(line, ",");
+
+        EquipmentData data;
+        data.key = stoi(rowData[0]);
+        data.equipType = rowData[1];
+        data.equipParts = rowData[2];
+        data.atk = stoi(rowData[3]);
+        data.defense = stoi(rowData[4]);
+
+        equipmentDatas[data.key] = data;
+    }
+}
+

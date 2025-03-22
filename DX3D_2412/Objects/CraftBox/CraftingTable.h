@@ -15,5 +15,4 @@ public:
 
 	// CraftBox을(를) 통해 상속됨
 	void CraftItem() override;
-
 };

@@ -2,6 +2,8 @@
 
 InventoryCraftingSlot::InventoryCraftingSlot() : CraftBox(L"Resources/Textures/GUI/inventoryTopSlot.png")
 {
+    tag = "InventoryGUI";
+
 	CreateSlot();
 
 	craftingRecipes = DataManager::Get()->GetCraftingRecipes();
@@ -14,14 +16,24 @@ InventoryCraftingSlot::~InventoryCraftingSlot()
 void InventoryCraftingSlot::Update()
 {
 	CraftBox::Update();
+    for (CraftSlot* equipSlot : equipSlots)
+        equipSlot->Update();
+}
+
+void InventoryCraftingSlot::PostRender()
+{
+    CraftBox::PostRender();
+    for (CraftSlot* equipSlot : equipSlots)
+        equipSlot->Render();
 }
 
 void InventoryCraftingSlot::CreateSlot()
 {
-	Vector3 startPos = { CENTER.x + 36, CENTER.y + 197 , 0 };
+	Vector3 startPos = { CENTER.x + 36, CENTER.y + 197};
 	Vector2 interval = { 36, 36 };
 	
 	craftSlots.resize(MAX_SLOTSIZE);
+    equipSlots.resize(MAX_EQUIPSIZE);
 
 	int row = MAX_SLOTSIZE / INVEN_COL;
 	int col = MAX_SLOTSIZE % INVEN_COL;
@@ -33,7 +45,7 @@ void InventoryCraftingSlot::CreateSlot()
 		int row = i / INVEN_COL;
 		int col = i % INVEN_COL;
 
-		Vector3 pos = { startPos.x + col * interval.x, startPos.y - row * interval.y, 0 };
+		Vector3 pos = { startPos.x + col * interval.x, startPos.y - row * interval.y};
 
 		craftSlot->SetLocalPosition(pos);
 		craftSlot->UpdateWorld();
@@ -47,6 +59,26 @@ void InventoryCraftingSlot::CreateSlot()
 	slot->SetTag("ResultSlot");
 
 	craftSlots[MAX_SLOTSIZE - 1] = slot;
+
+    for (int i = 0; i < MAX_EQUIPSIZE; i++)
+    {
+        Vector3 startPos = { CENTER.x - 144, CENTER.y + 217 };
+        CraftSlot* slot = new CraftSlot(this);
+
+        if(i == 0)
+            slot->SetTag("HelmetSlot");
+        if(i == 1)
+            slot->SetTag("ChestPlateSlot");
+        if(i == 2)
+            slot->SetTag("LeggingsSlot");
+        if(i == 3)
+            slot->SetTag("BootsSlot");
+
+        slot->SetLocalPosition(startPos.x, startPos.y - (interval.y * i), startPos.z);
+        slot->UpdateWorld();
+
+        equipSlots[i] = slot;
+    }
 }
 
 void InventoryCraftingSlot::CraftItem()

@@ -39,7 +39,7 @@ public:
 	bool IsRefreshQuickSlot() { return isRefreshQuickSlot; }
 
 	void SetRefreshQuickSlot(bool isRefreshQuickSlot) { this->isRefreshQuickSlot = isRefreshQuickSlot; }
-
+	
 	SlotIcon* GetCloneIcon() { return cloneIcon; }
 	pair<UINT, UINT> GetQuickSlotData(int index);
 

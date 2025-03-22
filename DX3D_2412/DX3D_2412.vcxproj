@@ -218,6 +218,7 @@
     <ClInclude Include="Objects\CraftBox\InventoryCraftingSlot.h" />
     <ClInclude Include="Objects\Editor\ObjectEditor.h" />
     <ClInclude Include="Objects\Inventory\InventorySingleton.h" />
+    <ClInclude Include="Objects\Item\Armor.h" />
     <ClInclude Include="Objects\Landscape\Skybox.h" />
     <ClInclude Include="Objects\Landscape\Terrain.h" />
     <ClInclude Include="Objects\Manager\DataManager.h" />
@@ -333,6 +334,7 @@
     <ClCompile Include="Objects\CraftBox\InventoryCraftingSlot.cpp" />
     <ClCompile Include="Objects\Editor\ObjectEditor.cpp" />
     <ClCompile Include="Objects\Inventory\InventorySingleton.cpp" />
+    <ClCompile Include="Objects\Item\Armor.cpp" />
     <ClCompile Include="Objects\Landscape\Skybox.cpp" />
     <ClCompile Include="Objects\Landscape\Terrain.cpp" />
     <ClCompile Include="Objects\Manager\DataManager.cpp" />

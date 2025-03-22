@@ -4,10 +4,14 @@
 BlockTestScene::BlockTestScene()
 {
 	PlayerSingleton::Get();
+	UIManager::Get();
+	InventorySingleton::Get();
+
 	PLAYER->SetLocalPosition(2, 4, 2);
-	//CAM->SetTarget(PLAYER);
-	//CAM->TargetOptionLoad("FPSMode");
-	//CAM->SetFPSView(true);
+
+	CAM->SetTarget(PLAYER);
+	CAM->TargetOptionLoad("QuaterViewMode");
+	CAM->SetFPSView(true);
 
 	ShowCursor(true);
 
@@ -62,6 +66,7 @@ void BlockTestScene::Update()
 	}
 
 	PLAYER->Update();
+	UIManager::Get()->Update();
 }	
 
 void BlockTestScene::PreRender()
@@ -80,10 +85,12 @@ void BlockTestScene::Render()
 	}
 
 	PLAYER->Render();
+
 }
 
 void BlockTestScene::PostRender()
 {
+	UIManager::Get()->PostRender();
 }
 
 void BlockTestScene::GUIRender()

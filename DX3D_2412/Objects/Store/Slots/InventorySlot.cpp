@@ -45,7 +45,9 @@ void InventorySlot::Update()
 	
 		if (isRButtonDown)
 		{
+			isPush = true;
 			SetSlotState(PUSH);
+			INVEN->OnSelectSlot(this);
 		}
 	}
 

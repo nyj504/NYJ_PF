@@ -26,6 +26,7 @@ public:
 	void SetPlayerState(PlayerState state);
 
 	float GetPlayerReach(bool interationType) { return interationType ? MAX_INTERACT_REACH : MAX_BLOCK_REACH; } 
+	ModelAnimator* GetModelAnimator() { return modelAnimator; }
 
 	int GetDamage() { return atk; }
 	void SetLand();
@@ -46,6 +47,8 @@ private:
 	float jumpTime = 0.0f;
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
+
+	Armor* armor;
 
 	PlayerState playerState = IDLE;
 	

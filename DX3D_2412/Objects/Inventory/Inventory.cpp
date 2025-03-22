@@ -26,8 +26,6 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	AddItem(37, 1);
 	AddItem(38, 1);
 
-
-
 	SetActive(false);
 }
 
@@ -79,12 +77,12 @@ void Inventory::CreateSlot()
 
 	for (int i = 0; i < 9; i++)
 	{
-		Vector3 startPos = { CENTER.x - 144, CENTER.y - 47  , 0 };
+		Vector3 startPos = { CENTER.x - 144, CENTER.y - 47};
 
 		InventorySlot* slot = new InventorySlot();
 		slot->SetTag("SyncQuickSlot");
 
-		Vector3 pos = { startPos.x + i * interval.x, startPos.y - row, 0 };
+		Vector3 pos = { startPos.x + i * interval.x, startPos.y - row};
 		slot->SetLocalPosition(pos);
 		slot->UpdateWorld();
 
@@ -93,14 +91,14 @@ void Inventory::CreateSlot()
 
 	for (int i = 9; i < MAX_SLOTSIZE; i++)
 	{
-		Vector3 startPos = { CENTER.x - 144, CENTER.y + 101 , 0 };
+		Vector3 startPos = { CENTER.x - 144, CENTER.y + 101};
 
 		InventorySlot* slot = new InventorySlot();
 
 		int row = i / INVEN_COL;
 		int col = i % INVEN_COL;
 
-		Vector3 pos = { startPos.x + col * interval.x, startPos.y - row * interval.y, 0 };
+		Vector3 pos = { startPos.x + col * interval.x, startPos.y - row * interval.y};
 
 		slot->SetLocalPosition(pos);
 		slot->UpdateWorld();

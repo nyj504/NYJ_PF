@@ -20,6 +20,11 @@ enum class TerrainType
 	PLAINS, HILLS, MOUNTAINS
 };
 
+enum class AmoType
+{
+	HELMET, CHESTPLATE, LEGGINGS, BOOTS, WEAPON
+};
+
 #define CENTER Vector3(SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1, 0.0f)
 
 #define DEVICE Device::Get()->GetDevice()
@@ -211,6 +216,9 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Store/Slots/SlotIcon.h"
 #include "Objects/Store/Slots/InventorySlot.h"
 #include "Objects/Store/Slots/CraftSlot.h"
+
+#include "Objects/Item/Armor.h"
+
 
 #include "Objects/Inventory/Inventory.h"
 #include "Objects/Inventory/QuickSlot.h"

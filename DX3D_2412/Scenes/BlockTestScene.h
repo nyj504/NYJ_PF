@@ -18,6 +18,7 @@ public:
 
 private:
 	Cube* cube;
+	Armor* armor;
 	vector<Block*> blocks;
 	vector<InstanceData> instanceData;
 	VertexBuffer* instanceBuffer;

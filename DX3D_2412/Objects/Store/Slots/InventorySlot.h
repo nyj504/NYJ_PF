@@ -32,6 +32,7 @@ public:
 	bool IsChanged() { return isChanged; }
 	void SetChanged(bool isChanged) { this->isChanged = isChanged; }
 	bool IsHold() { return isHold; }
+	bool IsPush() { return isPush; }
 	bool IsPressShift() { return isPressShift; }
 
 	void SetRest(bool isRest) { this->isRest = isRest; }
@@ -43,6 +44,7 @@ protected:
 
 private:
 	bool isHold = false;
+	bool isPush = false;
 	bool isPressShift = false;
 	bool isRest = false;
 
