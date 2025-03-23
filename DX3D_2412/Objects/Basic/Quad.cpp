@@ -42,13 +42,14 @@ Quad::Quad(wstring texture)
     mesh->CreateMesh();
 }
 
-Quad::Quad(wstring texture, Vector2 size)
+Quad::Quad(string name, Vector2 size)
 {
-    tag = "Quad";
+    tag = name;
+
+    string path = "Resources/Textures/Itemx2/" + name + ".png";
 
     material->SetShader(L"Basic/Texture.hlsl");
-    material->SetDiffuseMap(texture);
-    this->size = material->GetDiffuseMap()->GetSize();
+    material->SetDiffuseMap(Utility::ToWString(path));
 
     vector<VertexUV>& vertices = mesh->GetVertices();
     vertices.emplace_back(-0.5f * size.x, +0.5f * size.y, 0.0f, 0, 0);//0

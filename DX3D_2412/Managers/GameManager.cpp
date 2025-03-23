@@ -24,8 +24,8 @@ GameManager::GameManager()
 	//SCENE->Create("Edit", new EditScene());
 	//SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
-	SCENE->Create("Start", new BlockTestScene());
-	//SCENE->Create("Start", new ModelEquipScene());
+	//SCENE->Create("Start", new BlockTestScene());
+	SCENE->Create("Start", new ModelEquipScene());
 
 	SCENE->Add("Start");
 	//SCENE->Add("Grid");

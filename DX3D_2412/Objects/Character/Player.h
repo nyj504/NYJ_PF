@@ -5,7 +5,7 @@ class Player : public Character
 private:
 	enum PlayerState
 	{
-		IDLE, MOVE, JUMP, FALL, LAND
+		IDLE, MOVE, JUMP, FALL, LAND, TOUCH
 	};
 
 private:
@@ -22,9 +22,8 @@ public:
 	void Render();
 	void PostRender();
 
-	void PlayerStateMachine();
 	void SetPlayerState(PlayerState state);
-
+	
 	float GetPlayerReach(bool interationType) { return interationType ? MAX_INTERACT_REACH : MAX_BLOCK_REACH; } 
 	ModelAnimator* GetModelAnimator() { return modelAnimator; }
 
@@ -51,6 +50,8 @@ private:
 	//Armor* armor;
 
 	PlayerState playerState = IDLE;
+
+	Quad* item;
 	
 	Model* weapon;
 	Transform* weaponSocket;

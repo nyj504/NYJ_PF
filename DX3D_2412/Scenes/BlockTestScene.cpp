@@ -22,12 +22,8 @@ BlockTestScene::BlockTestScene()
 	PLAYER->SetLocalPosition(2, 4, 2);
 
 	CAM->SetTarget(PLAYER);
-	CAM->TargetOptionLoad("QuaterViewMode");
+	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
-
-	item = new Quad(L"Resources/Textures/Item/stick.png", Vector2(0.1f, 0.1f));
-	item->SetLocalPosition(Vector3(3, 4, 3));
-	item->UpdateWorld();
 
 	ShowCursor(true);
 
@@ -72,12 +68,31 @@ BlockTestScene::~BlockTestScene()
 {
 	delete cube;
 	delete instanceBuffer;
-	delete item;
+	//delete item;
 	
 }
 
 void BlockTestScene::Update()
 {
+	if (KEY->Down(VK_F2))
+	{
+		CAM->SetTarget(nullptr);
+	}
+
+	if (KEY->Down(VK_F3))
+	{
+		CAM->SetTarget(PLAYER);
+		CAM->TargetOptionLoad("FPSMode");
+		CAM->SetFPSView(true);
+	}
+
+	if (KEY->Down(VK_F4))
+	{
+		CAM->SetTarget(PLAYER);
+		CAM->TargetOptionLoad("QuaterViewMode");
+		CAM->SetQuaterView(true);
+	}
+
 	for (Block* block : blocks)
 	{
 		block->Update();
@@ -105,9 +120,6 @@ void BlockTestScene::Render()
 
 	PLAYER->Render();
 	EquipManager::Get()->Render();
-	item->Render();
-	
-
 }
 
 void BlockTestScene::PostRender()

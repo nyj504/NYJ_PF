@@ -219,7 +219,6 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Objects/Item/EquipManager.h"
 
-
 #include "Objects/Inventory/Inventory.h"
 #include "Objects/Inventory/QuickSlot.h"
 

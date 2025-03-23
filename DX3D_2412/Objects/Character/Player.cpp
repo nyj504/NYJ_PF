@@ -18,18 +18,23 @@ Player::Player() : Character("Resources/Models/Player.model")
 	//armor->EquipArmor(AmoType::LEGGINGS, "Gold");
 	//armor->EquipArmor(AmoType::BOOTS, "Diamond");
 
-	weapon = new Model("DiamondPickAxe");
-	weapon->Load();
+	item = new Quad("string", Vector2(1, 1));
+	item->SetTag("Item");
+	item->Load();
+	
+	//weapon = new Model("DiamondPickAxe");
+	//weapon->Load();
 
 	weaponSocket = new Transform();
-	weapon->SetParent(weaponSocket);
+	//weapon->SetParent(weaponSocket);
+	item->SetParent(weaponSocket);
 }
 
 Player::~Player()
 {
 	delete weapon;
 	delete weaponSocket;
-	//delete armor;
+	delete item;
 }
 
 void Player::Update()
@@ -49,37 +54,38 @@ void Player::Update()
 	modelAnimator->Update();
 	collider->UpdateWorld();
 
-	weapon->UpdateWorld();
+	item->UpdateWorld();
 	UpdateWorld();
 	
-	PlayerStateMachine();
 	//BuildAndMining();
-
 	SetCursor();
 	Control();
+	Jump();
 	Move();
 	CAM->UpdateWorld();
-	//armor->Update();
-
 }
 
 void Player::Render()
 {
 	modelAnimator->Render();
 	collider->Render();
-	weapon->Render();
-	//armor->Render();
+	Environment::Get()->SetAlphaBlend(true);
+	item->Render();
+	Environment::Get()->SetAlphaBlend(true);
 }
 
 void Player::PostRender()
 {
 }
 
-void Player::PlayerStateMachine()
+void Player::SetPlayerState(PlayerState state)
 {
+	this->playerState = state;
+
 	switch (playerState)
 	{
 	case Player::IDLE:
+		modelAnimator->PlayClip(0);
 		break;
 	case Player::MOVE:
 		break;
@@ -96,24 +102,18 @@ void Player::PlayerStateMachine()
 		break;
 	case Player::LAND:
 		velocity.y = 0;
-		Jump();
 		break;
+	case Player::TOUCH:
+		modelAnimator->PlayClip(7);
 	default:
 		break;
 	}
-}
-
-void Player::SetPlayerState(PlayerState state)
-{
-	this->playerState = state;
 }
 
 void Player::SetLand()
 {
 	if (jumpTime <= 0)
 	SetPlayerState(LAND);
-
-	modelAnimator->PlayClip(0);
 }
 	
 void Player::SetFall()
@@ -173,24 +173,12 @@ void Player::Jump()
 		velocity.y += JUMP_POWER;
 		jumpTime = 0.2f;
 
-		modelAnimator->PlayClip(2);
 		SetPlayerState(JUMP);
 	}
 }
 
 void Player::Move()
 {
-	if (velocity.x == 0 && velocity.z == 0)
-	{
-		isMove = false;
-		modelAnimator->PlayClip(0);
-	}
-
-	if (velocity.x > 0 || velocity.z > 0 || isMove != true)
-	{
-		isMove = true;
-		modelAnimator->PlayClip(5);
-	}
 	Translate(velocity * moveSpeed * DELTA);
 }
 
@@ -206,7 +194,7 @@ void Player::BuildAndMining()
 			BlockManager::Get()->InteractingBlock();
 		else
 		{	
-			modelAnimator->PlayClip(7);
+			SetPlayerState(TOUCH);
 			BlockManager::Get()->BuildBlock();
 		}
 	}
@@ -215,7 +203,7 @@ void Player::BuildAndMining()
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
 			return;
 
-		modelAnimator->PlayClip(7);
+		SetPlayerState(TOUCH);
 		BlockManager::Get()->MiningBlock();
 	}
 }

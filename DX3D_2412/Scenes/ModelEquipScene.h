@@ -44,4 +44,7 @@ private:
 	Model* weapon;
 
 	BoxCollider* collider;
+
+	Quad* item;
+	Cube* cube;
 };
