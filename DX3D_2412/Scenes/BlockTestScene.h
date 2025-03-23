@@ -18,6 +18,10 @@ public:
 
 private:
 	HUDBar* hpBar;
+	HUDBar* armorBar;
+	HUDBar* hungerBar;
+
+	Quad* item;
 
 	Cube* cube;
 	vector<Block*> blocks;

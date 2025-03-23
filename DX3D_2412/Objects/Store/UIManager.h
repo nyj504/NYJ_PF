@@ -14,6 +14,7 @@ public:
 
 	void SetTopSlot(string type);
 	QuickSlot* GetQuickSlot() { return quickSlot; }
+	HUDBar* GetArmorBar() { return armorBar; }
 
 	void SetCursorState();
 
@@ -33,4 +34,8 @@ private:
 	CraftingUI* craftingUI;
 	QuickSlot* quickSlot;
 	PauseMenuUI* pauseMenuUI;
+
+	HUDBar* hpBar;
+	HUDBar* armorBar;
+	HUDBar* hungerBar;
 };

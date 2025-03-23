@@ -14,6 +14,10 @@ UIManager::~UIManager()
 	delete craftingUI;
 	delete quickSlot;
 	delete pauseMenuUI;
+
+	delete hpBar;
+	delete armorBar;
+	delete hungerBar;
 }
 
 void UIManager::Update()
@@ -45,9 +49,14 @@ void UIManager::Update()
 void UIManager::PostRender()
 {
 	InventorySingleton::Get()->Render();
+	
 	craftingUI->PostRender();
 	quickSlot->Render();
 	pauseMenuUI->Render();
+
+	hpBar->Render();
+	armorBar->Render();
+	hungerBar->Render();
 
 	if(!isPopup)
 		cursor->Render();
@@ -76,4 +85,14 @@ void UIManager::CreateInGameUI()
 	cursor = new Quad(L"Resources/Textures/UI/cursor.png");
 	cursor->SetLocalPosition(CENTER);
 	cursor->UpdateWorld();
+
+	hpBar = new HUDBar();
+	hpBar->Create("Resources/Textures/UI/heart.png", Vector3(CENTER.x - 260, CENTER.y - 280));
+
+	armorBar = new HUDBar();
+	armorBar->Create("Resources/Textures/UI/armor_empty.png", Vector3(CENTER.x - 260, CENTER.y - 256));
+	armorBar->UpdateArmorBar(0);
+
+	hungerBar = new HUDBar();
+	hungerBar->Create("Resources/Textures/UI/hunger_full.png", Vector3(CENTER.x + 86, CENTER.y - 280));
 }

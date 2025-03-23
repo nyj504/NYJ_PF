@@ -3,7 +3,13 @@
 
 TestScene::TestScene() : isPaused(false)
 {
+	PlayerSingleton::Get();
 	UIManager::Get();
+	InventorySingleton::Get();
+
+	EquipManager::Get();
+	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
+	
 	CAM->SetTarget(PLAYER);
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
@@ -16,6 +22,7 @@ TestScene::TestScene() : isPaused(false)
 TestScene::~TestScene()
 {
 	BlockManager::Delete();
+	EquipManager::Delete();
 	UIManager::Delete();
 }
 
@@ -45,6 +52,7 @@ void TestScene::Update()
 		BlockManager::Get()->Update();
 		PLAYER->Update();
 		UIManager::Get()->Update();
+		EquipManager::Get()->Update();
 	}
 }
 
@@ -60,6 +68,7 @@ void TestScene::Render()
 	{
 		BlockManager::Get()->Render();
 		PLAYER->Render();
+		EquipManager::Get()->Render();
 	}
 }
 

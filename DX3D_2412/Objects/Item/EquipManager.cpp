@@ -173,6 +173,8 @@ void EquipManager::EquipTotalArmor(const unordered_map<AmoType, UINT>& equips)
 
 		EquipArmor(equip.first, data.equipType); 
 	}
+
+	UIManager::Get()->GetArmorBar()->UpdateArmorBar(curDefense);
 }
 
 void EquipManager::EquipArmor(AmoType type, string name)

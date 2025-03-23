@@ -8,14 +8,26 @@ BlockTestScene::BlockTestScene()
 	InventorySingleton::Get();
 	EquipManager::Get();
 	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
+	
 	hpBar = new HUDBar();
-	hpBar->Create("Resources/Textures/UI/heart.png");
+	hpBar->Create("Resources/Textures/UI/heart.png", Vector3(CENTER.x - 260 , CENTER.y - 280));
+	
+	armorBar = new HUDBar();
+	armorBar->Create("Resources/Textures/UI/armor_empty.png", Vector3(CENTER.x - 260, CENTER.y - 256));
+	//armorBar->UpdateBar(1);
+	
+	hungerBar = new HUDBar();
+	hungerBar->Create("Resources/Textures/UI/hunger_full.png", Vector3(CENTER.x + 86, CENTER.y - 280));
 
 	PLAYER->SetLocalPosition(2, 4, 2);
 
 	CAM->SetTarget(PLAYER);
 	CAM->TargetOptionLoad("QuaterViewMode");
 	CAM->SetFPSView(true);
+
+	item = new Quad(L"Resources/Textures/Item/stick.png", Vector2(0.1f, 0.1f));
+	item->SetLocalPosition(Vector3(3, 4, 3));
+	item->UpdateWorld();
 
 	ShowCursor(true);
 
@@ -60,7 +72,8 @@ BlockTestScene::~BlockTestScene()
 {
 	delete cube;
 	delete instanceBuffer;
-	delete hpBar;
+	delete item;
+	
 }
 
 void BlockTestScene::Update()
@@ -92,8 +105,8 @@ void BlockTestScene::Render()
 
 	PLAYER->Render();
 	EquipManager::Get()->Render();
+	item->Render();
 	
-
 
 }
 
@@ -101,6 +114,8 @@ void BlockTestScene::PostRender()
 {
 	UIManager::Get()->PostRender();
 	hpBar->Render();
+	armorBar->Render();
+	hungerBar->Render();
 }
 
 void BlockTestScene::GUIRender()
