@@ -10,6 +10,15 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	cloneIcon->SetActive(false);
 	CreateSlot();
 
+
+	AddItem(91, 1); // 무기 실험 다이아 검 
+	AddItem(68, 1); // 돌삽 
+	AddItem(63, 1); // 활 
+	AddItem(81, 1); // 황금곡괭이
+	AddItem(59, 1); // 나무도끼
+	AddItem(73, 1); 
+	AddItem(89, 1);
+
 	AddItem(1, 64);
 	AddItem(2, 64);
 	AddItem(3, 64);
@@ -28,7 +37,7 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	AddItem(93, 1);
 	AddItem(74, 1);
 	AddItem(86, 1);
-	AddItem(77, 1);
+
 
 	SetActive(false);
 }

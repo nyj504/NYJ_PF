@@ -81,6 +81,29 @@ void QuickSlot::OnMouseWheel(int delta)
         selectedIndex = (selectedIndex - 1 + MAX_SLOTSIZE) % MAX_SLOTSIZE;
     }
 
+    pair<UINT, UINT>quickSlotData = GetSelectedIndexData();
+
+    ItemData itemData = DataManager::Get()->GetItemData(quickSlotData.first);
+
+    if (itemData.itemType == "Weapon")
+    {
+        WeaponType type = WeaponType::SWORD;
+        EquipmentData data = DataManager::Get()->GetEquipmentData(quickSlotData.first);
+
+        if (data.equipParts == "Sword")
+            type = WeaponType::SWORD;
+        else if (data.equipParts == "Axe")
+            type = WeaponType::AXE;
+        else if (data.equipParts == "PickAxe")
+            type = WeaponType::PICKAXE;
+        else if (data.equipParts == "Shovel")
+            type = WeaponType::SHOVEL;
+        else if (data.equipParts == "Bow")
+            type = WeaponType::BOW;
+
+        EquipManager::Get()->EquipWeapon(type, data.equipType);
+    }
+
     HighlightSelectedQuickSlot();
 }
 

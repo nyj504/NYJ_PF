@@ -27,6 +27,28 @@ EquipManager::EquipManager()
 
 	weaponSocket = new Transform();
 
+	singleBlock = new Cube();
+	singleBlock->SetTag("Item");
+	singleBlock->Load();
+	singleBlock->SetParent(weaponSocket);
+
+	multiBlock = new Cube();
+	multiBlock->SetTag("Item");
+	multiBlock->Load();
+	multiBlock->ApplyObjectUVMapping();
+	multiBlock->SetParent(weaponSocket);
+
+	item = new Quad(Vector2(1, 1));
+	item->SetTag("Item");
+	item->Load();
+	item->SetParent(weaponSocket);
+
+	string weapon = "Bow";
+	Model* model = new Model(weapon);
+	model->Load();
+	model->SetParent(weaponSocket);
+	equipments[weapon] = model;
+
 	for (const string& type : types)
 	{
 		for (int i = 0; i < names.size(); ++i)
@@ -79,6 +101,10 @@ EquipManager::~EquipManager()
 	for (const pair<string, Model*>equipment : equipments)
 		delete equipment.second;
 	equipments.clear();
+	
+	delete singleBlock;
+	delete multiBlock;
+	delete item;
 
 	delete modelAnimator;
 	delete weaponSocket;
@@ -98,6 +124,11 @@ EquipManager::~EquipManager()
 
 void EquipManager::Update()
 {
+	if (isEquipWeapon)
+	{
+		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+		weapon->UpdateWorld();
+	}
 	if (isEquipHelmet)
 	{
 		helmetSocket->SetWorld(modelAnimator->GetTransformByNode(12));
@@ -133,6 +164,10 @@ void EquipManager::Update()
 
 void EquipManager::Render()
 {
+	if (isEquipWeapon)
+	{
+		weapon->Render();
+	}
 	if (isEquipHelmet)
 	{
 		helmet->Render();
@@ -194,8 +229,6 @@ void EquipManager::EquipArmor(AmoType type, string name)
 		break;
 	case AmoType::BOOTS:
 		slotNames = { "Boots_Left", "Boots_Right" };
-		break;
-	case AmoType::WEAPON:
 		break;
 	}
 
@@ -265,6 +298,28 @@ void EquipManager::UnequipArmor(AmoType type)
 	}
 }
 
-void EquipManager::EquipWeapon(string name)
+void EquipManager::EquipWeapon(WeaponType type, string name)
 {
+	string category = {};
+
+	switch (type)
+	{
+	case WeaponType::SWORD:
+		category = "Sword";
+		break;
+	case WeaponType::AXE:
+		category = "Axe";
+		break;
+	case WeaponType::PICKAXE:
+		category = "PickAxe";
+		break;
+	case WeaponType::SHOVEL:
+		category = "Shovel";
+		break;
+	case WeaponType::BOW:
+		break;
+	}
+	isEquipWeapon = true;
+
+	weapon = equipments[name + category];
 }

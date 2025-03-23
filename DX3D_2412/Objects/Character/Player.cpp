@@ -11,23 +11,6 @@ Player::Player() : Character("Resources/Models/Player.model")
 
 	modelAnimator->SetParent(this);
 	modelAnimator->UpdateWorld();
-
-	//armor = new Armor(modelAnimator);
-	//armor->EquipArmor(AmoType::CHESTPLATE, "Diamond");
-	//armor->EquipArmor(AmoType::HELMET, "Iron");
-	//armor->EquipArmor(AmoType::LEGGINGS, "Gold");
-	//armor->EquipArmor(AmoType::BOOTS, "Diamond");
-
-	item = new Quad("string", Vector2(1, 1));
-	item->SetTag("Item");
-	item->Load();
-	
-	//weapon = new Model("DiamondPickAxe");
-	//weapon->Load();
-
-	weaponSocket = new Transform();
-	//weapon->SetParent(weaponSocket);
-	item->SetParent(weaponSocket);
 }
 
 Player::~Player()
@@ -50,14 +33,13 @@ void Player::Update()
 	//
 	//	velocity.y = 0;
 	//}
-	weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+
 	modelAnimator->Update();
 	collider->UpdateWorld();
 
-	item->UpdateWorld();
 	UpdateWorld();
 	
-	//BuildAndMining();
+	BuildAndMining();
 	SetCursor();
 	Control();
 	Jump();
@@ -69,9 +51,6 @@ void Player::Render()
 {
 	modelAnimator->Render();
 	collider->Render();
-	Environment::Get()->SetAlphaBlend(true);
-	item->Render();
-	Environment::Get()->SetAlphaBlend(true);
 }
 
 void Player::PostRender()

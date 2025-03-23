@@ -25,6 +25,11 @@ enum class AmoType
 	HELMET, CHESTPLATE, LEGGINGS, BOOTS, WEAPON
 };
 
+enum class WeaponType
+{
+	SWORD, AXE, PICKAXE, SHOVEL, BOW
+};
+
 #define CENTER Vector3(SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1, 0.0f)
 
 #define DEVICE Device::Get()->GetDevice()
