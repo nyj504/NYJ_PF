@@ -6,6 +6,7 @@ TestScene::TestScene() : isPaused(false)
 	PlayerSingleton::Get();
 	UIManager::Get();
 	InventorySingleton::Get();
+	ItemManager::Get();
 
 	EquipManager::Get();
 	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
@@ -24,6 +25,7 @@ TestScene::~TestScene()
 	BlockManager::Delete();
 	EquipManager::Delete();
 	UIManager::Delete();
+	EquipManager::Delete();
 }
 
 void TestScene::Update()
@@ -53,6 +55,7 @@ void TestScene::Update()
 		PLAYER->Update();
 		UIManager::Get()->Update();
 		EquipManager::Get()->Update();
+		ItemManager::Get()->Update();
 	}
 }
 
@@ -69,6 +72,7 @@ void TestScene::Render()
 		BlockManager::Get()->Render();
 		PLAYER->Render();
 		EquipManager::Get()->Render();
+		ItemManager::Get()->Render();
 	}
 }
 

@@ -217,6 +217,10 @@
     <ClInclude Include="Objects\Inventory\Inventory.h" />
     <ClInclude Include="Objects\CraftBox\InventoryCraftingSlot.h" />
     <ClInclude Include="Objects\Inventory\InventorySingleton.h" />
+    <ClInclude Include="Objects\Item\DropCube.h" />
+    <ClInclude Include="Objects\Item\DropItem.h" />
+    <ClInclude Include="Objects\Item\DropQuad.h" />
+    <ClInclude Include="Objects\Item\ItemManager.h" />
     <ClInclude Include="Objects\Item\EquipManager.h" />
     <ClInclude Include="Objects\Landscape\Skybox.h" />
     <ClInclude Include="Objects\Landscape\Terrain.h" />
@@ -330,6 +334,10 @@
     <ClCompile Include="Objects\Inventory\Inventory.cpp" />
     <ClCompile Include="Objects\CraftBox\InventoryCraftingSlot.cpp" />
     <ClCompile Include="Objects\Inventory\InventorySingleton.cpp" />
+    <ClCompile Include="Objects\Item\DropCube.cpp" />
+    <ClCompile Include="Objects\Item\DropItem.cpp" />
+    <ClCompile Include="Objects\Item\DropQuad.cpp" />
+    <ClCompile Include="Objects\Item\ItemManager.cpp" />
     <ClCompile Include="Objects\Item\EquipManager.cpp" />
     <ClCompile Include="Objects\Landscape\Skybox.cpp" />
     <ClCompile Include="Objects\Landscape\Terrain.cpp" />

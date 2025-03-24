@@ -29,6 +29,18 @@ public:
 	Vector3 HalfSize() const { return Size() * 0.5f; }
 	Vector3 OriginSize() const { return size; }
 	
+	Vector3 GetMin()
+	{
+		Vector3 half = size * 0.5f;
+		return GetGlobalPosition() - half;
+	}
+
+	Vector3 GetMax()
+	{
+		Vector3 half = size * 0.5f;
+		return GetGlobalPosition() + half;
+	}
+
 	void UpdateMesh(const Vector3& size);
 private:
 	virtual void MakeMesh() override;

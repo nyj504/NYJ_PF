@@ -20,8 +20,8 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	AddItem(89, 1);
 
 	AddItem(1, 64);
-	AddItem(2, 64);
-	AddItem(3, 64);
+	AddItem(46, 64);
+	AddItem(49, 64);
 	AddItem(4, 64);
 	AddItem(5, 64);
 	AddItem(24, 64);
@@ -29,10 +29,6 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	AddItem(8, 1);
 	AddItem(9, 1);
 	AddItem(10, 1);
-	AddItem(11, 1);
-	AddItem(65, 1);
-	AddItem(35, 1);
-	AddItem(37, 1);
 	AddItem(38, 1);
 	AddItem(93, 1);
 	AddItem(74, 1);

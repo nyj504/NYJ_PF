@@ -39,7 +39,7 @@ void Player::Update()
 
 	UpdateWorld();
 	
-	//BuildAndMining();
+	BuildAndMining();
 	SetCursor();
 	Control();
 	Jump();
@@ -173,7 +173,6 @@ void Player::BuildAndMining()
 			BlockManager::Get()->InteractingBlock();
 		else
 		{	
-			SetPlayerState(TOUCH);
 			BlockManager::Get()->BuildBlock();
 		}
 	}
@@ -182,7 +181,6 @@ void Player::BuildAndMining()
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
 			return;
 
-		SetPlayerState(TOUCH);
 		BlockManager::Get()->MiningBlock();
 	}
 }

@@ -106,7 +106,30 @@ bool RectCollider::IsRayCollision(IN const Ray& ray, OUT RaycastHit* hit)
 
 bool RectCollider::IsBoxCollision(BoxCollider* collider, Vector3* overlap)
 {
-    return false;
+    Vector3 boxMin = collider->GetMin();
+    Vector3 boxMax = collider->GetMax();
+
+    float boxL = boxMin.x;
+    float boxR = boxMax.x;
+    float boxB = boxMin.y;
+    float boxT = boxMax.y;
+
+    float rectL = L();
+    float rectR = R();
+    float rectT = T();
+    float rectB = B();
+
+    if (rectR < boxL || rectL > boxR) return false;
+    if (rectT < boxB || rectB > boxT) return false;
+
+    if (overlap)
+    {
+        float overlapX = min(rectR, boxR) - max(rectL, boxL);
+        float overlapY = min(rectT, boxT) - max(rectB, boxB);
+        *overlap = Vector3(overlapX, overlapY, 0);
+    }
+
+    return true;
 }
 
 bool RectCollider::IsSphereCollision(SphereCollider* collider)

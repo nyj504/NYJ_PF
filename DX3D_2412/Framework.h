@@ -223,6 +223,11 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Store/Slots/InventorySlot.h"
 #include "Objects/Store/Slots/CraftSlot.h"
 
+#include "Objects/Item/DropItem.h"
+#include "Objects/Item/DropQuad.h"
+#include "Objects/Item/DropCube.h"
+#include "Objects/Item/ItemManager.h"
+
 #include "Objects/Item/EquipManager.h"
 
 #include "Objects/Inventory/Inventory.h"

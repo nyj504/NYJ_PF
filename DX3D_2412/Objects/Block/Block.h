@@ -18,7 +18,7 @@ struct InstanceData
 class Block : public Transform
 {
 private:
-	enum ItemType
+	enum BlockType
 	{
 		BLOCK, CRAFTBLOCK, EMPTYBLOCK
 	};
@@ -64,6 +64,7 @@ private:
 	void SetBlockUV();
 
 protected:
+	UINT key;
 	int curHp = 0;
 	UINT64 parentIndex = 0;
 	
@@ -71,7 +72,7 @@ protected:
 	bool isOcclusion = false;
 
 	bool isNormal = true;
-	ItemType blockType = EMPTYBLOCK;
+	BlockType blockType = EMPTYBLOCK;
 	ItemData itemData;
 
 private:

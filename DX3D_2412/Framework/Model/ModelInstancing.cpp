@@ -4,6 +4,7 @@ ModelInstancing::ModelInstancing(string name, UINT size)
     : Model(name), size(size)
 {
     SetShader(L"Instancing/ModelInstancing.hlsl");
+    
     instanceDatas = new Matrix[size];
     instanceBuffer = new VertexBuffer(instanceDatas, sizeof(Matrix), size);
 }

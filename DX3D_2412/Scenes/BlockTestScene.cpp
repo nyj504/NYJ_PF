@@ -38,9 +38,7 @@ BlockTestScene::BlockTestScene()
 	{
 		for (int z = 0; z < 10; z++)
 		{
-			int y = (x + z) / 2; 
-
-			Vector3 pos = { (float)x, (float)y, (float)z };
+			Vector3 pos = { (float)x, 0, (float)z };
 			Block* block = new Block(2);
 			block->SetLocalPosition(pos);
 			block->UpdateWorld();
@@ -101,6 +99,7 @@ void BlockTestScene::Update()
 	PLAYER->Update();
 	UIManager::Get()->Update();
 	EquipManager::Get()->Update();
+	
 }	
 
 void BlockTestScene::PreRender()
@@ -120,6 +119,8 @@ void BlockTestScene::Render()
 
 	PLAYER->Render();
 	EquipManager::Get()->Render();
+	ItemManager::Get()->Render();
+
 }
 
 void BlockTestScene::PostRender()

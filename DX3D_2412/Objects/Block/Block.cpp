@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Block::Block(UINT key)
+Block::Block(UINT key) : key(key)
 {
     if (key > 0)
     {
@@ -63,7 +63,8 @@ void Block::Damage()
 
     if (curHp <= 0)
     {
-        INVEN->AddItem(itemData.dropItemKey, itemData.dropsAmount);
+        Vector3 offset = { 0.0f, 0.2f, 0.0f };
+        ItemManager::Get()->DropItem(itemData.dropItemKey, GetLocalPosition() - offset, itemData.dropsAmount);
         isActive = false;
         isMining = true;
     }

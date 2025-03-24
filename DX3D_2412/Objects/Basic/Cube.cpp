@@ -9,6 +9,7 @@ Cube::Cube(Vector3 size) : size(size)
 
     collider = new BoxCollider(size);
     collider->SetParent(this);
+    collider->UpdateWorld();
 }
 
 void Cube::Update()
