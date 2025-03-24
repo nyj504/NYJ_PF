@@ -103,6 +103,19 @@ void QuickSlot::OnMouseWheel(int delta)
 
         EquipManager::Get()->EquipWeapon(type, data.equipType);
     }
+    else
+    {
+        ItemType type = ItemType::QUAD;
+
+        if (itemData.textureType == "Normal")
+            type = ItemType::SINGLE;
+        else if (itemData.textureType == "UVMapping")
+            type = ItemType::MULTI;
+        else
+            type = ItemType::QUAD;
+
+        EquipManager::Get()->EquipItem(type, itemData.image);
+    }
 
     HighlightSelectedQuickSlot();
 }

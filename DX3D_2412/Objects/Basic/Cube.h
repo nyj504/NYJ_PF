@@ -18,7 +18,7 @@ public:
 
 	Vector3 GetSize() { return size; }
 
-	void ApplyCharacterUVMapping(Vector2 startUV, Vector3 size, int atlasSize);
+	void ApplyBlockUVMapping();
 	void ApplyObjectUVMapping();
 
 	virtual BoxCollider* GetCollider() { return collider; }

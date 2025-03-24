@@ -14,6 +14,8 @@ public:
 	void EquipTotalArmor(const unordered_map<AmoType, UINT>& equips);
 
 	void EquipWeapon(WeaponType type, string name);
+	void EquipItem(ItemType type, string path);
+
 	void SetTarget(ModelAnimator* modelAnimator) { this->modelAnimator = modelAnimator; }
 
 private:
@@ -27,6 +29,7 @@ private:
 	bool isEquipLeggings = false;
 	bool isEquipBoots = false;
 	bool isEquipWeapon = false;
+	bool isEquipItem = false;
 
 	Cube* singleBlock = nullptr;
 	Cube* multiBlock = nullptr;

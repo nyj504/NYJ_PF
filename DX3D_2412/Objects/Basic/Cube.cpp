@@ -80,71 +80,44 @@ void Cube::ApplyObjectUVMapping()
 }
 
 
-void Cube::ApplyCharacterUVMapping(Vector2 startUV, Vector3 size, int atlasSize)
+void Cube::ApplyBlockUVMapping()
 {
+    float atlasUSize = 0.25f;
+
     vector<VertexType>& vertices = mesh->GetVertices();
-
-    float startU = (float)startUV.x / atlasSize;
-    float startV = (float)startUV.y/ atlasSize;
-
-    float width = (float)size.x / atlasSize;
-    float height = (float)size.y / atlasSize;
-    float depth = (float)size.z / atlasSize;
 
     for (int i = 0; i < 6; i++)
     {
         int startIdx = i * 4;
-        
-        float tempU = startU;
-        float tempV = startV;
 
         if (i == 0) // front startUVÀ§Ä¡
         {
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + width, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + height };
-            vertices[startIdx + 3].uv = { tempU + width, tempV + height };
+            vertices[startIdx + 0].uv = { 0, 0 };
+            vertices[startIdx + 1].uv = { atlasUSize, 0 };
+            vertices[startIdx + 2].uv = { 0, 1 };
+            vertices[startIdx + 3].uv = { atlasUSize, 1 };
         }
-        if (i == 1) // right
+        else if (i == 2) // up
         {
-            tempU += width;
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + depth, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + height };
-            vertices[startIdx + 3].uv = { tempU + depth, tempV + height };
+            vertices[startIdx + 0].uv = { 2 * atlasUSize, 0 };
+            vertices[startIdx + 1].uv = { 3 * atlasUSize, 0 };
+            vertices[startIdx + 2].uv = { 2 * atlasUSize, 1 };
+            vertices[startIdx + 3].uv = { 3 * atlasUSize, 1 };
         }
-        if (i == 2) // up
+
+        else if (i == 5) // down
         {
-            tempV -= depth;
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + width, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + depth };
-            vertices[startIdx + 3].uv = { tempU + width, tempV + depth };
+            vertices[startIdx + 0].uv = { 3 * atlasUSize, 0 };
+            vertices[startIdx + 1].uv = { 1, 0 };
+            vertices[startIdx + 2].uv = { 3 * atlasUSize, 1 };
+            vertices[startIdx + 3].uv = { 1, 1 };
         }
-        if (i == 3) // back
+        else
         {
-            tempU += width + depth;
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + width, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + height };
-            vertices[startIdx + 3].uv = { tempU + width, tempV + height };
-        }
-        if (i == 4) // left
-        {
-            tempU -= depth;
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + depth, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + height };
-            vertices[startIdx + 3].uv = { tempU + depth, tempV + height };
-        }
-        if (i == 5) // down
-        {
-            tempU += width;
-            tempV -= depth;
-            vertices[startIdx + 0].uv = { tempU, tempV };
-            vertices[startIdx + 1].uv = { tempU + width, tempV };
-            vertices[startIdx + 2].uv = { tempU, tempV + depth };
-            vertices[startIdx + 3].uv = { tempU + width, tempV + depth };
+            vertices[startIdx + 0].uv = { atlasUSize, 0 };
+            vertices[startIdx + 1].uv = { 2 * atlasUSize, 0 };
+            vertices[startIdx + 2].uv = { atlasUSize, 1 };
+            vertices[startIdx + 3].uv = { 2 * atlasUSize, 1 };
         }
     }
     mesh->UpdateVertices();

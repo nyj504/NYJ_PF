@@ -30,6 +30,11 @@ enum class WeaponType
 	SWORD, AXE, PICKAXE, SHOVEL, BOW
 };
 
+enum class ItemType
+{
+	SINGLE, MULTI, QUAD, MODEL
+};
+
 #define CENTER Vector3(SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1, 0.0f)
 
 #define DEVICE Device::Get()->GetDevice()
@@ -210,10 +215,6 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Particle/Snow.h"
 
 #include "Objects/Block/Block.h"
-#include "Objects/Block/SimpleBlock.h"
-#include "Objects/Block/ComplexBlock.h"
-
-#include "Objects/Robot/ObjectModel.h"
 
 #include "Objects/Shooting/Bullet.h"
 #include "Objects/Shooting/Enemy.h"
@@ -252,9 +253,6 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Map/MainChunk.h"
 #include "Objects/Map/WorldGenerator.h"
 #include "Objects/Map/BlockManager.h"
-
-#include "Objects/Editor/ObjectEditor.h"
-
 
 //Manager Head
 #include "Scenes/Scene.h"

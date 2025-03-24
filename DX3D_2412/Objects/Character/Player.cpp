@@ -39,7 +39,7 @@ void Player::Update()
 
 	UpdateWorld();
 	
-	BuildAndMining();
+	//BuildAndMining();
 	SetCursor();
 	Control();
 	Jump();

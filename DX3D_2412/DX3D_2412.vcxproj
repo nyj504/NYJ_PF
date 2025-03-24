@@ -200,8 +200,6 @@
     <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="Objects\Block\Block.h" />
     <ClInclude Include="Objects\Block\DropBlock.h" />
-    <ClInclude Include="Objects\Block\ComplexBlock.h" />
-    <ClInclude Include="Objects\Block\SimpleBlock.h" />
     <ClInclude Include="Objects\Character\Character.h" />
     <ClInclude Include="Objects\Character\NPC.h" />
     <ClInclude Include="Objects\Character\PlayerSingleton.h" />
@@ -218,7 +216,6 @@
     <ClInclude Include="Objects\GUI\PlayerHUD.h" />
     <ClInclude Include="Objects\Inventory\Inventory.h" />
     <ClInclude Include="Objects\CraftBox\InventoryCraftingSlot.h" />
-    <ClInclude Include="Objects\Editor\ObjectEditor.h" />
     <ClInclude Include="Objects\Inventory\InventorySingleton.h" />
     <ClInclude Include="Objects\Item\EquipManager.h" />
     <ClInclude Include="Objects\Landscape\Skybox.h" />
@@ -236,7 +233,6 @@
     <ClInclude Include="Objects\Particle\Snow.h" />
     <ClInclude Include="Objects\Particle\Spark.h" />
     <ClInclude Include="Objects\Particle\Sprite.h" />
-    <ClInclude Include="Objects\Robot\ObjectModel.h" />
     <ClInclude Include="Objects\Shooting\Bullet.h" />
     <ClInclude Include="Objects\Shooting\Enemy.h" />
     <ClInclude Include="Objects\Character\Player.h" />
@@ -250,7 +246,6 @@
     <ClInclude Include="Objects\UI\ProgressBar.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scenes\BlockTestScene.h" />
-    <ClInclude Include="Scenes\EditScene.h" />
     <ClInclude Include="Scenes\GridScene.h" />
     <ClInclude Include="Scenes\InstancingScene.h" />
     <ClInclude Include="Scenes\LightScene.h" />
@@ -318,8 +313,6 @@
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
     <ClCompile Include="Objects\Block\Block.cpp" />
-    <ClCompile Include="Objects\Block\ComplexBlock.cpp" />
-    <ClCompile Include="Objects\Block\SimpleBlock.cpp" />
     <ClCompile Include="Objects\Character\Character.cpp" />
     <ClCompile Include="Objects\Character\NPC.cpp" />
     <ClCompile Include="Objects\Character\PlayerSingleton.cpp" />
@@ -336,7 +329,6 @@
     <ClCompile Include="Objects\GUI\PlayerHUD.cpp" />
     <ClCompile Include="Objects\Inventory\Inventory.cpp" />
     <ClCompile Include="Objects\CraftBox\InventoryCraftingSlot.cpp" />
-    <ClCompile Include="Objects\Editor\ObjectEditor.cpp" />
     <ClCompile Include="Objects\Inventory\InventorySingleton.cpp" />
     <ClCompile Include="Objects\Item\EquipManager.cpp" />
     <ClCompile Include="Objects\Landscape\Skybox.cpp" />
@@ -353,7 +345,6 @@
     <ClCompile Include="Objects\Particle\Snow.cpp" />
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
-    <ClCompile Include="Objects\Robot\ObjectModel.cpp" />
     <ClCompile Include="Objects\Shooting\Bullet.cpp" />
     <ClCompile Include="Objects\Shooting\Enemy.cpp" />
     <ClCompile Include="Objects\Character\Player.cpp" />
@@ -366,7 +357,6 @@
     <ClCompile Include="Objects\UI\Button.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
     <ClCompile Include="Scenes\BlockTestScene.cpp" />
-    <ClCompile Include="Scenes\EditScene.cpp" />
     <ClCompile Include="Scenes\GridScene.cpp" />
     <ClCompile Include="Scenes\InstancingScene.cpp" />
     <ClCompile Include="Scenes\LightScene.cpp" />

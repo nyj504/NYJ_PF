@@ -35,11 +35,12 @@ EquipManager::EquipManager()
 	multiBlock = new Cube();
 	multiBlock->SetTag("Item");
 	multiBlock->Load();
-	multiBlock->ApplyObjectUVMapping();
+	multiBlock->ApplyBlockUVMapping();
 	multiBlock->SetParent(weaponSocket);
 
 	item = new Quad(Vector2(1, 1));
 	item->SetTag("Item");
+	item->GetMaterial()->SetShader(L"Basic/Texture.hlsl");
 	item->Load();
 	item->SetParent(weaponSocket);
 
@@ -129,6 +130,16 @@ void EquipManager::Update()
 		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
 		weapon->UpdateWorld();
 	}
+	if (isEquipItem)
+	{
+		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+		if (singleBlock->IsActive())
+			singleBlock->UpdateWorld();
+		else if (multiBlock->IsActive())
+			multiBlock->UpdateWorld();
+		else if (item->IsActive())
+			item->UpdateWorld();
+	}
 	if (isEquipHelmet)
 	{
 		helmetSocket->SetWorld(modelAnimator->GetTransformByNode(12));
@@ -167,6 +178,19 @@ void EquipManager::Render()
 	if (isEquipWeapon)
 	{
 		weapon->Render();
+	}
+	if (isEquipItem)
+	{
+		if (singleBlock->IsActive())
+			singleBlock->Render();
+		else if (multiBlock->IsActive())
+			multiBlock->Render();
+		else if (item->IsActive())
+		{
+			Environment::Get()->SetAlphaBlend(true);
+			item->Render();
+			Environment::Get()->SetAlphaBlend(false);
+		}
 	}
 	if (isEquipHelmet)
 	{
@@ -300,6 +324,8 @@ void EquipManager::UnequipArmor(AmoType type)
 
 void EquipManager::EquipWeapon(WeaponType type, string name)
 {
+	isEquipItem = false;
+
 	string category = {};
 
 	switch (type)
@@ -322,4 +348,37 @@ void EquipManager::EquipWeapon(WeaponType type, string name)
 	isEquipWeapon = true;
 
 	weapon = equipments[name + category];
+}
+
+void EquipManager::EquipItem(ItemType type, string path)
+{
+	isEquipWeapon = false;
+
+	string itemPath = "Resources/Textures/Itemx2/" + path + ".png";
+
+	singleBlock->SetActive(false);
+	multiBlock->SetActive(false);
+	item->SetActive(false);
+
+	switch (type)
+	{
+	case ItemType::SINGLE:
+		singleBlock->GetMaterial()->SetDiffuseMap(Utility::ToWString(itemPath));
+		singleBlock->SetActive(true);
+		break;
+	case ItemType::MULTI:
+		multiBlock->GetMaterial()->SetDiffuseMap(Utility::ToWString(itemPath));
+		multiBlock->SetActive(true);
+		break;
+	case ItemType::QUAD:
+		item->GetMaterial()->SetDiffuseMap(Utility::ToWString(itemPath));
+		item->SetActive(true);
+		break;
+	case ItemType::MODEL:
+		break;
+	default:
+		break;
+	}
+
+	isEquipItem = true;
 }

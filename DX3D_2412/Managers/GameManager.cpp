@@ -4,7 +4,6 @@
 #include "Scenes/TestScene.h"
 #include "Scenes/LightScene.h"
 #include "Scenes/TerrainScene.h"
-#include "Scenes/EditScene.h"
 #include "Scenes/LobbyScene.h"
 #include "Scenes/InstancingScene.h"
 #include "Scenes/ModelRenderScene.h"
@@ -21,13 +20,12 @@ GameManager::GameManager()
 	//SCENE->Create("Start", new InstancingScene());
 	//SCENE->Create("Start", new TerrainScene());
 
-	//SCENE->Create("Edit", new EditScene());
 	//SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
-	//SCENE->Create("Start", new BlockTestScene());
+	SCENE->Create("Start", new BlockTestScene());
 	//SCENE->Create("Start", new ModelEquipScene());
 
-	//SCENE->Add("Start");
+	SCENE->Add("Start");
 	//SCENE->Add("Grid");
 	
 	//SCENE->Create("Model", new ModelExportScene());
@@ -35,12 +33,11 @@ GameManager::GameManager()
 	
 	//SCENE->Add("Model");
 	//SCENE->Add("ModelRender");
-
-	//SCENE->Add("Edit");
 	
-	SCENE->Create("Lobby", new LobbyScene());
-	SCENE->Create("Test", new TestScene());
-	SCENE->Add("Lobby");
+	//SCENE->Create("Lobby", new LobbyScene());
+	//SCENE->Create("Test", new TestScene());
+	//
+	//SCENE->Add("Lobby");
 	
 	Create();
 }
