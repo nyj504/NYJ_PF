@@ -1,6 +1,5 @@
 #include "Framework.h"
 #include "TestScene.h"
-
 TestScene::TestScene() : isPaused(false)
 {
 	PlayerSingleton::Get();

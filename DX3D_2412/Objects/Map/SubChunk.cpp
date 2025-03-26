@@ -122,13 +122,22 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 			for (UINT y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
 				int worldY = minY + y;
-			
+				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
+
 				if (worldY > terrainHeight) continue;
 
 				int blockType = 3;
 
 				if (worldY == terrainHeight)
-					blockType = 4; 
+				{
+					blockType = 4;
+					
+					if (x == 8 && z == 8 && !isGenerateTree)
+					{
+						int treeType = GameMath::Random(0, 1);
+						GenerateTree((TreeType)treeType, globalPos);
+					}
+				}
 				else if (worldY > terrainHeight - 3)
 					blockType = 6;  
 				else if (worldY < terrainHeight - 6)
@@ -173,7 +182,6 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 						else if (randValue < 4) blockType = 11;  // 다이아몬드 (4% 확률) 
 					}
 				}
-				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
 				UINT64 blockID = GameMath::GenerateBlockID(globalPos);
 				UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
 			
@@ -187,6 +195,68 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 			}
 		}
 	}
+}
+
+void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
+{
+	UINT treeHeight = GameMath::Random(4, 6);
+
+	int leavesRange = treeHeight - 1;
+
+	int leafType = 0;
+	int logType = 0;
+
+	switch (type)
+	{
+	case SubChunk::CHAM:
+		logType = 24;
+		leafType = 16;
+		break;
+	case SubChunk::ACACIA:
+		logType = 25;
+		leafType = 17;
+		break;
+	default:
+		break;
+	}
+
+	for (int y = 0; y < treeHeight; y++)
+	{
+		Vector3 globalPos = { pos.x, pos.y + y, pos.z };
+		UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+		UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
+
+		Block* logBlock = new Block(logType);
+		logBlock->SetActive(true);
+		logBlock->SetLocalPosition(globalPos);
+		logBlock->SetBlockInstanceID(blockIndex);
+		logBlock->UpdateWorld();
+
+		blocks[blockID] = logBlock;
+	}
+
+	for (int x = -leavesRange; x < leavesRange; x++)
+	{
+		for (int z = -leavesRange; z < leavesRange; z++)
+		{
+			for (int y = treeHeight; y < treeHeight + leavesRange; y++)
+			{
+				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
+				UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+				UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
+
+				Block* leafBlock = new Block(leafType);
+				leafBlock->SetActive(true);
+				leafBlock->SetLocalPosition(globalPos);
+				leafBlock->SetBlockInstanceID(blockIndex);
+				leafBlock->UpdateWorld();
+
+				blocks[blockID] = leafBlock;
+			}
+		}
+	}
+
+	isGenerateTree = true;
 }
 
 Block* SubChunk::GetBlock(Vector3 globalPos)

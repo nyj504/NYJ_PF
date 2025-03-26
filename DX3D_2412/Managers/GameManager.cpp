@@ -95,6 +95,8 @@ void GameManager::Render()
 
 void GameManager::Create()
 {
+	srand((UINT)(time(0)));
+
 	Device::Get();
 	Environment::Get();
 	Timer::Get();

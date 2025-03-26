@@ -2,6 +2,11 @@
 
 class SubChunk
 {
+private:
+	enum TreeType
+	{
+		CHAM, ACACIA
+	};
 public:
 	SubChunk(int index, class WorldGenerator* worldGenerator);
 	~SubChunk();
@@ -13,6 +18,7 @@ public:
 	Block* GetSelectedBlock() { return selectedBlock; }
 	
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
+	void GenerateTree(TreeType type, Vector3 pos);
 	void CheckVisibleBlocks();
 	void ActiveCollider();
 
@@ -32,6 +38,8 @@ private:
 	void FindVisibleBlocks();
 
 private:
+	TreeType treeType = CHAM;
+	bool isGenerateTree = false;
 	bool hasCollider = false;
 	bool isMouseOver = false;
 
