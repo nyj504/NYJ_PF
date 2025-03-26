@@ -7,6 +7,7 @@ private:
 	{
 		CHAM, ACACIA
 	};
+
 public:
 	SubChunk(int index, class WorldGenerator* worldGenerator);
 	~SubChunk();
@@ -39,7 +40,6 @@ private:
 
 private:
 	TreeType treeType = CHAM;
-	bool isGenerateTree = false;
 	bool hasCollider = false;
 	bool isMouseOver = false;
 

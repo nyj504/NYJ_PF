@@ -75,8 +75,7 @@ void WorldGenerator::Render()
 void WorldGenerator::CreateWorld()
 {
     int gridSize = 8; 
-    PerlinNoise perlin(12345);
-
+ 
     for (int x = -gridSize; x <= gridSize; x++)
     {
         for (int z = -gridSize; z <= gridSize; z++)
@@ -87,8 +86,6 @@ void WorldGenerator::CreateWorld()
             UINT64 chunkKey = GameMath::ChunkPosToKey(x, z);
 
             if (mainChunks.find(chunkKey) != mainChunks.end()) continue;
-
-            float noiseValue = perlin.Noise(x * 0.1f, z * 0.1f) * 0.2f - 0.8f;  
 
             TerrainType terrainType = TerrainType::PLAINS;
 

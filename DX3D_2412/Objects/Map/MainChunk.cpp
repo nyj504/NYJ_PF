@@ -46,7 +46,7 @@ void MainChunk::Render()
 
 void MainChunk::GenerateTerrain()
 {
-    PerlinNoise perlin((int)terrainType * 100);
+    PerlinNoise perlin;
 
     UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH];
 

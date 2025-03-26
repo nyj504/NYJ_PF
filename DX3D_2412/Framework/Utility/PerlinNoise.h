@@ -2,7 +2,7 @@
 class PerlinNoise
 {
 public:
-    PerlinNoise(UINT seed = 123456)
+    PerlinNoise()
     {
         for (int i = 0; i < 256; i++)
             PermutationTable[i] = i;

@@ -25,6 +25,8 @@ BlockTestScene::BlockTestScene()
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
 
+	skybox = new Skybox(L"Resources/Textures/Skybox/Night_4096x2048.dds");
+
 	ShowCursor(true);
 
 	cube = new Cube();
@@ -108,6 +110,8 @@ void BlockTestScene::PreRender()
 
 void BlockTestScene::Render()
 {
+	skybox->Render();
+
 	instanceBuffer->Set(1);
 
 	Environment::Get()->SetAlphaBlend(true);

@@ -19,9 +19,20 @@ PixelInput VS(VertexUV input)
     return output;
 }
 
-TextureCube cubeMap : register(t10);
+
+Texture2D skyMap : register(t10);
+
+float2 SphereToUV(float3 dir)
+{
+    float2 uv;
+    uv.x = atan2(dir.x, dir.z) / (2.0 * 3.14159265f) + 0.5f;
+    uv.y = 0.5f - asin(dir.y) / 3.14159265f; 
+    return uv;
+}
 
 float4 PS(PixelInput input) : SV_TARGET
 {
-    return float4(cubeMap.Sample(samp, input.originPos).rgb, 1.0f);
+    float3 dir = normalize(input.originPos);
+    float2 uv = SphereToUV(dir);
+    return skyMap.Sample(samp, uv);
 }

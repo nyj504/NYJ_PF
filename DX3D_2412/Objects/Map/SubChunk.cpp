@@ -108,7 +108,23 @@ void SubChunk::Render()
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH])
 {
 	worldPos = pos;
-	blocks.clear(); 
+	blocks.clear();
+
+	vector<Vector3> treePositions;
+
+	if (index == 0)
+	{
+		int treeCount = GameMath::Random(0, 4);
+
+		for (int i = 0; i < treeCount; i++)
+		{
+			int treeX = GameMath::Random(2, CHUNK_WIDTH - 2);
+			int treeZ = GameMath::Random(2, CHUNK_DEPTH - 2);
+			int treeY = heightMap[treeX][treeZ];
+
+			treePositions.push_back({ (float)treeX, (float)treeY, (float)treeZ });
+		}
+	}
 
 	for (UINT x = 0; x < CHUNK_WIDTH; x++)
 	{
@@ -118,6 +134,16 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 			int maxY = minY + SUBCHUNK_HEIGHT;
 
 			int terrainHeight = heightMap[x][z];
+
+			for (const auto& treePos : treePositions)
+			{
+				if (treePos.x == x && treePos.y == terrainHeight && treePos.z == z)
+				{
+					int treeType = GameMath::Random(0, 2);
+					Vector3 globalTreePos = { treePos.x + pos.x, treePos.y, treePos.z + pos.z };
+					GenerateTree((TreeType)treeType, globalTreePos);
+				}
+			}
 
 			for (UINT y = 0; y < SUBCHUNK_HEIGHT; y++)
 			{
@@ -131,23 +157,10 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 				if (worldY == terrainHeight)
 				{
 					blockType = 4;
-					
-					if (x == 8 && z == 8 && !isGenerateTree)
-					{
-						int treeType = GameMath::Random(0, 2);
-						GenerateTree((TreeType)treeType, globalPos);
-					}
 				}
-				else if (worldY > terrainHeight - 3)
-					blockType = 6;  
-				else if (worldY < terrainHeight - 6)
-				{
-					 blockType = 2;
-				}
-				else if (worldY <= terrainHeight - 47)
-				{
-					blockType = 1;
-				}
+				else if (worldY > terrainHeight - 3) blockType = 6;
+				else if (worldY < terrainHeight - 6) blockType = 2;
+				else if (worldY <= terrainHeight - 47) blockType = 1;
 
 				if (blockType == 2 || blockType == 1)
 				{
@@ -199,24 +212,92 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 
 void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 {
-	int treeHeight = GameMath::Random(4, 6);
-
-	int leavesRange = treeHeight - 1;
-
+	int treeHeight = 0;
+	int leavesRange = 3;
 	int leafType = 0;
 	int logType = 0;
 
 	switch (type)
 	{
 	case SubChunk::CHAM:
+		treeHeight = GameMath::Random(4, 6);
 		logType = 24;
 		leafType = 16;
+
+		for (int y = -1; y <= 2; y++) 
+		{
+			int leafY = pos.y + treeHeight + y;
+			int radius = 2 - abs(y); 
+
+			for (int x = -radius; x <= radius; x++)
+			{
+				for (int z = -radius; z <= radius; z++)
+				{
+					if (x == 0 && z == 0 && y <= 0) continue;
+					if (abs(x) == radius && abs(z) == radius)
+					{
+						if (GameMath::Random(0, 100) < 50) continue;
+					}
+
+					Vector3 globalPos = { pos.x + x, (float)leafY, pos.z + z };
+					UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+					UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
+
+					Block* leafBlock = new Block(leafType);
+					leafBlock->SetActive(true);
+					leafBlock->SetLocalPosition(globalPos);
+					leafBlock->SetBlockInstanceID(blockIndex);
+					leafBlock->UpdateWorld();
+
+					blocks[blockID] = leafBlock;
+				}
+			}
+		}
 		break;
 	case SubChunk::ACACIA:
+		treeHeight = GameMath::Random(5, 8);
 		logType = 25;
 		leafType = 17;
-		break;
-	default:
+
+		for (int y = 0; y < leavesRange; y++)
+		{
+			int leafY = treeHeight + y;
+			int offset = leavesRange - y;
+
+			for (int x = -offset; x <= offset; x++)
+			{
+				for (int z = -offset; z <= offset; z++)
+				{
+					Vector3 globalPos = { pos.x + x, pos.y + leafY, pos.z + z };
+
+					UINT64 blockID = GameMath::GenerateBlockID(globalPos);
+					UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
+
+					if (x == 0 && z == 0) // ³ª¹« ¸öÅë
+					{
+						Block* logBlock = new Block(logType);
+						logBlock->SetActive(true);
+						logBlock->SetLocalPosition(globalPos);
+						logBlock->SetBlockInstanceID(blockIndex);
+						logBlock->UpdateWorld();
+
+						blocks[blockID] = logBlock;
+					}
+					else
+					{
+						if (y % 2 != 0) continue;
+
+						Block* leafBlock = new Block(leafType);
+						leafBlock->SetActive(true);
+						leafBlock->SetLocalPosition(globalPos);
+						leafBlock->SetBlockInstanceID(blockIndex);
+						leafBlock->UpdateWorld();
+
+						blocks[blockID] = leafBlock;
+					}
+				}
+			}
+		}
 		break;
 	}
 
@@ -234,29 +315,6 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 
 		blocks[blockID] = logBlock;
 	}
-
-	for (int x = -leavesRange; x < leavesRange; x++)
-	{
-		for (int z = -leavesRange; z < leavesRange; z++)
-		{
-			for (int y = treeHeight; y < treeHeight + leavesRange; y++)
-			{
-				Vector3 globalPos = { pos.x + x, pos.y + y, pos.z + z };
-				UINT64 blockID = GameMath::GenerateBlockID(globalPos);
-				UINT blockIndex = worldGenerator->GetBlockInstanceIndex();
-
-				Block* leafBlock = new Block(leafType);
-				leafBlock->SetActive(true);
-				leafBlock->SetLocalPosition(globalPos);
-				leafBlock->SetBlockInstanceID(blockIndex);
-				leafBlock->UpdateWorld();
-
-				blocks[blockID] = leafBlock;
-			}
-		}
-	}
-
-	isGenerateTree = true;
 }
 
 Block* SubChunk::GetBlock(Vector3 globalPos)

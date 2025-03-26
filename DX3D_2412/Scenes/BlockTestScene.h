@@ -20,6 +20,7 @@ private:
 	HUDBar* hpBar;
 	HUDBar* armorBar;
 	HUDBar* hungerBar;
+	Skybox* skybox;
 
 	Quad* item;
 

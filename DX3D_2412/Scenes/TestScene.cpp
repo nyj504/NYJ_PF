@@ -14,7 +14,7 @@ TestScene::TestScene() : isPaused(false)
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
 
-	skybox = new Skybox(L"Resources/Textures/Landscape/SpaceSky.dds");
+	skybox = new Skybox(L"Resources/Textures/Skybox/BlueSunset_4096x2048.dds");
 
 	PLAYER->SetLocalPosition(0, 3, 0);
 }

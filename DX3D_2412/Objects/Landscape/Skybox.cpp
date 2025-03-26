@@ -4,7 +4,6 @@ Skybox::Skybox(wstring textureFile)
 {
 	material->SetShader(L"Landscape/Skybox.hlsl");
 	
-
 	cubeMap = Texture::Add(textureFile);
 
 	rasterizerState[0] = new RasterizerState();
