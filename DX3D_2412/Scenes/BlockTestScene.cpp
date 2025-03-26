@@ -39,7 +39,7 @@ BlockTestScene::BlockTestScene()
 		for (int z = 0; z < 10; z++)
 		{
 			Vector3 pos = { (float)x, 0, (float)z };
-			Block* block = new Block(2);
+			Block* block = new Block(16);
 			block->SetLocalPosition(pos);
 			block->UpdateWorld();
 			block->EnableCollider();
@@ -110,7 +110,9 @@ void BlockTestScene::Render()
 {
 	instanceBuffer->Set(1);
 
+	Environment::Get()->SetAlphaBlend(true);
 	cube->RenderInstanced(instanceData.size());
+	Environment::Get()->SetAlphaBlend(false);
 
 	for (Block* block : blocks)
 	{

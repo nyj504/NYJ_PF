@@ -134,7 +134,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 					
 					if (x == 8 && z == 8 && !isGenerateTree)
 					{
-						int treeType = GameMath::Random(0, 1);
+						int treeType = GameMath::Random(0, 2);
 						GenerateTree((TreeType)treeType, globalPos);
 					}
 				}
@@ -151,7 +151,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 
 				if (blockType == 2 || blockType == 1)
 				{
-					int randValue = GameMath::Random(1, 100);
+					int randValue = GameMath::Random(1, 101);
 
 					if (worldY < terrainHeight - 5 && worldY >= terrainHeight - 16) 
 					{
@@ -199,7 +199,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 
 void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 {
-	UINT treeHeight = GameMath::Random(4, 6);
+	int treeHeight = GameMath::Random(4, 6);
 
 	int leavesRange = treeHeight - 1;
 

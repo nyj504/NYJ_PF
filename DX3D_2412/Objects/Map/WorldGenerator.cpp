@@ -51,8 +51,10 @@ void WorldGenerator::Render()
 
     if (singleInstanceBuffer)
     {
+        Environment::Get()->SetAlphaBlend(true);
         singleInstanceBuffer->Set(1);
         singleFaceBlock->RenderInstanced(totalSingleInstanceDatas.size());
+        Environment::Get()->SetAlphaBlend(false);
     }
 
     if (multiInstanceBuffer)

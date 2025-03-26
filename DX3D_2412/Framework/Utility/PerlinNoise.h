@@ -4,14 +4,13 @@ class PerlinNoise
 public:
     PerlinNoise(UINT seed = 123456)
     {
-        srand(seed);
         for (int i = 0; i < 256; i++)
             PermutationTable[i] = i;
 
         for (int i = 255; i > 0; i--)
         {
             int j = rand() % (i + 1);
-            std::swap(PermutationTable[i], PermutationTable[j]);
+            swap(PermutationTable[i], PermutationTable[j]);
         }
 
         for (int i = 0; i < 256; i++)
