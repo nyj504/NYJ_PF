@@ -3,7 +3,8 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("WoodShovel");
+	model = new Model("SteveRigged");
+	model->Load();
 }
 
 ModelRenderScene::~ModelRenderScene()

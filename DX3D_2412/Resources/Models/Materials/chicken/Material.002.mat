@@ -1,0 +1,14 @@
+<Material Name="Material.002">
+    <Shader Vertex="Basic\Texture.hlsl" Pixel="Basic\Texture.hlsl"/>
+    <Texture>
+        <DiffuseMap Diffuse="Resources\Textures\Model\chicken\chicken.png"/>
+        <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
+        <NormalMap Normal="Resources/Textures/Colors/White.png"/>
+    </Texture>
+    <Property Shininess="25" HasNormalMap="0">
+        <Diffuse R="1" G="0.96568626" B="0.96568626" A="1"/>
+        <Specular R="1" G="0.9852941" B="0.9852941" A="1"/>
+        <Ambient R="0.16666669" G="0.16666669" B="0.16666669" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

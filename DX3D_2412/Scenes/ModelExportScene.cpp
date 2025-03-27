@@ -3,21 +3,21 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "SteveRigged";
-    //string extension = "fbx";
-    //string file = "Resources/Models/FBX/" + name + "." + extension;
-    //
-    //ModelExporter* exporter = new ModelExporter(name, file);
-    //exporter->ExportMaterial();
-    //exporter->ExportMesh();
-    //delete exporter;
-
-    string clipName = "Idle";
-    string file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
+    string name = "chicken";
+    string extension = "fbx";
+    string file = "Resources/Models/FBX/" + name + "." + extension;
     
-    ModelExporter * exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
+    ModelExporter* exporter = new ModelExporter(name, file);
+    exporter->ExportMaterial();
+    exporter->ExportMesh();
     delete exporter;
+
+    //string clipName = "Idle";
+    //string file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
+    //
+    //ModelExporter * exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
     //
     //clipName = "BowShoot";
     //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
