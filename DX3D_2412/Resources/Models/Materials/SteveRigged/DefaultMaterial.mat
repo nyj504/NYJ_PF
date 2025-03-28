@@ -1,7 +1,7 @@
 <Material Name="DefaultMaterial">
-    <Shader Vertex="Custom\UnitOpaque.hlsl" Pixel="Custom\UnitOpaque.hlsl"/>
+    <Shader Vertex="Custom/UnitOpaque.hlsl" Pixel="Custom/UnitOpaque.hlsl"/>
     <Texture>
-        <DiffuseMap Diffuse="Resources\Textures\Model\SteveRigged\Diffuse.png"/>
+        <DiffuseMap Diffuse="Resources\Textures\Model\SteveRigged\Steve.png"/>
         <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
         <NormalMap Normal="Resources/Textures/Colors/White.png"/>
     </Texture>

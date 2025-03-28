@@ -3,34 +3,33 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "chicken";
+    string name = "Zombie";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
     
-    ModelExporter* exporter = new ModelExporter(name, file);
-    exporter->ExportMaterial();
-    exporter->ExportMesh();
-    delete exporter;
+    //ModelExporter* exporter = new ModelExporter(name, file);
+    //exporter->ExportMaterial();
+    //exporter->ExportMesh();
+    //delete exporter;
 
-    //string clipName = "Idle";
-    //string file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
-    //
-    //ModelExporter * exporter = new ModelExporter(name, file);
-    //exporter->ExportClip(clipName);
-    //delete exporter;
-    //
-    //clipName = "BowShoot";
-    //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
-    //
-    //exporter = new ModelExporter(name, file);
-    //exporter->ExportClip(clipName);
-    //delete exporter;
-    // clipName = "BowCharging";
-    //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
-    //
-    //exporter = new ModelExporter(name, file);
-    //exporter->ExportClip(clipName);
-    //delete exporter;
+    string clipName = "Zombie_Bite";
+    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
+    ModelExporter * exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+    delete exporter;
+    
+    clipName = "Zombie_Dying";
+    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
+    exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+    delete exporter;
+    
+    clipName = "Zombie_Walk";
+    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
+    exporter = new ModelExporter(name, file);
+    exporter->ExportClip(clipName);
+    delete exporter;
+    // 
     // clipName = "Jump";
     //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
     //

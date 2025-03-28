@@ -1,7 +1,7 @@
 <Material Name="DefaultMaterial">
-    <Shader Vertex="Light/Light.hlsl" Pixel="Light/Light.hlsl"/>
+    <Shader Vertex="Custom/UnitOpaque.hlsl" Pixel="Custom/UnitOpaque.hlsl"/>
     <Texture>
-        <DiffuseMap Diffuse="Resources/Textures/Colors/White.png"/>
+        <DiffuseMap Diffuse="Resources\Textures\Model\Zombie\Zombie.png"/>
         <SpecularMap Specular="Resources/Textures/Colors/White.png"/>
         <NormalMap Normal="Resources/Textures/Colors/White.png"/>
     </Texture>

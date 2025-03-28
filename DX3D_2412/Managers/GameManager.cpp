@@ -17,12 +17,12 @@
 
 GameManager::GameManager()
 {
-	//SCENE->Create("Grid", new GridScene());
+	SCENE->Create("Grid", new GridScene());
 	//SCENE->Create("Start", new LightScene());
 	//SCENE->Create("Start", new InstancingScene());
 	//SCENE->Create("Start", new TerrainScene());
 
-	//SCENE->Create("Start", new ModelAnimationScene());
+	SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
 	//SCENE->Create("Start", new BlockTestScene());
 	//SCENE->Create("Start", new ModelEquipScene());
@@ -30,8 +30,8 @@ GameManager::GameManager()
 	//SCENE->Create("Start", new ParticleEditorScene());
 	//SCENE->Create("Start", new WeatherScene());
 
-	//SCENE->Add("Start");
-	//SCENE->Add("Grid");
+	SCENE->Add("Start");
+	SCENE->Add("Grid");
 	
 	//SCENE->Create("Model", new ModelExportScene());
 	//SCENE->Create("ModelRender", new ModelRenderScene());
@@ -39,10 +39,10 @@ GameManager::GameManager()
 	//SCENE->Add("Model");
 	//SCENE->Add("ModelRender");
 	
-	SCENE->Create("Lobby", new LobbyScene());
-	SCENE->Create("Test", new TestScene());
-	
-	SCENE->Add("Lobby");
+	//SCENE->Create("Lobby", new LobbyScene());
+	//SCENE->Create("Test", new TestScene());
+	//
+	//SCENE->Add("Lobby");
 	
 	Create();
 }
