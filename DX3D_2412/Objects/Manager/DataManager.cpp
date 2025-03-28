@@ -29,19 +29,20 @@ void DataManager::LoadItemData()
         data.name = rowData[1];
         data.image = rowData[2];
         data.hp = stoi(rowData[3]);
-        data.canBuild = stoi(rowData[4]);
-        data.canCraft = stoi(rowData[5]);
-        data.textureType = rowData[6];
-        data.craftingType = rowData[7];
-        data.startUV = stoi(rowData[8]);
-        data.endUV = stoi(rowData[9]);
-        data.dropItemKey = stoi(rowData[10]);
-        data.dropsAmount = stoi(rowData[11]);
-        data.serialKey = rowData[12];
-        data.itemType = rowData[13];
-        data.isFuel = stoi(rowData[14]);
-        data.isSmeltable = stoi(rowData[15]);
-        data.craftAmount = stoi(rowData[16]);
+        data.particle = rowData[4];
+        data.canBuild = stoi(rowData[5]);
+        data.canCraft = stoi(rowData[6]);
+        data.textureType = rowData[7];
+        data.craftingType = rowData[8];
+        data.startUV = stoi(rowData[9]);
+        data.endUV = stoi(rowData[10]);
+        data.dropItemKey = stoi(rowData[11]);
+        data.dropsAmount = stoi(rowData[12]);
+        data.serialKey = rowData[13];
+        data.itemType = rowData[14];
+        data.isFuel = stoi(rowData[15]);
+        data.isSmeltable = stoi(rowData[16]);
+        data.craftAmount = stoi(rowData[17]);
 
         itemDatas[data.key] = data;
 

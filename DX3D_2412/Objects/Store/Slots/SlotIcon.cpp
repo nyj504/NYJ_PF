@@ -23,7 +23,11 @@ void SlotIcon::UpdateFromSlot(InventorySlot* slot)
 	if (slot->GetKey() != 0)
 	{
 		ItemData data = DataManager::Get()->GetItemData(slot->GetKey());
-		string path = "Resources/Textures/Item/" + data.image + ".png";
+		string path = "Resources/Textures/Item/" + data.image + "_block.png";
+
+		if(!data.canBuild)
+			path = "Resources/Textures/Item/" + data.image + ".png";
+
 		material->SetDiffuseMap(Utility::ToWString(path));
 	}
 
@@ -47,6 +51,10 @@ void SlotIcon::SetItem(UINT key, UINT count)
 	itemCounts.second = count;
 
 	ItemData data = DataManager::Get()->GetItemData(itemCounts.first);
-	string path = "Resources/Textures/Item/" + data.image + ".png";
+	string path = "Resources/Textures/Item/" + data.image + "_block.png";
+
+	if (!data.canBuild)
+		path = "Resources/Textures/Item/" + data.image + ".png";
+
 	material->SetDiffuseMap(Utility::ToWString(path));
 }

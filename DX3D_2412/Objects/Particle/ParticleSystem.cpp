@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-ParticleSystem::ParticleSystem(string file)
+ParticleSystem::ParticleSystem(string file) : Quad(Vector2(0.1f, 0.1f))
 {
     Load(file);
 
@@ -9,7 +9,6 @@ ParticleSystem::ParticleSystem(string file)
 
 ParticleSystem::~ParticleSystem()
 {
-    delete quad;
     delete instanceBuffer;
 }
 
@@ -21,7 +20,7 @@ void ParticleSystem::Update()
 
     UpdatePhysical();
     UpdateColor();
-    quad->UpdateWorld();
+    UpdateWorld();
 
     if (lifeTime > data.duration)
     {
@@ -43,7 +42,7 @@ void ParticleSystem::Render()
     else
         Environment::Get()->SetAlphaBlend(true);
 
-    quad->RenderInstanced(data.count);
+    RenderInstanced(data.count);
 
     Environment::Get()->SetAlphaBlend(false);
     Environment::Get()->SetDepthWriteMask(D3D11_DEPTH_WRITE_MASK_ALL);
@@ -51,16 +50,16 @@ void ParticleSystem::Render()
 
 void ParticleSystem::Play(Vector3 pos)
 {
-    quad->SetActive(true);
+    SetActive(true);
 
-    quad->SetLocalPosition(pos);
+    SetLocalPosition(pos);
 
     Init();
 }
 
 void ParticleSystem::Stop()
 {
-    quad->SetActive(false);
+    SetActive(false);
 }
 
 void ParticleSystem::UpdatePhysical()
@@ -106,7 +105,7 @@ void ParticleSystem::UpdateColor()
     color.z = GameMath::Lerp(data.startColor.z, data.endColor.z, t);
     color.w = GameMath::Lerp(data.startColor.w, data.endColor.w, t);
 
-    quad->GetMaterial()->GetData()->diffuse = color;
+    material->GetData()->diffuse = color;
 }
 
 void ParticleSystem::Init()
@@ -137,10 +136,12 @@ void ParticleSystem::Load(string file)
 {
     BinaryReader* reader = new BinaryReader(file);
 
+    if (reader->IsFailed())
+        assert(false);
+
     wstring textureFile = reader->WString();
-    quad = new Quad(Float2(1, 1));
-    quad->GetMaterial()->SetDiffuseMap(textureFile);
-    quad->GetMaterial()->SetShader(L"Instancing/Particle.hlsl");
+    material->SetDiffuseMap(textureFile);
+    material->SetShader(L"Instancing/Particle.hlsl");
 
     ParticleData* particleData = new ParticleData();
     reader->Byte((void**)&particleData, sizeof(ParticleData));

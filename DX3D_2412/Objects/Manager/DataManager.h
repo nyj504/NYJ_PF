@@ -6,6 +6,7 @@ struct ItemData
     string name;
     string image;
     UINT hp;
+    string particle;
     bool canBuild;
     bool canCraft;
     string textureType;

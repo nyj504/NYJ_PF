@@ -44,6 +44,7 @@ public:
 	BoxCollider* GetCollider() { return collider; }
 
 	int GetHp() { return curHp; }
+	string GetParticlePath() { return itemData.particle; }
 	//void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
 	//UINT64 GetParentIndex() { return parentIndex; }
 

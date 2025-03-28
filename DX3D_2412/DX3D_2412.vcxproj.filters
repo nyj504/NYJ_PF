@@ -384,6 +384,12 @@
     <ClInclude Include="Objects\Item\DropCube.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\ParticleEditorScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\WeatherScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX3D_2412.cpp">
@@ -713,6 +719,12 @@
     <ClCompile Include="Objects\Item\DropCube.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\ParticleEditorScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\WeatherScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3D_2412.rc">
@@ -742,6 +754,13 @@
     <FxCompile Include="Resources\Shaders\Model\Model.hlsl" />
     <FxCompile Include="Resources\Shaders\Instancing\ColliderInstancing.hlsl" />
     <FxCompile Include="Resources\Shaders\Instancing\MultiFaceInstancing.hlsl" />
+    <FxCompile Include="Resources\Shaders\FX\Sprite.hlsl" />
+    <FxCompile Include="Resources\Shaders\Geometry\Billboard.hlsl" />
+    <FxCompile Include="Resources\Shaders\Geometry\Rain.hlsl" />
+    <FxCompile Include="Resources\Shaders\Geometry\Snow.hlsl" />
+    <FxCompile Include="Resources\Shaders\Geometry\Spark.hlsl" />
+    <FxCompile Include="Resources\Shaders\Geometry\Sprite.hlsl" />
+    <FxCompile Include="Resources\Shaders\Instancing\Particle.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\PixelHeader.hlsli" />

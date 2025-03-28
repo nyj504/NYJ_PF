@@ -1,8 +1,10 @@
 #pragma once
 
-class ParticleSystem : public Quad
+class ParticleEditorScene : public Scene
 {
 private:
+    const UINT SIZE = 1000;
+
     struct ParticleData
     {
         bool isLoop = true;
@@ -44,25 +46,31 @@ private:
     };
 
 public:
-    ParticleSystem(string file);
-    ~ParticleSystem();
+    ParticleEditorScene();
+    ~ParticleEditorScene();
 
-    void Update();
-    void Render();
-
-    void Play(Vector3 pos);
-    void Stop();
-
-    ParticleData& GetParticleData() { return data; }
+    virtual void Update() override;
+    virtual void PreRender() override;
+    virtual void Render() override;
+    virtual void PostRender() override;
+    virtual void GUIRender() override;
 
 private:
     void UpdatePhysical();
     void UpdateColor();
+
     void Init();
 
+    void Save(string file);
     void Load(string file);
 
+    void EditTexture();
+    void SaveDialog();
+    void LoadDialog();
+
 private:
+    Quad* quad;
+
     vector<Matrix> instances;
     vector<ParticleInfo> particleInfos;
 
@@ -73,4 +81,6 @@ private:
     float lifeTime = 0.0f;
     UINT drawCount = 0;
     UINT particleCount = 100;
+
+    string projectPath;
 };

@@ -14,7 +14,7 @@ public:
 	void BuildBlock();
 	void MiningBlock();
 	void InteractingBlock();
-
+	
 	void ActivateRenderingChunks();
 
 	Block* GetSelectedBlock() { return selectedBlock; }
@@ -32,6 +32,8 @@ private:
 	WorldGenerator* worldGenerator;
 
 	Cube* block;
+
+	ParticleSystem* particle;
 
 	//vector<InstanceData> instanceDatas;
 	//VertexBuffer* instanceBuffer;
