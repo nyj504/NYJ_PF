@@ -37,20 +37,21 @@ public:
 	
 	void SetItemKey(UINT key) { this->itemData.key = key; }
 
-	virtual void Damage();
+	void Mining();
 	
 	bool HasCollider() { return hasCollider; }
 
 	BoxCollider* GetCollider() { return collider; }
 
-	int GetHp() { return curHp; }
 	string GetParticlePath() { return itemData.particle; }
 	//void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
 	//UINT64 GetParentIndex() { return parentIndex; }
 
 	void CheckPlayerCollision();
+	
 	bool GetBlockType() { return blockType; }
-	bool IsMining() { return isMining; }
+	WeaponType GetBlockWeakType() { return itemData.weakType; }
+	
 	bool IsNormal() { return isNormal; }
 	
 	bool IsOcclusion() { return isOcclusion; }
@@ -66,10 +67,8 @@ private:
 
 protected:
 	UINT key;
-	int curHp = 0;
 	UINT64 parentIndex = 0;
 	
-	bool isMining = false;
 	bool isOcclusion = false;
 
 	bool isNormal = true;

@@ -9,11 +9,6 @@ Block::Block(UINT key) : key(key)
 
         isNormal = itemData.textureType == "Normal" ? 1 : 0;
 
-        if (itemData.canBuild)
-        {
-            curHp = itemData.hp;
-        }
-
         if (key == 35) tag = "CraftingTable";
         if (key == 37) tag = "Furnace";
 
@@ -56,18 +51,11 @@ void Block::EnableCollider()
     }
 }
 
-void Block::Damage()
+void Block::Mining()
 {
-    int damage = PLAYER->GetDamage();
-    curHp -= damage;
-
-    if (curHp <= 0)
-    {
-        Vector3 offset = { 0.0f, 0.2f, 0.0f };
-        ItemManager::Get()->DropItem(itemData.dropItemKey, GetLocalPosition() - offset, itemData.dropsAmount);
-        isActive = false;
-        isMining = true;
-    }
+    Vector3 offset = { 0.0f, 0.2f, 0.0f };
+    ItemManager::Get()->DropItem(itemData.dropItemKey, GetLocalPosition() - offset, itemData.dropsAmount);
+    isActive = false;
 }
 
 void Block::CheckPlayerCollision()

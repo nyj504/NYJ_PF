@@ -14,6 +14,7 @@ public:
 	void EquipTotalArmor(const unordered_map<AmoType, UINT>& equips);
 
 	void EquipWeapon(WeaponType type, string name);
+	void UnEquipWeapon();
 	void EquipItem(ItemType type, string path);
 
 	void SetTarget(ModelAnimator* modelAnimator) { this->modelAnimator = modelAnimator; }

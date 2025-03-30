@@ -25,6 +25,7 @@ public:
 
 	string GetEditTag() { return editTag; }
 	void SetEditTag(string editTag) { this->editTag = editTag;}
+
 private:
 	void MakeMesh();
 	void MakeMesh(Vector2 startUV, Vector2 endUV);

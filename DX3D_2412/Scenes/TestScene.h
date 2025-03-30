@@ -20,6 +20,9 @@ public:
 
 private:
 	Skybox* skybox;
+	
+	Monster* zombie;
+	Animal* animal;
 
 	bool isPaused = false;
 };

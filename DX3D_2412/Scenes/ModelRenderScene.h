@@ -14,4 +14,5 @@ public:
 
 private:
 	Model* model;
+	BoxCollider* collider;
 };

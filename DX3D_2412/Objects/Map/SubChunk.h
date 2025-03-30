@@ -16,17 +16,15 @@ public:
 	void Render();
 
 	Block* GetBlock(Vector3 globalPos);
-	Block* GetSelectedBlock() { return selectedBlock; }
-	
+
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
 	void GenerateTree(TreeType type, Vector3 pos);
-	void CheckVisibleBlocks();
+
 	void ActiveCollider();
 
 	void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
 	UINT64 GetParentIndex() { return parentIndex; }
 
-	void MiningBlock(Block* block);
 	void BuildBlock(Vector3 pos, int blockType);
 
 	bool HasCollider() { return hasCollider; }
@@ -35,7 +33,6 @@ public:
 	vector<InstanceData> GetVisibleSingleInstanceData() { return visibleSingleInstanceDatas; }
 	vector<InstanceData> GetVisibleMultiInstanceData() { return visibleMultiInstanceDatas; }
 
-private:
 	void FindVisibleBlocks();
 
 private:

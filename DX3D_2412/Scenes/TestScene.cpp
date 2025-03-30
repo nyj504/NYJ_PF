@@ -10,6 +10,12 @@ TestScene::TestScene() : isPaused(false)
 	EquipManager::Get();
 	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
 	
+	zombie = new Monster();
+	zombie->SetLocalPosition(3, 3, 3);
+
+	animal = new Animal();
+	animal->SetLocalPosition(5, 3, 5);
+
 	CAM->SetTarget(PLAYER);
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
@@ -25,6 +31,9 @@ TestScene::~TestScene()
 	EquipManager::Delete();
 	UIManager::Delete();
 	EquipManager::Delete();
+
+	delete zombie;
+	delete animal;
 }
 
 void TestScene::Update()
@@ -55,7 +64,9 @@ void TestScene::Update()
 		UIManager::Get()->Update();
 		EquipManager::Get()->Update();
 		ItemManager::Get()->Update();
-	}
+		zombie->Update();
+		animal->Update();
+;	}
 }
 
 void TestScene::PreRender()
@@ -72,6 +83,8 @@ void TestScene::Render()
 		PLAYER->Render();
 		EquipManager::Get()->Render();
 		ItemManager::Get()->Render();
+		zombie->Render();
+		animal->Render();
 	}
 }
 

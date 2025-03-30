@@ -256,23 +256,22 @@ void WorldGenerator::MiningBlock(Block* block)
     if (!block) return;
     UINT blockID = block->GetBlockInstanceID();
     bool isNormal = block->IsNormal();
- 
-    if (activeSubChunk)
+
+    if (isNormal)
     {
-        activeSubChunk->MiningBlock(block);
-        if (isNormal)
-        {
-            totalSingleInstanceDatas.erase(blockID);
-        }
-        else
-        {
-            totalMultiInstanceDatas.erase(blockID);
-        }
-
-        SetInstanceData(mainChunks[activeSubChunk->GetParentIndex()], true);
-
-        UpdateInstanceBuffer();
+        totalSingleInstanceDatas.erase(blockID);
     }
+    else
+    {
+        totalMultiInstanceDatas.erase(blockID);
+    }
+
+    activeSubChunk->FindVisibleBlocks();
+
+    SetInstanceData(mainChunks[activeSubChunk->GetParentIndex()], true);
+
+    UpdateInstanceBuffer();
+    
 }
 
 void WorldGenerator::BuildBlock(Vector3 pos, UINT key)

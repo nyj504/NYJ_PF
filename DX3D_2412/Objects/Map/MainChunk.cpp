@@ -28,14 +28,6 @@ void MainChunk::Update()
     }
 
      subChunks[activeChunkIndex]->Update();
-    
-    for (SubChunk* chunk : subChunks)
-    {
-        if (chunk->IsMouseOverChunk())
-        {
-            BlockManager::Get()->SetSelectedBlock(subChunks[activeChunkIndex]->GetSelectedBlock());
-        }
-    }
 }
 
 void MainChunk::Render()
@@ -103,7 +95,7 @@ void MainChunk::SetInstanceData(bool isChange)
     {
         if (!isChange)
         {
-            subChunk->CheckVisibleBlocks();
+            subChunk->FindVisibleBlocks();
         }
        
         vector<InstanceData> newSingleInstanceData = subChunk->GetVisibleSingleInstanceData();

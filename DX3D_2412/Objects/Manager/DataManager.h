@@ -5,7 +5,7 @@ struct ItemData
     UINT key;
     string name;
     string image;
-    UINT hp;
+    WeaponType weakType;
     string particle;
     bool canBuild;
     bool canCraft;

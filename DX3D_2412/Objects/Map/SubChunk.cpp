@@ -66,6 +66,7 @@ void SubChunk::Update()
 	{
 		isMouseOver = true;
 		worldGenerator->SetActiveSubChunk(this);
+		BlockManager::Get()->SetSelectedBlock(selectedBlock);
 	}
 
 	for (const pair<UINT64, Block*> pair : blocks)
@@ -390,11 +391,6 @@ void SubChunk::FindVisibleBlocks()
 	}
 }
 
-void SubChunk::CheckVisibleBlocks()
-{
-	FindVisibleBlocks();
-}
-
 void SubChunk::ActiveCollider()
 {
 	for (const pair<UINT64, Block*> pair : blocks)
@@ -404,25 +400,6 @@ void SubChunk::ActiveCollider()
 	}
 
 	hasCollider = true;
-}
-
-void SubChunk::MiningBlock(Block* block)
-{
-	UINT64 blockID = GameMath::GenerateBlockID(block->GetGlobalPosition());
-
-	unordered_map<UINT64, Block*>::iterator it = blocks.find(blockID);
-	
-	if (it == blocks.end()) return;
-
-	if (selectedBlock == it->second)
-	{
-		selectedBlock->SetActive(false);
-		selectedBlock = nullptr;
-	}	
-
-	BlockManager::Get()->SetSelectedBlock(nullptr);
-
-	FindVisibleBlocks();
 }
 
 void SubChunk::BuildBlock(Vector3 pos, int blockType)

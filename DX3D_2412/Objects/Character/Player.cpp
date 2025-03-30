@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Player::Player() : Character("Resources/Models/Player.model")
+Player::Player() : Character("SteveRigged")
 {
 	tag = "Player";
 
@@ -8,9 +8,6 @@ Player::Player() : Character("Resources/Models/Player.model")
 	ClientToScreen(hWnd, &clientCenterPos);
 	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
 	ShowCursor(false);
-
-	modelAnimator->SetParent(this);
-	modelAnimator->UpdateWorld();
 }
 
 Player::~Player()
@@ -34,11 +31,8 @@ void Player::Update()
 	//	velocity.y = 0;
 	//}
 
-	modelAnimator->Update();
-	collider->UpdateWorld();
-
+	Character::Update();
 	UpdateWorld();
-	
 	BuildAndMining();
 	SetCursor();
 	Control();
@@ -49,8 +43,7 @@ void Player::Update()
 
 void Player::Render()
 {
-	modelAnimator->Render();
-	collider->Render();
+	Character::Render();
 }
 
 void Player::PostRender()
@@ -163,9 +156,11 @@ void Player::Move()
 
 void Player::BuildAndMining()
 {
+	isMining = false;
+
 	if (UIManager::Get()->IsPopup()) return;
 	Block* block = BlockManager::Get()->GetSelectedBlock();
-	if (BlockManager::Get()->GetSelectedBlock() == nullptr) return;
+	if (block == nullptr) return;
 	
 	if (KEY->Down(VK_RBUTTON))
 	{
@@ -176,12 +171,24 @@ void Player::BuildAndMining()
 			BlockManager::Get()->BuildBlock();
 		}
 	}
-	else if (KEY->Down(VK_LBUTTON))
+	if (KEY->Down(VK_LBUTTON))
 	{
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
 			return;
 
+		BlockManager::Get()->GetCrackEffect()->SetMining(block);
 		BlockManager::Get()->MiningBlock();
+		isMining = true;
+	}
+	if (KEY->Press(VK_LBUTTON))
+	{
+		isMining = true;
+	}
+	if (KEY->Up(VK_LBUTTON))
+	{
+		isMining = false;
+		BlockManager::Get()->CallStopMining();
+		BlockManager::Get()->GetCrackEffect()->ResetMining();
 	}
 }
 

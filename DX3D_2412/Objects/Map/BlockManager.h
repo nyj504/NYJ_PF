@@ -14,14 +14,21 @@ public:
 	void BuildBlock();
 	void MiningBlock();
 	void InteractingBlock();
+
+	void CallDoneMining();
+	void CallStopMining();
 	
 	void ActivateRenderingChunks();
 
 	Block* GetSelectedBlock() { return selectedBlock; }
+	CrackEffect* GetCrackEffect() { return crackEffect; }
+
 	void SetSelectedBlock(Block* block) { selectedBlock = block; }
 	//void Save();  
 	//void Load();
 private:
+	bool isParticlePlayed = false;
+
 	Vector3 lastPlayerPos; // 마지막 플레이어 위치
 	float updateThreshold = 32.0f;
 
@@ -34,7 +41,6 @@ private:
 	Cube* block;
 
 	ParticleSystem* particle;
+	CrackEffect* crackEffect;
 
-	//vector<InstanceData> instanceDatas;
-	//VertexBuffer* instanceBuffer;
 };

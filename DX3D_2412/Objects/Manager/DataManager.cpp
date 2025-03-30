@@ -28,7 +28,15 @@ void DataManager::LoadItemData()
         data.key = stoi(rowData[0]);
         data.name = rowData[1];
         data.image = rowData[2];
-        data.hp = stoi(rowData[3]);
+       
+        string typeStr = rowData[3];
+        if (typeStr == "SWORD") data.weakType = WeaponType::SWORD;
+        else if (typeStr == "AXE") data.weakType = WeaponType::AXE;
+        else if (typeStr == "PICKAXE") data.weakType = WeaponType::PICKAXE;
+        else if (typeStr == "SHOVEL") data.weakType = WeaponType::SHOVEL;
+        else if (typeStr == "BOW") data.weakType = WeaponType::BOW;
+        else data.weakType = WeaponType::NONE;
+       
         data.particle = rowData[4];
         data.canBuild = stoi(rowData[5]);
         data.canCraft = stoi(rowData[6]);

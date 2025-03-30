@@ -50,51 +50,51 @@ EquipManager::EquipManager()
 	model->SetParent(weaponSocket);
 	equipments[weapon] = model;
 
-	//for (const string& type : types)
-	//{
-	//	for (int i = 0; i < names.size(); ++i)
-	//	{
-	//		if ((type == "Wood" || type == "Stone") && i < 8)
-	//			continue;
-	//
-	//		string key = type + names[i];
-	//
-	//		Model* model = new Model(key);
-	//		model->Load();
-	//
-	//		switch (i)
-	//		{
-	//		case 0:
-	//			model->SetParent(leftBootsSocket);
-	//			break;
-	//		case 1:
-	//			model->SetParent(rightBootsSocket);
-	//			break;
-	//		case 2:
-	//			model->SetParent(leftLegSocket);
-	//			break;
-	//		case 3:
-	//			model->SetParent(rightLegSocket);
-	//			break;
-	//		case 4:
-	//			model->SetParent(chestPlateSocket);
-	//			break;
-	//		case 5:
-	//			model->SetParent(leftArmSocket);
-	//			break;
-	//		case 6:
-	//			model->SetParent(rightArmSocket);
-	//			break;
-	//		case 7:
-	//			model->SetParent(helmetSocket);
-	//			break;
-	//		default:
-	//			model->SetParent(weaponSocket);
-	//			break;
-	//		}
-	//		equipments[key] = model;
-	//	}
-	//}
+	for (const string& type : types)
+	{
+		for (int i = 0; i < names.size(); ++i)
+		{
+			if ((type == "Wood" || type == "Stone") && i < 8)
+				continue;
+	
+			string key = type + names[i];
+	
+			Model* model = new Model(key);
+			model->Load();
+	
+			switch (i)
+			{
+			case 0:
+				model->SetParent(leftBootsSocket);
+				break;
+			case 1:
+				model->SetParent(rightBootsSocket);
+				break;
+			case 2:
+				model->SetParent(leftLegSocket);
+				break;
+			case 3:
+				model->SetParent(rightLegSocket);
+				break;
+			case 4:
+				model->SetParent(chestPlateSocket);
+				break;
+			case 5:
+				model->SetParent(leftArmSocket);
+				break;
+			case 6:
+				model->SetParent(rightArmSocket);
+				break;
+			case 7:
+				model->SetParent(helmetSocket);
+				break;
+			default:
+				model->SetParent(weaponSocket);
+				break;
+			}
+			equipments[key] = model;
+		}
+	}
 }
 
 EquipManager::~EquipManager()
@@ -327,7 +327,7 @@ void EquipManager::EquipWeapon(WeaponType type, string name)
 	isEquipItem = false;
 
 	string category = {};
-
+	
 	switch (type)
 	{
 	case WeaponType::SWORD:
@@ -344,10 +344,24 @@ void EquipManager::EquipWeapon(WeaponType type, string name)
 		break;
 	case WeaponType::BOW:
 		break;
+	case WeaponType::NONE:
+		break;
 	}
 	isEquipWeapon = true;
-
+	
 	weapon = equipments[name + category];
+	weapon->SetActive(true);
+}
+
+void EquipManager::UnEquipWeapon()
+{
+	isEquipWeapon = false;
+	isEquipItem = false;
+
+	weapon->SetActive(false);
+	singleBlock->SetActive(false);
+	multiBlock->SetActive(false);
+	item->SetActive(false);
 }
 
 void EquipManager::EquipItem(ItemType type, string path)

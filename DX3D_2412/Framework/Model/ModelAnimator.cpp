@@ -24,6 +24,7 @@ ModelAnimator::~ModelAnimator()
 void ModelAnimator::Update()
 {
     UpdateFrame(frameBuffer->GetData());
+    
     UpdateWorld();
 }
 

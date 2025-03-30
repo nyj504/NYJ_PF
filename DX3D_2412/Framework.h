@@ -27,7 +27,7 @@ enum class AmoType
 
 enum class WeaponType
 {
-	SWORD, AXE, PICKAXE, SHOVEL, BOW
+	NONE, SWORD, AXE, PICKAXE, SHOVEL, BOW
 };
 
 enum class ItemType
@@ -213,8 +213,10 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Particle/Sprite.h"
 #include "Objects/Particle/Rain.h"
 #include "Objects/Particle/Snow.h"
+#include "Objects/Particle/Trail.h"
 
 #include "Objects/Block/Block.h"
+#include "Objects/Block/CrackEffect.h"
 
 #include "Objects/Shooting/Bullet.h"
 #include "Objects/Shooting/Enemy.h"
@@ -244,7 +246,8 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Objects/Character/Character.h"
 #include "Objects/Character/Player.h"
-#include "Objects/Character/NPC.h"
+#include "Objects/Character/Monster.h"
+#include "Objects/Character/Animal.h"
 
 #include "Objects/Character/PlayerSingleTon.h"
 

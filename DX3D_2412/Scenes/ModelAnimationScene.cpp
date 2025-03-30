@@ -6,6 +6,11 @@ ModelAnimationScene::ModelAnimationScene()
 	model = new ModelAnimator("Zombie");
 	model->Load();
 
+	collider = new BoxCollider();
+	collider->SetTag("ZombieCollider");
+	collider->Load();
+	collider->SetParent(model);
+
 	model->ReadClip("Zombie_Bite");
 	model->ReadClip("Zombie_Dying");
 	model->ReadClip("Zombie_Walk");
@@ -23,6 +28,7 @@ ModelAnimationScene::ModelAnimationScene()
 ModelAnimationScene::~ModelAnimationScene()
 {
 	delete model;
+	delete collider;
 }
 
 void ModelAnimationScene::Update()
@@ -73,6 +79,7 @@ void ModelAnimationScene::Update()
 	//}
 
 	model->Update();
+	collider->UpdateWorld();
 }
 
 void ModelAnimationScene::PreRender()
@@ -82,6 +89,7 @@ void ModelAnimationScene::PreRender()
 void ModelAnimationScene::Render()
 {
 	model->Render();
+	collider->Render();
 }
 
 void ModelAnimationScene::PostRender()
@@ -91,4 +99,5 @@ void ModelAnimationScene::PostRender()
 void ModelAnimationScene::GUIRender()
 {
 	model->Edit();
+	collider->Edit();
 }

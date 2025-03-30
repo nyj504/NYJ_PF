@@ -1,4 +1,10 @@
 #pragma once
+struct PlayerEquipmentInfo
+{
+	WeaponType type = WeaponType::NONE;
+	float weaponAtk;
+	UINT armorDef;
+};
 
 class Player : public Character
 {
@@ -31,6 +37,10 @@ public:
 	void SetLand();
 	void SetFall();
 	bool IsMove() { return isMove; }
+	bool IsMining() { return isMining; }
+
+	void SetPlayerEquipInfo(PlayerEquipmentInfo info) { this->equipInfo = info; }
+	PlayerEquipmentInfo GetPlayerEquipInfo() { return equipInfo; }
 
 private:
 	void Control();
@@ -42,10 +52,13 @@ private:
 private:
 	bool isCreativeMode = false;
 	bool isMove = false;
+	bool isMining = false;
 	int atk = 10;
 	float jumpTime = 0.0f;
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
+
+	PlayerEquipmentInfo equipInfo;
 
 	//Armor* armor;
 

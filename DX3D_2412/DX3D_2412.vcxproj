@@ -199,9 +199,11 @@
     <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="Objects\Block\Block.h" />
+    <ClInclude Include="Objects\Block\CrackEffect.h" />
     <ClInclude Include="Objects\Block\DropBlock.h" />
+    <ClInclude Include="Objects\Character\Animal.h" />
     <ClInclude Include="Objects\Character\Character.h" />
-    <ClInclude Include="Objects\Character\NPC.h" />
+    <ClInclude Include="Objects\Character\Monster.h" />
     <ClInclude Include="Objects\Character\PlayerSingleton.h" />
     <ClInclude Include="Objects\Collider\BoxCollider.h" />
     <ClInclude Include="Objects\Collider\CapsuleCollider.h" />
@@ -237,6 +239,7 @@
     <ClInclude Include="Objects\Particle\Snow.h" />
     <ClInclude Include="Objects\Particle\Spark.h" />
     <ClInclude Include="Objects\Particle\Sprite.h" />
+    <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Objects\Shooting\Bullet.h" />
     <ClInclude Include="Objects\Shooting\Enemy.h" />
     <ClInclude Include="Objects\Character\Player.h" />
@@ -319,8 +322,10 @@
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
     <ClCompile Include="Objects\Block\Block.cpp" />
+    <ClCompile Include="Objects\Block\CrackEffect.cpp" />
+    <ClCompile Include="Objects\Character\Animal.cpp" />
     <ClCompile Include="Objects\Character\Character.cpp" />
-    <ClCompile Include="Objects\Character\NPC.cpp" />
+    <ClCompile Include="Objects\Character\Monster.cpp" />
     <ClCompile Include="Objects\Character\PlayerSingleton.cpp" />
     <ClCompile Include="Objects\Collider\BoxCollider.cpp" />
     <ClCompile Include="Objects\Collider\CapsuleCollider.cpp" />
@@ -355,6 +360,7 @@
     <ClCompile Include="Objects\Particle\Snow.cpp" />
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
+    <ClCompile Include="Objects\Particle\Trail.cpp" />
     <ClCompile Include="Objects\Shooting\Bullet.cpp" />
     <ClCompile Include="Objects\Shooting\Enemy.cpp" />
     <ClCompile Include="Objects\Character\Player.cpp" />

@@ -25,6 +25,12 @@ private:
 	Quad* item;
 
 	Cube* cube;
+
+	Monster* monster;
+	Animal* animal;
+
+	CrackEffect* effect;
+
 	vector<Block*> blocks;
 	vector<InstanceData> instanceData;
 	VertexBuffer* instanceBuffer;

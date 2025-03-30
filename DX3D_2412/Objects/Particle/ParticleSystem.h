@@ -51,6 +51,7 @@ public:
     void Render();
 
     void Play(Vector3 pos);
+   
     void Stop();
 
     ParticleData& GetParticleData() { return data; }

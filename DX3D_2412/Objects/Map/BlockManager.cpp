@@ -3,7 +3,11 @@
 BlockManager::BlockManager()
 {
 	worldGenerator = new WorldGenerator();
+	
 	particle = new ParticleSystem("Resources/Textures/Particle/particle.fx");
+	
+	crackEffect = new CrackEffect();
+	crackEffect->SetActive(false);
 
 	lastPlayerPos = PLAYER->GetGlobalPosition();
 	ActivateRenderingChunks();
@@ -20,6 +24,7 @@ BlockManager::~BlockManager()
 	activeChunks.clear();
 
 	delete particle;
+	delete crackEffect;
 }
 
 void BlockManager::Update()
@@ -28,8 +33,10 @@ void BlockManager::Update()
 	float distanceMoved = Vector3::Distance(currentPlayerPos, lastPlayerPos);
 	
 	worldGenerator->Update();
+
 	particle->Update();
-	
+	crackEffect->Update();
+
 	if (distanceMoved >= updateThreshold)
 	{
 		lastPlayerPos = currentPlayerPos;
@@ -40,7 +47,9 @@ void BlockManager::Update()
 void BlockManager::Render()
 {
 	worldGenerator->Render();
+
 	particle->Render();
+	crackEffect->Render();
 }
 
 void BlockManager::PostRender()
@@ -73,31 +82,25 @@ void BlockManager::BuildBlock()
 
 void BlockManager::MiningBlock()
 {
-	if (!selectedBlock) return;
-	
-	string particlePath = "Resources/Textures/FX/";
-	string blockTexturePath = selectedBlock->GetParticlePath() + ".png";
-	particle->GetMaterial()->SetDiffuseMap(Utility::ToWString(particlePath + blockTexturePath));
-
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 	RaycastHit hit;
 
 	if (selectedBlock->GetCollider()->IsRayCollision(ray, &hit))
 	{
-		particle->GetParticleData().minAccelation = hit.normal * 2;
-		particle->GetParticleData().duration = 0.5f;
-		particle->GetParticleData().count = 10;
-		
-		particle->Play(hit.point);
-	}
+		if (!isParticlePlayed) 
+		{
+			string particlePath = "Resources/Textures/FX/";
+			string blockTexturePath = selectedBlock->GetParticlePath() + ".png";
+			particle->GetMaterial()->SetDiffuseMap(Utility::ToWString(particlePath + blockTexturePath));
 
-	selectedBlock->Damage();
-	
-	if (selectedBlock->GetHp() <= 0)
-	{
-		particle->Play(selectedBlock->GetLocalPosition());
-		
-		worldGenerator->MiningBlock(selectedBlock);
+			particle->GetParticleData().minAccelation = hit.normal * 2;
+			particle->GetParticleData().duration = 0.5f;
+			particle->GetParticleData().count = 10;
+			particle->GetParticleData().isLoop = true;
+
+			particle->Play(hit.point);
+			isParticlePlayed = true;
+		}
 	}
 }
 
@@ -105,6 +108,25 @@ void BlockManager::InteractingBlock()
 {
 	if (selectedBlock->GetBlockType() == 0) return;
 	UIManager::Get()->SetTopSlot(selectedBlock->GetTag());
+}
+
+void BlockManager::CallDoneMining()
+{
+	CallStopMining();
+
+	particle->Play(selectedBlock->GetLocalPosition());
+
+	selectedBlock->Mining();
+	worldGenerator->MiningBlock(selectedBlock);
+
+	selectedBlock = nullptr;
+}
+
+void BlockManager::CallStopMining()
+{
+	particle->GetParticleData().count = 20;
+	particle->GetParticleData().isLoop = false;
+	isParticlePlayed = false;
 }
 
 void BlockManager::ActivateRenderingChunks()

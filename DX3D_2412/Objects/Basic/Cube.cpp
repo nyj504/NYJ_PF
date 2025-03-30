@@ -126,9 +126,6 @@ void Cube::ApplyBlockUVMapping()
 
 void Cube::MakeMesh()
 {
-    //Polygon : 3차원에서의 정점 3개로 이루어진 삼각형
-    //-> 시계방향을 앞면으로 해서 앞면만 출력함.
-
     vector<VertexType>& vertices = mesh->GetVertices();
 
     //Front
@@ -185,38 +182,3 @@ void Cube::MakeMesh()
         20, 21, 22, 22, 21, 23
     };
 }
-
-//void Cube::Update()
-//{
-//    if (GetAsyncKeyState('D'))
-//        pos.x += 0.001f;
-//    if (GetAsyncKeyState('A'))
-//        pos.x -= 0.001f;
-//
-//    Matrix T = XMMatrixTranslation(pos.x, pos.y, pos.z);
-//
-//
-//    if (GetAsyncKeyState('T'))
-//        scale.y += 0.001f;
-//    if (GetAsyncKeyState('G'))
-//        scale.y -= 0.001f;
-//
-//    Matrix S = XMMatrixScaling(scale.x, scale.y, scale.z);
-//
-//    static float angle = 0.0f;
-//
-//    if (GetAsyncKeyState(VK_UP))
-//        rot.z += 0.001f;
-//    if (GetAsyncKeyState(VK_DOWN))
-//        rot.z -= 0.001f;
-//
-//    worldMat._11 = cos(angle);
-//    worldMat._13 = sin(angle);
-//    worldMat._31 = -sin(angle);
-//    worldMat._33 = cos(angle);
-//
-//    Matrix R = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
-//
-//    //world = XMLoadFloat4x4(&worldMat);
-//    world = S * R * T;
-//}

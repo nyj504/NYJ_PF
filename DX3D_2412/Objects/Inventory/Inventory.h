@@ -14,6 +14,7 @@ public:
 	};
 private:
 	const int MAX_SLOTSIZE = 36;
+	const int MAX_INVENTORY_STORAGE = 64;
 	const int INVEN_COL = 9;
 
 public:

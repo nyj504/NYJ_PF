@@ -83,39 +83,55 @@ void QuickSlot::OnMouseWheel(int delta)
 
     pair<UINT, UINT>quickSlotData = GetSelectedIndexData();
 
-    ItemData itemData = DataManager::Get()->GetItemData(quickSlotData.first);
-
-    if (itemData.itemType == "Weapon")
+    if (quickSlotData.first != 0)
     {
-        WeaponType type = WeaponType::SWORD;
-        EquipmentData data = DataManager::Get()->GetEquipmentData(quickSlotData.first);
+        ItemData itemData = DataManager::Get()->GetItemData(quickSlotData.first);
+        PlayerEquipmentInfo info;
 
-        if (data.equipParts == "Sword")
-            type = WeaponType::SWORD;
-        else if (data.equipParts == "Axe")
-            type = WeaponType::AXE;
-        else if (data.equipParts == "PickAxe")
-            type = WeaponType::PICKAXE;
-        else if (data.equipParts == "Shovel")
-            type = WeaponType::SHOVEL;
-        else if (data.equipParts == "Bow")
-            type = WeaponType::BOW;
+        if (itemData.itemType == "Weapon")
+        {
+            WeaponType weaponType = WeaponType::SWORD;
+            EquipmentData data = DataManager::Get()->GetEquipmentData(quickSlotData.first);
 
-        EquipManager::Get()->EquipWeapon(type, data.equipType);
+            if (data.equipParts == "Sword")
+                weaponType = WeaponType::SWORD;
+            else if (data.equipParts == "Axe")
+                weaponType = WeaponType::AXE;
+            else if (data.equipParts == "PickAxe")
+                weaponType = WeaponType::PICKAXE;
+            else if (data.equipParts == "Shovel")
+                weaponType = WeaponType::SHOVEL;
+            else if (data.equipParts == "Bow")
+                weaponType = WeaponType::BOW;
+
+            info.type = weaponType;
+            info.weaponAtk = data.atk;
+
+            PLAYER->SetPlayerEquipInfo(info);
+
+            EquipManager::Get()->EquipWeapon(weaponType, data.equipType);
+        }
+        else
+        {
+            ItemType type = ItemType::QUAD;
+
+            if (itemData.textureType == "Normal")
+                type = ItemType::SINGLE;
+            else if (itemData.textureType == "UVMapping")
+                type = ItemType::MULTI;
+            else
+                type = ItemType::QUAD;
+
+            EquipManager::Get()->EquipItem(type, itemData.image);
+
+            info.type = WeaponType::NONE;
+            info.weaponAtk = 1;
+
+            PLAYER->SetPlayerEquipInfo(info);
+        }
     }
     else
-    {
-        ItemType type = ItemType::QUAD;
-
-        if (itemData.textureType == "Normal")
-            type = ItemType::SINGLE;
-        else if (itemData.textureType == "UVMapping")
-            type = ItemType::MULTI;
-        else
-            type = ItemType::QUAD;
-
-        EquipManager::Get()->EquipItem(type, itemData.image);
-    }
+        EquipManager::Get()->UnEquipWeapon();
 
     HighlightSelectedQuickSlot();
 }

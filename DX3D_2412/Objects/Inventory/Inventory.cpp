@@ -10,22 +10,22 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	cloneIcon->SetActive(false);
 	CreateSlot();
 
-
-	AddItem(91, 1); // ¹«±â ½ÇÇè ´ÙÀÌ¾Æ °Ë 
-	AddItem(68, 1); // µ¹»ð 
-	AddItem(63, 1); // È° 
-	AddItem(81, 1); // È²±Ý°î±ªÀÌ
-	AddItem(59, 1); // ³ª¹«µµ³¢
-	AddItem(73, 1); 
-	AddItem(89, 1);
+	AddItem(70, 1); //µµ³¢ ½Ã¸®Áî
+	AddItem(80, 1);
+	AddItem(59, 1);
+	AddItem(88, 1);
+	AddItem(66, 1);
+	
+	AddItem(61, 1); // »ð ½Ã¸®Áî
+	AddItem(68, 1);
+	AddItem(72, 1);
+	AddItem(90, 1);
 
 	AddItem(1, 64);
 	AddItem(46, 64);
 	AddItem(49, 64);
-	AddItem(4, 64);
-	AddItem(5, 64);
 	AddItem(24, 64);
-	AddItem(7, 1);
+	AddItem(35, 1);
 	AddItem(8, 1);
 	AddItem(9, 1);
 	AddItem(10, 1);
@@ -129,6 +129,10 @@ void Inventory::UpdateCloneIcon()
 
 void Inventory::Clear()
 {
+	if (fromSlot->GetTag() == "SyncQuickSlot")
+	{
+		isRefreshQuickSlot = true;
+	}
 	cloneIcon->SetActive(false);
 	toSlot->SetRest(true);
 	fromSlot->SetRest(true);
@@ -144,7 +148,7 @@ void Inventory::AddItem(UINT key, UINT count)
 
 	for (InventorySlot* slot : slots)
 	{
-		if (slot->GetKey() == key)
+		if (slot->GetKey() == key && slot->GetCount() + count <= MAX_INVENTORY_STORAGE)
 		{
 			slot->SetItem(key, count);
 			if (slot->GetTag() == "SyncQuickSlot")
