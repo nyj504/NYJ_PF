@@ -21,13 +21,6 @@ Block::~Block()
     delete collider;
 }
 
-void Block::Update()
-{
-    if (!isActive || isOcclusion) return;
-
-     CheckPlayerCollision();
-}
-
 void Block::Render()
 {
     if (!isActive || isOcclusion) return;

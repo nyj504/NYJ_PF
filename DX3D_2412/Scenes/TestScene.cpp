@@ -22,7 +22,7 @@ TestScene::TestScene() : isPaused(false)
 
 	skybox = new Skybox(L"Resources/Textures/Skybox/BlueSunset_4096x2048.dds");
 
-	PLAYER->SetLocalPosition(0, 3, 0);
+	PLAYER->SetLocalPosition(0, 4, 0);
 }
 
 TestScene::~TestScene()

@@ -13,9 +13,10 @@ void SlotIcon::Render()
 {
 	if (!isActive || itemCounts.first == 0) return;
 
+	Vector3 offset = { 5, -5 };
 	EventQuad::Render();
 	
-	Font::Get()->RenderText(to_string(itemCounts.second), GetGlobalPosition());
+	Font::Get()->RenderText(to_string(itemCounts.second), GetGlobalPosition() + offset);
 }
 
 void SlotIcon::UpdateFromSlot(InventorySlot* slot)

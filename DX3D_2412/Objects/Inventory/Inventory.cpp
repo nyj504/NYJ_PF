@@ -10,30 +10,22 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	cloneIcon->SetActive(false);
 	CreateSlot();
 
-	AddItem(70, 1); //도끼 시리즈
-	AddItem(80, 1);
-	AddItem(59, 1);
-	AddItem(88, 1);
-	AddItem(66, 1);
-	
-	AddItem(61, 1); // 삽 시리즈
-	AddItem(68, 1);
-	AddItem(72, 1);
-	AddItem(90, 1);
-
-	AddItem(1, 64);
-	AddItem(46, 64);
-	AddItem(49, 64);
-	AddItem(24, 64);
-	AddItem(35, 1);
-	AddItem(8, 1);
-	AddItem(9, 1);
-	AddItem(10, 1);
-	AddItem(38, 1);
-	AddItem(93, 1);
-	AddItem(74, 1);
-	AddItem(86, 1);
-
+	//AddItem(70, 1); //도끼 시리즈
+	//AddItem(80, 1);
+	//AddItem(59, 1);
+	//AddItem(88, 1);
+	//AddItem(66, 1);
+	//
+	//AddItem(61, 1); // 삽 시리즈
+	//AddItem(68, 1);
+	//AddItem(72, 1);
+	//AddItem(90, 1);
+	//
+	AddItem(46, 64); // 철 주괴
+	AddItem(49, 64); // 다이아
+	AddItem(24, 64); // 참나무
+	AddItem(35, 1); // 작업대
+	AddItem(64, 40); // 나무 막대
 
 	SetActive(false);
 }

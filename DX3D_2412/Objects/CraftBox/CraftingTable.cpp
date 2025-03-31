@@ -53,7 +53,6 @@ void CraftingTable::CraftItem()
     int minCount = INT_MAX;
     bool isChanged = false;
 
-
     for (int i = 0; i < craftSlots.size() - 1; i++)
     {
         UINT itemKey = craftSlots[i]->GetKey();
@@ -65,12 +64,6 @@ void CraftingTable::CraftItem()
         {
             serialKey += "_";
         }
-
-        if (craftSlots[i]->IsChanged())
-        {
-            isChanged = true;
-        }
-
         if (itemKey > 0)
         {
             itemCounts[itemKey] = itemCount;
@@ -81,26 +74,8 @@ void CraftingTable::CraftItem()
         }
     }
 
-    if (isChanged)
-    {
-        unordered_map<string, pair<UINT, UINT>>::iterator it = craftingRecipes.find(serialKey);
+    unordered_map<string, pair<UINT, UINT>>::iterator it = craftingRecipes.find(serialKey);
 
-        if (it != craftingRecipes.end())
-        {
-            UINT resultKey = it->second.first;
-            UINT resultCount = it->second.second;
-            UINT finalResultCount = resultCount * minCount;
-
-            craftSlots[MAX_SLOTSIZE - 1]->SetItem(resultKey, finalResultCount);
-
-            return;
-        }
-        else
-        {
-            craftSlots[MAX_SLOTSIZE - 1]->SetItem(0, 0);
-            return;
-        }
-    }
     if (craftSlots[MAX_SLOTSIZE - 1]->IsChanged())
     {
         for (int i = 0; i < MAX_SLOTSIZE - 1; i++)
@@ -111,6 +86,23 @@ void CraftingTable::CraftItem()
             }
         }
         craftSlots[MAX_SLOTSIZE - 1]->SetChanged(false);
+        return;
+    }
+
+    if (it != craftingRecipes.end())
+    {
+        UINT resultKey = it->second.first;
+        UINT resultCount = it->second.second;
+        UINT finalResultCount = resultCount * minCount;
+
+        craftSlots[MAX_SLOTSIZE - 1]->SetItem(resultKey, finalResultCount);
+
+        return;
+    }
+    else
+    {
+        craftSlots[MAX_SLOTSIZE - 1]->SetItem(0, 0);
+        return;
     }
 }
 

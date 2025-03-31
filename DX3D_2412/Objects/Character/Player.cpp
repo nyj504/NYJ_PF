@@ -36,7 +36,6 @@ void Player::Update()
 	BuildAndMining();
 	SetCursor();
 	Control();
-	Jump();
 	Move();
 	CAM->UpdateWorld();
 }
@@ -62,11 +61,13 @@ void Player::SetPlayerState(PlayerState state)
 	case Player::MOVE:
 		break;
 	case Player::JUMP:
-		modelAnimator->PlayClip(2);
-
 		if (jumpTime >= 0)
 		{
 			jumpTime -= DELTA;
+		}
+		else if (jumpTime <= 0)
+		{
+			SetPlayerState(FALL);
 		}
 		break;
 	case Player::FALL:
@@ -74,9 +75,14 @@ void Player::SetPlayerState(PlayerState state)
 		break;
 	case Player::LAND:
 		velocity.y = 0;
+		if (KEY->Down(VK_SPACE))
+		{
+			jumpTime = 0.2f;
+			velocity.y += JUMP_POWER;
+			SetPlayerState(JUMP);
+		}
 		break;
 	case Player::TOUCH:
-		modelAnimator->PlayClip(7);
 	default:
 		break;
 	}
@@ -84,16 +90,12 @@ void Player::SetPlayerState(PlayerState state)
 
 void Player::SetLand()
 {
-	if (jumpTime <= 0)
 	SetPlayerState(LAND);
 }
 	
 void Player::SetFall()
 {
-	if (jumpTime <= 0)
-	{
-		SetPlayerState(FALL);
-	}
+	SetPlayerState(FALL);
 }
 
 void Player::Control()
@@ -135,17 +137,6 @@ void Player::Control()
 		Vector3 delta = mousePos - CENTER;
 		Rotate(Vector3::Up(), delta.x * rotSpeed * DELTA);
 		CAM->Rotate(Vector3::Left(), delta.y * rotSpeed * DELTA);
-	}
-}
-
-void Player::Jump()
-{
-	if (KEY->Down(VK_SPACE))
-	{
-		velocity.y += JUMP_POWER;
-		jumpTime = 0.2f;
-
-		SetPlayerState(JUMP);
 	}
 }
 

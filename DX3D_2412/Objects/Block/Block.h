@@ -28,7 +28,6 @@ public:
 	virtual ~Block();
 
 public:
-	void Update();
 	void Render();
 
 	void EnableCollider();

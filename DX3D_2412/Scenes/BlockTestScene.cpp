@@ -101,11 +101,6 @@ void BlockTestScene::Update()
 		CAM->SetQuaterView(true);
 	}
 
-	for (Block* block : blocks)
-	{
-		block->Update();
-	}
-
 	PLAYER->Update();
 	UIManager::Get()->Update();
 	EquipManager::Get()->Update();

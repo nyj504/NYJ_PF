@@ -21,19 +21,21 @@ void SubChunk::Update()
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
 	float minDistance = FLT_MAX;
+	float minBlockDistance = FLT_MAX;
 	RaycastHit hit;
 	Block* closestBlock = nullptr;
 
-	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetGlobalPosition() : PLAYER->GetGlobalPosition();
+	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetLocalPosition() : PLAYER->GetLocalPosition();
 
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
 		Block* block = pair.second;
 
 		if (block->IsOcclusion()) continue;
+		if (!block->IsActive()) continue;
 
-		Vector3 playerPos = PLAYER->GetGlobalPosition();
-		Vector3 blockPos = block->GetGlobalPosition();
+		Vector3 playerPos = PLAYER->GetLocalPosition();
+		Vector3 blockPos = block->GetLocalPosition();
 
 		float xDistance = abs(playerPos.x - blockPos.x);
 		float yDistance = abs(playerPos.y - blockPos.y);
@@ -41,7 +43,52 @@ void SubChunk::Update()
 
 		if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
 		{
-			block->Update();
+			Vector3 overlap;
+
+			Vector3 maxPlayerPosition = playerPos + PLAYER->GetCollider()->HalfSize();
+			Vector3 maxBoxPosition = blockPos + block->GetCollider()->HalfSize();
+
+			Vector3 minPlayerPosition = playerPos - PLAYER->GetCollider()->HalfSize();
+			Vector3 minBoxPosition = blockPos - block->GetCollider()->HalfSize();
+
+			Ray ray(playerPos, Vector3::Down());
+			RaycastHit hit;
+			bool isGrounded = false;
+
+			if (block->GetCollider()->IsRayCollision(ray, &hit))
+			{
+				if (abs(hit.distance) <= 0.1f)
+				{
+					minBlockDistance = abs(hit.distance);
+					PLAYER->Translate(0, hit.point.y - minPlayerPosition.y, 0);
+					PLAYER->SetLand();
+				}
+				else if(abs(hit.distance) > minBlockDistance)
+				{
+					PLAYER->SetFall();
+				}
+			}
+
+			if (block->GetCollider()->IsBoxCollision(PLAYER->GetCollider(), &overlap))
+			{
+				if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
+				{
+					if (abs(overlap.x) < abs(overlap.z))
+					{
+						if (playerPos.x < blockPos.x)
+							PLAYER->Translate(-overlap.x, 0, 0);
+						else
+							PLAYER->Translate(overlap.x, 0, 0);
+					}
+					else
+					{
+						if (playerPos.z < blockPos.z)
+							PLAYER->Translate(0, 0, -overlap.z);
+						else
+							PLAYER->Translate(0, 0, overlap.z);
+					}
+				}
+			}
 		}
 
 		if (xDistance <= 6 && yDistance <= 6 && zDistance <= 6)
@@ -315,6 +362,65 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 		logBlock->UpdateWorld();
 
 		blocks[blockID] = logBlock;
+	}
+}
+
+void SubChunk::CheckPlayerCollision()
+{
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		Vector3 overlap;
+
+		Vector3 maxPlayerPosition = PLAYER->GetLocalPosition() + PLAYER->GetCollider()->HalfSize();
+		Vector3 maxBoxPosition = block->GetLocalPosition() + block->GetCollider()->HalfSize();
+
+		Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
+		Vector3 minBoxPosition = block->GetLocalPosition() - block->GetCollider()->HalfSize();
+
+		Vector3 playerPosition = PLAYER->GetLocalPosition();
+		Vector3 blockPosition = block->GetLocalPosition();
+
+		Ray ray(PLAYER->GetLocalPosition(), Vector3::Down());
+		RaycastHit hit;
+		bool isGrounded = false;
+
+		if (block->GetCollider()->IsRayCollision(ray, &hit) && hit.point.y >= minPlayerPosition.y)
+		{
+			PLAYER->Translate(0, hit.point.y - minPlayerPosition.y, 0);
+			isGrounded = true;
+		}
+
+		if (isGrounded || (minPlayerPosition.y <= maxBoxPosition.y && maxPlayerPosition.y >= minBoxPosition.y))
+		{
+			PLAYER->SetLand();
+
+			if (block->GetCollider()->IsBoxCollision(PLAYER->GetCollider(), &overlap))
+			{
+				if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
+				{
+					if (abs(overlap.x) < abs(overlap.z))
+					{
+						if (playerPosition.x < blockPosition.x)
+							PLAYER->Translate(-overlap.x, 0, 0);
+						else
+							PLAYER->Translate(overlap.x, 0, 0);
+					}
+					else
+					{
+						if (playerPosition.z < blockPosition.z)
+							PLAYER->Translate(0, 0, -overlap.z);
+						else
+							PLAYER->Translate(0, 0, overlap.z);
+					}
+				}
+			}
+		}
+		else
+		{
+			PLAYER->SetFall();
+		}
 	}
 }
 

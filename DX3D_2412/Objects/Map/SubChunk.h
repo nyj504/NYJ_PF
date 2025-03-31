@@ -20,6 +20,8 @@ public:
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
 	void GenerateTree(TreeType type, Vector3 pos);
 
+	void CheckPlayerCollision();
+
 	void ActiveCollider();
 
 	void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
