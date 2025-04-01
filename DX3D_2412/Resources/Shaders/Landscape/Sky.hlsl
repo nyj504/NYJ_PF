@@ -7,6 +7,11 @@ struct PixelInput
     float3 originPos : POSITION;
 };
 
+cbuffer TimeBuffer : register(b10)
+{
+    float time;
+}
+
 PixelInput VS(VertexUV input)
 {
     PixelInput output;
@@ -19,13 +24,14 @@ PixelInput VS(VertexUV input)
     return output;
 }
 
-Texture2D skyMap : register(t10);
+Texture2D skyMapStart : register(t10); 
+Texture2D skyMapEnd : register(t11);
 
 float2 SphereToUV(float3 dir)
 {
     float2 uv;
     uv.x = atan2(dir.x, dir.z) / (2.0 * 3.14159265f) + 0.5f;
-    uv.y = 0.5f - asin(dir.y) / 3.14159265f; 
+    uv.y = 0.5f - asin(dir.y) / 3.14159265f;
     return uv;
 }
 
@@ -33,5 +39,9 @@ float4 PS(PixelInput input) : SV_TARGET
 {
     float3 dir = normalize(input.originPos);
     float2 uv = SphereToUV(dir);
-    return skyMap.Sample(samp, uv) * mDiffuse;
+    
+    float4 startColor = skyMapStart.Sample(samp, uv); 
+    float4 endColor = skyMapEnd.Sample(samp, uv); 
+    
+    return lerp(startColor, endColor, time) * mDiffuse;
 }

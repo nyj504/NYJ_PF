@@ -202,6 +202,7 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Objects/Landscape/Terrain.h"
 #include "Objects/Landscape/Skybox.h"
+#include "Objects/Landscape/Sky.h"
 
 #include "Objects/Manager/PoolingManager.h"
 #include "Objects/Manager/DataManager.h"
@@ -217,9 +218,6 @@ typedef function<void(int)> IntParamEvent;
 
 #include "Objects/Block/Block.h"
 #include "Objects/Block/CrackEffect.h"
-
-#include "Objects/Shooting/Bullet.h"
-#include "Objects/Shooting/Enemy.h"
 
 #include "Objects/Store/Slots/SlotIcon.h"
 #include "Objects/Store/Slots/InventorySlot.h"

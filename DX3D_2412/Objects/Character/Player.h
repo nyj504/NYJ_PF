@@ -26,14 +26,12 @@ public:
 
 	void Update();
 	void Render();
-	void PostRender();
 
 	void SetPlayerState(PlayerState state);
 	
 	float GetPlayerReach(bool interationType) { return interationType ? MAX_INTERACT_REACH : MAX_BLOCK_REACH; } 
 	ModelAnimator* GetModelAnimator() { return modelAnimator; }
 
-	int GetDamage() { return atk; }
 	void SetLand();
 	void SetFall();
 	bool IsMove() { return isMove; }
@@ -50,24 +48,17 @@ private:
 
 	void SetCursor();
 private:
-	bool isCreativeMode = false;
 	bool isMove = false;
 	bool isMining = false;
-	int atk = 10;
+
 	float jumpTime = 0.0f;
 	float moveSpeed = 5.0f;
 	float rotSpeed = 1.0f;
 
 	PlayerEquipmentInfo equipInfo;
 
-	//Armor* armor;
-
 	PlayerState playerState = IDLE;
 
-	Quad* item;
-	
-	Model* weapon;
-	Transform* weaponSocket;
 	Vector3 velocity;
 
 	POINT clientCenterPos;

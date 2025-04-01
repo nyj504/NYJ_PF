@@ -12,28 +12,13 @@ Player::Player() : Character("SteveRigged")
 
 Player::~Player()
 {
-	delete weapon;
-	delete weaponSocket;
-	delete item;
 }
 
 void Player::Update()
 {
-	//if (KEY->Down('C'))
-	//{
-	//	isCreativeMode = !isCreativeMode;
-	//}
-	//
-	//if (isCreativeMode)
-	//{
-	//	velocity = Vector3(0, 0, 0);
-	//
-	//	velocity.y = 0;
-	//}
-
 	Character::Update();
 	UpdateWorld();
-	BuildAndMining();
+	//BuildAndMining();
 	SetCursor();
 	Control();
 	Move();
@@ -43,10 +28,6 @@ void Player::Update()
 void Player::Render()
 {
 	Character::Render();
-}
-
-void Player::PostRender()
-{
 }
 
 void Player::SetPlayerState(PlayerState state)
@@ -119,20 +100,12 @@ void Player::Control()
 		dir += GetRight();
 	}
 
-	//if (isCreativeMode) 
-	//{
-	//	if (KEY->Press(VK_SPACE)) 
-	//		dir.y += 1.0f;
-	//	if (KEY->Press(VK_SHIFT)) 
-	//		dir.y -= 1.0f;
-	//}
-
 	dir.Normalize();
 
 	velocity.x = dir.x;
 	velocity.z = dir.z;
 
-	if (CAM->IsFPSView() && !UIManager::Get()->IsPopup())
+	if (!UIManager::Get()->IsPopup())
 	{
 		Vector3 delta = mousePos - CENTER;
 		Rotate(Vector3::Up(), delta.x * rotSpeed * DELTA);

@@ -36,3 +36,8 @@ void Skybox::Render()
 	rasterizerState[0]->SetState();
 	depthStencilState[0]->SetState();
 }
+
+void Skybox::Edit()
+{
+	material->Edit();
+}

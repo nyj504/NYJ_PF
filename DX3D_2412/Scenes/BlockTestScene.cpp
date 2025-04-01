@@ -31,7 +31,8 @@ BlockTestScene::BlockTestScene()
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
 
-	skybox = new Skybox(L"Resources/Textures/Skybox/Sunset_4096x2048.dds");
+	skybox = new Sky();
+	skybox->SetTag("Sunset");
 
 	ShowCursor(true);
 
@@ -106,6 +107,7 @@ void BlockTestScene::Update()
 	EquipManager::Get()->Update();
 	monster->Update();
 	animal->Update();
+	skybox->Update();
 	
 }	
 
@@ -145,4 +147,5 @@ void BlockTestScene::PostRender()
 
 void BlockTestScene::GUIRender()
 {
+	skybox->Edit();
 }

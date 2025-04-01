@@ -224,6 +224,7 @@
     <ClInclude Include="Objects\Item\DropQuad.h" />
     <ClInclude Include="Objects\Item\ItemManager.h" />
     <ClInclude Include="Objects\Item\EquipManager.h" />
+    <ClInclude Include="Objects\Landscape\Sky.h" />
     <ClInclude Include="Objects\Landscape\Skybox.h" />
     <ClInclude Include="Objects\Landscape\Terrain.h" />
     <ClInclude Include="Objects\Manager\DataManager.h" />
@@ -240,8 +241,6 @@
     <ClInclude Include="Objects\Particle\Spark.h" />
     <ClInclude Include="Objects\Particle\Sprite.h" />
     <ClInclude Include="Objects\Particle\Trail.h" />
-    <ClInclude Include="Objects\Shooting\Bullet.h" />
-    <ClInclude Include="Objects\Shooting\Enemy.h" />
     <ClInclude Include="Objects\Character\Player.h" />
     <ClInclude Include="Objects\Store\CraftingUI.h" />
     <ClInclude Include="Objects\Inventory\QuickSlot.h" />
@@ -346,6 +345,7 @@
     <ClCompile Include="Objects\Item\DropQuad.cpp" />
     <ClCompile Include="Objects\Item\ItemManager.cpp" />
     <ClCompile Include="Objects\Item\EquipManager.cpp" />
+    <ClCompile Include="Objects\Landscape\Sky.cpp" />
     <ClCompile Include="Objects\Landscape\Skybox.cpp" />
     <ClCompile Include="Objects\Landscape\Terrain.cpp" />
     <ClCompile Include="Objects\Manager\DataManager.cpp" />
@@ -361,8 +361,6 @@
     <ClCompile Include="Objects\Particle\Spark.cpp" />
     <ClCompile Include="Objects\Particle\Sprite.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
-    <ClCompile Include="Objects\Shooting\Bullet.cpp" />
-    <ClCompile Include="Objects\Shooting\Enemy.cpp" />
     <ClCompile Include="Objects\Character\Player.cpp" />
     <ClCompile Include="Objects\Store\CraftingUI.cpp" />
     <ClCompile Include="Objects\Inventory\QuickSlot.cpp" />
@@ -459,6 +457,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Resources\Shaders\Instancing\ColliderInstancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shaders\Landscape\Sky.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

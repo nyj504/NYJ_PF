@@ -7,6 +7,7 @@ public:
     ~Skybox();
 
     void Render();
+    void Edit();
 
 private:
     Texture* cubeMap;
