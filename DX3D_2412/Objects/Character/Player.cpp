@@ -18,7 +18,17 @@ void Player::Update()
 {
 	Character::Update();
 	UpdateWorld();
-	//BuildAndMining();
+
+	if (KEY->Down(VK_SPACE))
+	{
+		SetPlayerState(JUMP);
+	}
+	if (jumpTime >= 0)
+	{
+		jumpTime -= DELTA;
+	}
+
+	BuildAndMining();
 	SetCursor();
 	Control();
 	Move();
@@ -42,28 +52,17 @@ void Player::SetPlayerState(PlayerState state)
 	case Player::MOVE:
 		break;
 	case Player::JUMP:
-		if (jumpTime >= 0)
-		{
-			jumpTime -= DELTA;
-		}
-		else if (jumpTime <= 0)
-		{
-			SetPlayerState(FALL);
-		}
+		jumpTime = 0.2f;
+		velocity.y += JUMP_POWER;
 		break;
 	case Player::FALL:
 		velocity.y -= GRAVITY * DELTA;
 		break;
 	case Player::LAND:
 		velocity.y = 0;
-		if (KEY->Down(VK_SPACE))
-		{
-			jumpTime = 0.2f;
-			velocity.y += JUMP_POWER;
-			SetPlayerState(JUMP);
-		}
 		break;
 	case Player::TOUCH:
+		modelAnimator->PlayClip(3);
 	default:
 		break;
 	}
@@ -132,6 +131,7 @@ void Player::BuildAndMining()
 			BlockManager::Get()->InteractingBlock();
 		else
 		{	
+
 			BlockManager::Get()->BuildBlock();
 		}
 	}
@@ -142,6 +142,7 @@ void Player::BuildAndMining()
 
 		BlockManager::Get()->GetCrackEffect()->SetMining(block);
 		BlockManager::Get()->MiningBlock();
+		SetPlayerState(TOUCH);
 		isMining = true;
 	}
 	if (KEY->Press(VK_LBUTTON))

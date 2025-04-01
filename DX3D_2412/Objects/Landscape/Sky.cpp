@@ -6,15 +6,20 @@ Sky::Sky()
 
 	material->SetShader(L"Landscape/Sky.hlsl");
 
-	skyMapStart = Texture::Add(L"Resources/Textures/Skybox/SunRize_4096x2048.dds");
-	skyMapEnd = Texture::Add(L"Resources/Textures/Skybox/Midday_4096x2048.dds");
+	startSkyState = SkyState::SUNRIZE;
+	stateValue = (int)startSkyState;
+	endSkyState = (SkyState)((stateValue + 1) % (int)SkyState::COUNT);
 
 	skies[SkyState::SUNRIZE] = "Resources/Textures/Skybox/SunRize_4096x2048.dds";
 	skies[SkyState::MIDDAY] = "Resources/Textures/Skybox/Midday_4096x2048.dds";
 	skies[SkyState::SUNSET] = "Resources/Textures/Skybox/Sunset_4096x2048.dds";
 	skies[SkyState::DEEPDUSK] = "Resources/Textures/Skybox/DeepDusk_4096x2048.dds";
-	skies[SkyState::NIGHT] = "Resources/Textures/Skybox/Night_4096x2048.dds";
-	skies[SkyState::MIDNIGHT] = "Resources/Textures/Skybox/Night_4096x2048.dds";
+	skies[SkyState::MIDNIGHT] = "Resources/Textures/Skybox/Midnight_4096x2048.dds";
+	skies[SkyState::DAYBREAK] = "Resources/Textures/Skybox/Night_4096x2048.dds";
+	skies[SkyState::DAWN] = "Resources/Textures/Skybox/DeepDusk_4096x2048.dds";
+
+	skyMapStart = Texture::Add(Utility::ToWString(skies[startSkyState]));
+	skyMapEnd = Texture::Add(Utility::ToWString(skies[endSkyState]));
 
 	rasterizerState[0] = new RasterizerState();
 	rasterizerState[1] = new RasterizerState();
@@ -23,8 +28,6 @@ Sky::Sky()
 	depthStencilState[0] = new DepthStencilState();
 	depthStencilState[1] = new DepthStencilState();
 	depthStencilState[1]->DepthEnable(false);
-
-	//Skybox* sky = new Skybox(L"Resources/Textures/Skybox/SkyboxBlueSunset_4096x2048");
 }
 
 Sky::~Sky()
@@ -39,8 +42,8 @@ Sky::~Sky()
 
 void Sky::Update()
 {
-	if (skyState == SkyState::SUNRIZE || skyState == SkyState::DEEPDUSK ||
-		skyState == SkyState::SUNSET)
+	if (startSkyState == SkyState::SUNSET || startSkyState == SkyState::DEEPDUSK ||
+		startSkyState == SkyState::DAWN)
 	{
 		buffer->Get()[0] += DELTA * DAYBREAK_TIME;
 	}
@@ -48,20 +51,20 @@ void Sky::Update()
 	{
 		buffer->Get()[0] += DELTA * WORLD_TIME;
 	}
-	
-	if (skyState == SkyState::MIDNIGHT)
-	{
-		stateValue = 0;
-	}
 
 	if (buffer->Get()[0] >= 1.0f)
 	{
+		startSkyState = (SkyState)stateValue;
+
 		buffer->Get()[0] = 0.0f;
-		stateValue++;
-		
-		skyState = (SkyState)stateValue;
+
 		skyMapStart = skyMapEnd;
-		skyMapEnd = Texture::Add(Utility::ToWString(skies[skyState]));
+
+		stateValue = (stateValue + 1) % (int)SkyState::COUNT;
+		
+		endSkyState = (SkyState)stateValue;
+		
+		skyMapEnd = Texture::Add(Utility::ToWString(skies[endSkyState]));
 	}
 }
 

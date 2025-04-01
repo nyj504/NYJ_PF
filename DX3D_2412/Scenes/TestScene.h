@@ -16,10 +16,8 @@ public:
 
 	void GUIRender() override;
 
-	void Init();
-
 private:
-	Skybox* skybox;
+	Sky* sky;
 	
 	Monster* zombie;
 	Animal* animal;

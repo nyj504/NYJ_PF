@@ -4,7 +4,7 @@ class Sky : public Sphere
 private:
 	enum class SkyState
 	{
-		SUNRIZE = 1, MIDDAY, SUNSET, DEEPDUSK, NIGHT, MIDNIGHT
+		SUNRIZE, MIDDAY, SUNSET, DEEPDUSK, MIDNIGHT, DAYBREAK, DAWN, COUNT
 	};
 	const float WORLD_TIME = 0.01f;
 	const float DAYBREAK_TIME = 0.1f;
@@ -17,8 +17,10 @@ public:
 	void Edit();
 
 private:
-	SkyState skyState = SkyState::SUNRIZE;
-	int stateValue = 0;
+	SkyState startSkyState;
+	SkyState endSkyState;
+
+	int stateValue;
 	
 	FloatValueBuffer* buffer;
 

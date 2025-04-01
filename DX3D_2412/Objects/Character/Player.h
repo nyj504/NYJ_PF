@@ -15,8 +15,8 @@ private:
 	};
 
 private:
-	const float GRAVITY = 9.8f;
-	const float JUMP_POWER = 1.5f;
+	const float GRAVITY = 4.9f;
+	const float JUMP_POWER = 4.5f;
 	const float MAX_BLOCK_REACH = 5.0f;
 	const float MAX_INTERACT_REACH = 4.5f;
 

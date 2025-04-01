@@ -21,7 +21,7 @@ void SubChunk::Update()
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
 	float minDistance = FLT_MAX;
-	float minBlockDistance = FLT_MAX;
+	
 	RaycastHit hit;
 	Block* closestBlock = nullptr;
 
@@ -41,59 +41,8 @@ void SubChunk::Update()
 		float yDistance = abs(playerPos.y - blockPos.y);
 		float zDistance = abs(playerPos.z - blockPos.z);
 
-		if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
-		{
-			Vector3 overlap;
-
-			Vector3 maxPlayerPosition = playerPos + PLAYER->GetCollider()->HalfSize();
-			Vector3 maxBoxPosition = blockPos + block->GetCollider()->HalfSize();
-
-			Vector3 minPlayerPosition = playerPos - PLAYER->GetCollider()->HalfSize();
-			Vector3 minBoxPosition = blockPos - block->GetCollider()->HalfSize();
-
-			Ray ray(playerPos, Vector3::Down());
-			RaycastHit hit;
-			bool isGrounded = false;
-
-			if (block->GetCollider()->IsRayCollision(ray, &hit))
-			{
-				if (abs(hit.distance) <= 0.1f)
-				{
-					minBlockDistance = abs(hit.distance);
-					PLAYER->Translate(0, hit.point.y - minPlayerPosition.y, 0);
-					PLAYER->SetLand();
-				}
-				else if(abs(hit.distance) > minBlockDistance)
-				{
-					PLAYER->SetFall();
-				}
-			}
-
-			if (block->GetCollider()->IsBoxCollision(PLAYER->GetCollider(), &overlap))
-			{
-				if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
-				{
-					if (abs(overlap.x) < abs(overlap.z))
-					{
-						if (playerPos.x < blockPos.x)
-							PLAYER->Translate(-overlap.x, 0, 0);
-						else
-							PLAYER->Translate(overlap.x, 0, 0);
-					}
-					else
-					{
-						if (playerPos.z < blockPos.z)
-							PLAYER->Translate(0, 0, -overlap.z);
-						else
-							PLAYER->Translate(0, 0, overlap.z);
-					}
-				}
-			}
-		}
-
 		if (xDistance <= 6 && yDistance <= 6 && zDistance <= 6)
 		{
-			float dist = Vector3::Distance(block->GetGlobalPosition(), rayStartPos);
 			float maxDistance = PLAYER->GetPlayerReach(false);
 
 			if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -125,7 +74,7 @@ void SubChunk::Update()
 		else
 			block->GetCollider()->SetColor(0, 1, 0);
 	}
-	//CheckSelectedBlock();
+	CheckPlayerCollision();
 }
 
 void SubChunk::Render()
@@ -367,34 +316,57 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 
 void SubChunk::CheckPlayerCollision()
 {
+	Ray ray(PLAYER->GetLocalPosition(), Vector3::Down());
+	RaycastHit hit;
+
+	float maxHeight = 0.0f;
+	Vector3 playerPos = PLAYER->GetLocalPosition();
+	Vector3 maxPlayerPosition = PLAYER->GetLocalPosition() + PLAYER->GetCollider()->HalfSize();
+	Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
+	Vector3 overlap;
+
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
 		Block* block = pair.second;
 
-		Vector3 overlap;
+		if (block->IsOcclusion() || !block->IsActive())
+			continue;
 
-		Vector3 maxPlayerPosition = PLAYER->GetLocalPosition() + PLAYER->GetCollider()->HalfSize();
-		Vector3 maxBoxPosition = block->GetLocalPosition() + block->GetCollider()->HalfSize();
-
-		Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
-		Vector3 minBoxPosition = block->GetLocalPosition() - block->GetCollider()->HalfSize();
-
-		Vector3 playerPosition = PLAYER->GetLocalPosition();
-		Vector3 blockPosition = block->GetLocalPosition();
-
-		Ray ray(PLAYER->GetLocalPosition(), Vector3::Down());
-		RaycastHit hit;
-		bool isGrounded = false;
-
-		if (block->GetCollider()->IsRayCollision(ray, &hit) && hit.point.y >= minPlayerPosition.y)
+		if (block->GetCollider()->IsRayCollision(ray, &hit))
 		{
-			PLAYER->Translate(0, hit.point.y - minPlayerPosition.y, 0);
-			isGrounded = true;
-		}
+			if (hit.point.y > maxHeight)
+				maxHeight = hit.point.y;
+		}	
+	}
 
-		if (isGrounded || (minPlayerPosition.y <= maxBoxPosition.y && maxPlayerPosition.y >= minBoxPosition.y))
+	if (maxHeight >= minPlayerPosition.y)
+	{
+		PLAYER->Translate(0, maxHeight - minPlayerPosition.y, 0);
+		PLAYER->SetLand();
+	}
+	else if (maxHeight - minPlayerPosition.y < 0.1f)
+	{
+		PLAYER->SetFall();
+	}
+
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		if (block->IsOcclusion() || !block->IsActive())
+			continue;
+
+		Vector3 blockPos = block->GetLocalPosition();
+
+		float xDistance = abs(playerPos.x - blockPos.x);
+		float yDistance = abs(playerPos.y - blockPos.y);
+		float zDistance = abs(playerPos.z - blockPos.z);
+
+		if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
 		{
-			PLAYER->SetLand();
+			Vector3 blockPosition = block->GetLocalPosition();
+			Vector3 maxBoxPosition = blockPosition + block->GetCollider()->HalfSize();
+			Vector3 minBoxPosition = blockPosition - block->GetCollider()->HalfSize();
 
 			if (block->GetCollider()->IsBoxCollision(PLAYER->GetCollider(), &overlap))
 			{
@@ -402,24 +374,20 @@ void SubChunk::CheckPlayerCollision()
 				{
 					if (abs(overlap.x) < abs(overlap.z))
 					{
-						if (playerPosition.x < blockPosition.x)
+						if (playerPos.x < blockPos.x)
 							PLAYER->Translate(-overlap.x, 0, 0);
 						else
 							PLAYER->Translate(overlap.x, 0, 0);
 					}
 					else
 					{
-						if (playerPosition.z < blockPosition.z)
+						if (playerPos.z < blockPos.z)
 							PLAYER->Translate(0, 0, -overlap.z);
 						else
 							PLAYER->Translate(0, 0, overlap.z);
 					}
 				}
 			}
-		}
-		else
-		{
-			PLAYER->SetFall();
 		}
 	}
 }

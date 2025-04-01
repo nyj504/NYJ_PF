@@ -31,7 +31,7 @@ public:
 
 	bool HasCollider() { return hasCollider; }
 	bool IsMouseOverChunk() { return isMouseOver; }
-	
+
 	vector<InstanceData> GetVisibleSingleInstanceData() { return visibleSingleInstanceDatas; }
 	vector<InstanceData> GetVisibleMultiInstanceData() { return visibleMultiInstanceDatas; }
 

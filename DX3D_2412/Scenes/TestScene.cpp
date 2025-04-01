@@ -20,7 +20,7 @@ TestScene::TestScene() : isPaused(false)
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
 
-	skybox = new Skybox(L"Resources/Textures/Skybox/BlueSunset_4096x2048.dds");
+	sky = new Sky();
 
 	PLAYER->SetLocalPosition(0, 4, 0);
 }
@@ -34,6 +34,7 @@ TestScene::~TestScene()
 
 	delete zombie;
 	delete animal;
+	delete sky;
 }
 
 void TestScene::Update()
@@ -66,6 +67,7 @@ void TestScene::Update()
 		ItemManager::Get()->Update();
 		zombie->Update();
 		animal->Update();
+		sky->Update();
 ;	}
 }
 
@@ -75,7 +77,7 @@ void TestScene::PreRender()
 
 void TestScene::Render()
 {
-	skybox->Render();
+	sky->Render();
 
 	if (!isPaused)
 	{
