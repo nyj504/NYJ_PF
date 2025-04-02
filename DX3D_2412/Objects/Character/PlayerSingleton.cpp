@@ -2,7 +2,7 @@
 
 PlayerSingleton::PlayerSingleton()
 {
-	player = new Player();
+	player = new Player("SteveRigged");
 }
 
 PlayerSingleton::~PlayerSingleton()

@@ -21,6 +21,7 @@ public:
 	void GenerateTree(TreeType type, Vector3 pos);
 
 	void CheckPlayerCollision();
+	void CheckMonsterCollision();
 
 	void ActiveCollider();
 

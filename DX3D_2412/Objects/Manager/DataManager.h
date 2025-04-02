@@ -31,6 +31,15 @@ struct EquipmentData
     UINT defense;
 };
 
+struct CharacterData
+{
+    UINT key;
+    string name;
+    UINT maxHp;
+    UINT atk;
+    float moveSpeed;
+};
+
 class DataManager : public Singleton<DataManager>
 {
 private:
@@ -54,18 +63,28 @@ public:
 
         return equipmentDatas[key];
     }
+    CharacterData GetCharacterData(UINT key)
+    {
+        if (characterDatas.count(key) == 0)
+            assert(false);
+
+        return characterDatas[key];
+    }
 
     const unordered_map<UINT, ItemData>& GetItemDatas() const { return itemDatas; }
     const unordered_map<UINT, EquipmentData>& GetEquipmentDatas() const { return equipmentDatas; }
+    const unordered_map<UINT, CharacterData>& GetCharacterDatas() const { return characterDatas; }
     const unordered_map<string, pair<UINT, UINT>>& GetCraftingRecipes() const { return craftingRecipes; }
 
   
     void LoadItemData();
     void LoadEquipmentData();
+    void LoadCharacterData();
 
 private:
     unordered_map<UINT, ItemData> itemDatas;
     unordered_map<UINT, EquipmentData> equipmentDatas;
+    unordered_map<UINT, CharacterData> characterDatas;
 
     unordered_map<string, pair<UINT, UINT>> craftingRecipes;
 };

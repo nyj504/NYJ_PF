@@ -75,6 +75,7 @@ void SubChunk::Update()
 			block->GetCollider()->SetColor(0, 1, 0);
 	}
 	CheckPlayerCollision();
+	CheckMonsterCollision();
 }
 
 void SubChunk::Render()
@@ -95,11 +96,6 @@ void SubChunk::Render()
 			block->Render();
 		}
 	}
-	
-	//for (Block* visibleBlock : visibleBlocks)
-	//{
-	//	visibleBlock->Render();
-	//}
 }
 
 void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH])
@@ -329,7 +325,16 @@ void SubChunk::CheckPlayerCollision()
 	{
 		Block* block = pair.second;
 
+		Vector3 blockPos = block->GetLocalPosition();
+
+		float xDistance = abs(playerPos.x - blockPos.x);
+		float yDistance = abs(playerPos.y - blockPos.y);
+		float zDistance = abs(playerPos.z - blockPos.z);
+
 		if (block->IsOcclusion() || !block->IsActive())
+			continue;
+
+		if (xDistance > 2 && yDistance > 2 && zDistance > 2)
 			continue;
 
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -362,7 +367,7 @@ void SubChunk::CheckPlayerCollision()
 		float yDistance = abs(playerPos.y - blockPos.y);
 		float zDistance = abs(playerPos.z - blockPos.z);
 
-		if (xDistance <= 3 && yDistance <= 3 && zDistance <= 3)
+		if (xDistance <= 2 && yDistance <= 2 && zDistance <= 2)
 		{
 			Vector3 blockPosition = block->GetLocalPosition();
 			Vector3 maxBoxPosition = blockPosition + block->GetCollider()->HalfSize();
@@ -385,6 +390,95 @@ void SubChunk::CheckPlayerCollision()
 							PLAYER->Translate(0, 0, -overlap.z);
 						else
 							PLAYER->Translate(0, 0, overlap.z);
+					}
+				}
+			}
+		}
+	}
+}
+
+void SubChunk::CheckMonsterCollision()
+{
+	Monster* monster = MonsterManager::Get()->GetMonsters();
+	if (!monster) return;
+
+	Ray ray(monster->GetLocalPosition(), Vector3::Down());
+	RaycastHit hit;
+
+	float maxHeight = 0.0f;
+	Vector3 monsterPos = monster->GetLocalPosition();
+	Vector3 maxMonsterPosition = monster->GetLocalPosition() + monster->GetCollider()->HalfSize();
+	Vector3 minMonsterPosition = monster->GetLocalPosition() - monster->GetCollider()->HalfSize();
+	Vector3 overlap;
+
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		Vector3 blockPos = block->GetLocalPosition();
+
+		float xDistance = abs(monsterPos.x - blockPos.x);
+		float yDistance = abs(monsterPos.y - blockPos.y);
+		float zDistance = abs(monsterPos.z - blockPos.z);
+
+		if (block->IsOcclusion() || !block->IsActive())
+			continue;
+
+		if (xDistance > 2 && yDistance > 2 && zDistance > 2)
+			continue;
+
+		if (block->GetCollider()->IsRayCollision(ray, &hit))
+		{
+			if (hit.point.y > maxHeight)
+				maxHeight = hit.point.y;
+		}
+	}
+
+	if (maxHeight >= minMonsterPosition.y)
+	{
+		monster->SetLand();
+	}
+	else if (maxHeight - minMonsterPosition.y < 0.1f)
+	{
+		monster->SetFall();
+	}
+
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		if (block->IsOcclusion() || !block->IsActive())
+			continue;
+
+		Vector3 blockPos = block->GetLocalPosition();
+
+		float xDistance = abs(monsterPos.x - blockPos.x);
+		float yDistance = abs(monsterPos.y - blockPos.y);
+		float zDistance = abs(monsterPos.z - blockPos.z);
+
+		if (xDistance <= 2 && yDistance <= 2 && zDistance <= 2)
+		{
+			Vector3 blockPosition = block->GetLocalPosition();
+			Vector3 maxBoxPosition = blockPosition + block->GetCollider()->HalfSize();
+			Vector3 minBoxPosition = blockPosition - block->GetCollider()->HalfSize();
+
+			if (block->GetCollider()->IsBoxCollision(monster->GetCollider(), &overlap))
+			{
+				if (minMonsterPosition.y < maxBoxPosition.y && maxMonsterPosition.y > minBoxPosition.y)
+				{
+					if (abs(overlap.x) < abs(overlap.z))
+					{
+						if (monsterPos.x < blockPos.x)
+							monster->Translate(-overlap.x, 0, 0);
+						else
+							monster->Translate(overlap.x, 0, 0);
+					}
+					else
+					{
+						if (monsterPos.z < blockPos.z)
+							monster->Translate(0, 0, -overlap.z);
+						else
+							monster->Translate(0, 0, overlap.z);
 					}
 				}
 			}

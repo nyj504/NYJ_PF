@@ -248,6 +248,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Objects/Character/Animal.h"
 
 #include "Objects/Character/PlayerSingleTon.h"
+#include "Objects/Character/MonsterManager.h"
 
 #include "Objects/GUI/HUDBar.h"
 #include "Objects/GUI/PauseMenuUI.h"

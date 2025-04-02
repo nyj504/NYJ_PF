@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Player::Player() : Character("SteveRigged")
+Player::Player(string name) : Character(name)
 {
 	tag = "Player";
 
@@ -22,10 +22,6 @@ void Player::Update()
 	if (KEY->Down(VK_SPACE))
 	{
 		SetPlayerState(JUMP);
-	}
-	if (jumpTime >= 0)
-	{
-		jumpTime -= DELTA;
 	}
 
 	BuildAndMining();
@@ -52,30 +48,13 @@ void Player::SetPlayerState(PlayerState state)
 	case Player::MOVE:
 		break;
 	case Player::JUMP:
-		jumpTime = 0.2f;
 		velocity.y += JUMP_POWER;
-		break;
-	case Player::FALL:
-		velocity.y -= GRAVITY * DELTA;
-		break;
-	case Player::LAND:
-		velocity.y = 0;
 		break;
 	case Player::TOUCH:
 		modelAnimator->PlayClip(3);
 	default:
 		break;
 	}
-}
-
-void Player::SetLand()
-{
-	SetPlayerState(LAND);
-}
-	
-void Player::SetFall()
-{
-	SetPlayerState(FALL);
 }
 
 void Player::Control()
@@ -114,7 +93,7 @@ void Player::Control()
 
 void Player::Move()
 {
-	Translate(velocity * moveSpeed * DELTA);
+	Character::Move();
 }
 
 void Player::BuildAndMining()

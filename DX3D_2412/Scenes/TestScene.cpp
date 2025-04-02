@@ -6,16 +6,11 @@ TestScene::TestScene() : isPaused(false)
 	UIManager::Get();
 	InventorySingleton::Get();
 	ItemManager::Get();
+	MonsterManager::Get();
 
 	EquipManager::Get();
 	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
 	
-	zombie = new Monster();
-	zombie->SetLocalPosition(3, 3, 3);
-
-	animal = new Animal();
-	animal->SetLocalPosition(5, 3, 5);
-
 	CAM->SetTarget(PLAYER);
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
@@ -23,6 +18,8 @@ TestScene::TestScene() : isPaused(false)
 	sky = new Sky();
 
 	PLAYER->SetLocalPosition(0, 4, 0);
+
+	MonsterManager::Get()->Spawn();
 }
 
 TestScene::~TestScene()
@@ -31,9 +28,7 @@ TestScene::~TestScene()
 	EquipManager::Delete();
 	UIManager::Delete();
 	EquipManager::Delete();
-
-	delete zombie;
-	delete animal;
+	MonsterManager::Delete();
 	delete sky;
 }
 
@@ -65,8 +60,7 @@ void TestScene::Update()
 		UIManager::Get()->Update();
 		EquipManager::Get()->Update();
 		ItemManager::Get()->Update();
-		zombie->Update();
-		animal->Update();
+		MonsterManager::Get()->Update();
 		sky->Update();
 ;	}
 }
@@ -85,8 +79,7 @@ void TestScene::Render()
 		PLAYER->Render();
 		EquipManager::Get()->Render();
 		ItemManager::Get()->Render();
-		zombie->Render();
-		animal->Render();
+		MonsterManager::Get()->Render();
 	}
 }
 

@@ -204,6 +204,7 @@
     <ClInclude Include="Objects\Character\Animal.h" />
     <ClInclude Include="Objects\Character\Character.h" />
     <ClInclude Include="Objects\Character\Monster.h" />
+    <ClInclude Include="Objects\Character\MonsterManager.h" />
     <ClInclude Include="Objects\Character\PlayerSingleton.h" />
     <ClInclude Include="Objects\Collider\BoxCollider.h" />
     <ClInclude Include="Objects\Collider\CapsuleCollider.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="Objects\Character\Animal.cpp" />
     <ClCompile Include="Objects\Character\Character.cpp" />
     <ClCompile Include="Objects\Character\Monster.cpp" />
+    <ClCompile Include="Objects\Character\MonsterManager.cpp" />
     <ClCompile Include="Objects\Character\PlayerSingleton.cpp" />
     <ClCompile Include="Objects\Collider\BoxCollider.cpp" />
     <ClCompile Include="Objects\Collider\CapsuleCollider.cpp" />

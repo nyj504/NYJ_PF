@@ -9,12 +9,6 @@ BlockTestScene::BlockTestScene()
 	EquipManager::Get();
 	EquipManager::Get()->SetTarget(PLAYER->GetModelAnimator());
 	
-	monster = new Monster();
-	monster->SetLocalPosition(4, 2, 4);
-
-	animal = new Animal();
-	animal->SetLocalPosition(5, 2, 5);
-
 	hpBar = new HUDBar();
 	hpBar->Create("Resources/Textures/UI/heart.png", Vector3(CENTER.x - 260 , CENTER.y - 280));
 	
@@ -31,17 +25,7 @@ BlockTestScene::BlockTestScene()
 	CAM->TargetOptionLoad("FPSMode");
 	CAM->SetFPSView(true);
 
-	skybox = new Sky();
-	skybox->SetTag("Sunset");
-
 	ShowCursor(true);
-
-	cube = new Cube();
-
-	cube->GetMaterial()->SetShader(L"Instancing/Instancing.hlsl");
-	//cube->ApplyObjectUVMapping();
-	cube->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");
-	cube->UpdateWorld();
 
 	for (int x = 0; x < 10; x++)
 	{
@@ -75,8 +59,6 @@ BlockTestScene::~BlockTestScene()
 {
 	delete cube;
 	delete instanceBuffer;
-	delete monster;
-	delete animal;
 	//delete item;
 	
 }
@@ -105,10 +87,6 @@ void BlockTestScene::Update()
 	PLAYER->Update();
 	UIManager::Get()->Update();
 	EquipManager::Get()->Update();
-	monster->Update();
-	animal->Update();
-	skybox->Update();
-	
 }	
 
 void BlockTestScene::PreRender()
@@ -117,8 +95,6 @@ void BlockTestScene::PreRender()
 
 void BlockTestScene::Render()
 {
-	skybox->Render();
-
 	instanceBuffer->Set(1);
 
 	Environment::Get()->SetAlphaBlend(true);
@@ -133,8 +109,6 @@ void BlockTestScene::Render()
 	PLAYER->Render();
 	EquipManager::Get()->Render();
 	ItemManager::Get()->Render();
-	monster->Render();
-	animal->Render();
 }
 
 void BlockTestScene::PostRender()
@@ -147,5 +121,4 @@ void BlockTestScene::PostRender()
 
 void BlockTestScene::GUIRender()
 {
-	skybox->Edit();
 }

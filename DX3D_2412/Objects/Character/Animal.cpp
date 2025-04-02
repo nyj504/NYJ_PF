@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Animal::Animal() : Character("chicken")
+Animal::Animal(string name) : Monster(name)
 {
 }
 

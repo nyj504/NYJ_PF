@@ -4,6 +4,7 @@ DataManager::DataManager()
 {
     LoadItemData();
     LoadEquipmentData();
+    LoadCharacterData();
 }
 
 DataManager::~DataManager()
@@ -83,6 +84,31 @@ void DataManager::LoadEquipmentData()
         data.defense = stoi(rowData[4]);
 
         equipmentDatas[data.key] = data;
+    }
+}
+
+void DataManager::LoadCharacterData()
+{
+    string fileName = "Resources/Tables/CharacterTable.csv";
+
+    ifstream loadFile(fileName);
+
+    string line;
+
+    getline(loadFile, line);
+
+    while (getline(loadFile, line))
+    {
+        vector<string> rowData = Utility::SplitString(line, ",");
+
+        CharacterData data;
+        data.key = stoi(rowData[0]);
+        data.name = rowData[1];
+        data.maxHp = stoi(rowData[2]);
+        data.atk = stoi(rowData[3]);
+        data.moveSpeed = stof(rowData[4]);
+
+        characterDatas[data.key] = data;
     }
 }
 

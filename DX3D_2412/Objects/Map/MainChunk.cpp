@@ -18,7 +18,6 @@ void MainChunk::Update()
 {
     int playerY = PLAYER->GetGlobalPosition().y;
     int minBaseY = chunkPosition.y;
-    int subChunkIndex = chunkPosition.y + SUBCHUNK_HEIGHT;
     
     activeChunkIndex = (playerY - minBaseY) / SUBCHUNK_HEIGHT;
 

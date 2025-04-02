@@ -1,13 +1,10 @@
 #pragma once
-class Animal : public Character
+class Animal : public Monster
 {
 public:
-	Animal();
+	Animal(string name);
 	~Animal();
 
 	void Update();
 	void Render();
-
-private:
-	Model* model;
 };

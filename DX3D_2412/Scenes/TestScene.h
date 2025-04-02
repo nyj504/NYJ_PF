@@ -18,9 +18,6 @@ public:
 
 private:
 	Sky* sky;
-	
-	Monster* zombie;
-	Animal* animal;
 
 	bool isPaused = false;
 };

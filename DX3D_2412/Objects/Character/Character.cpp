@@ -3,11 +3,23 @@
 Character::Character(string name)
 {
     if (name == "SteveRigged")
+    {
+        characterKey = 1001;
         characterType = CharacterType::STEVE;
-    else if(name == "Zombie")
+    }
+    else if (name == "Zombie")
+    {
+        characterKey = 1002;
         characterType = CharacterType::MONSTER;
+    }
     else if (name == "chicken")
+    {
+        characterKey = 1003;
         characterType = CharacterType::ANIMAL;
+    }
+
+    characterData = DataManager::Get()->GetCharacterData(characterKey);
+    curHp = characterData.maxHp;
 
     switch (characterType)
     {
@@ -99,4 +111,9 @@ void Character::Render()
         model->Render();
     }
     collider->Render();
+}
+
+void Character::Move()
+{
+    Translate(velocity * characterData.moveSpeed * DELTA);
 }

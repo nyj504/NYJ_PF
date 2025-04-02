@@ -20,7 +20,7 @@ class Block : public Transform
 private:
 	enum BlockType
 	{
-		BLOCK, CRAFTBLOCK, EMPTYBLOCK
+		BLOCK, CRAFTBLOCK
 	};
 public:
 	Block() {};
@@ -29,25 +29,16 @@ public:
 
 public:
 	void Render();
-
 	void EnableCollider();
 
 	UINT GetItemKey() const { return itemData.key; }
-	
 	void SetItemKey(UINT key) { this->itemData.key = key; }
 
-	void Mining();
-	
 	bool HasCollider() { return hasCollider; }
-
 	BoxCollider* GetCollider() { return collider; }
 
 	string GetParticlePath() { return itemData.particle; }
-	//void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
-	//UINT64 GetParentIndex() { return parentIndex; }
 
-	void CheckPlayerCollision();
-	
 	bool GetBlockType() { return blockType; }
 	WeaponType GetBlockWeakType() { return itemData.weakType; }
 	
@@ -60,21 +51,22 @@ public:
 	void SetBlockInstanceID(UINT id) { this->blockInstanceID = id; }
 
 	UVInfo GetUVInfo() { return uvInfo; }
+	void Mining();
 
 private:
 	void SetBlockUV();
+	
 
-protected:
+private:
 	UINT key;
 	UINT64 parentIndex = 0;
-	
+
 	bool isOcclusion = false;
 
 	bool isNormal = true;
-	BlockType blockType = EMPTYBLOCK;
+	BlockType blockType = BLOCK;
 	ItemData itemData;
 
-private:
 	bool hasCollider = false;
 	UINT blockInstanceID;
 	UVInfo uvInfo;

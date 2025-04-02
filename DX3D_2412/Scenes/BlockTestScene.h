@@ -20,14 +20,10 @@ private:
 	HUDBar* hpBar;
 	HUDBar* armorBar;
 	HUDBar* hungerBar;
-	Sky* skybox;
 
 	Quad* item;
 
 	Cube* cube;
-
-	Monster* monster;
-	Animal* animal;
 
 	CrackEffect* effect;
 
