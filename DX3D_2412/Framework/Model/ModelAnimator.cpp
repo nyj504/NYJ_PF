@@ -23,6 +23,8 @@ ModelAnimator::~ModelAnimator()
 
 void ModelAnimator::Update()
 {
+    if (!isPlay) return;
+
     UpdateFrame(frameBuffer->GetData());
     
     UpdateWorld();
@@ -30,6 +32,8 @@ void ModelAnimator::Update()
 
 void ModelAnimator::Render()
 {
+    if (!isPlay) return;
+
     frameBuffer->SetVS(3);
     DC->VSSetShaderResources(0, 1, &srv);
 
@@ -79,9 +83,10 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum)
     delete reader;
 }
 
-void ModelAnimator::PlayClip(int clip, float scale, float duration)
+void ModelAnimator::PlayClip(int clip, float scale, float duration, bool isLoop)
 {
     isPlay = true;
+    this->isLoop = isLoop;
 
     frameBuffer->GetData()->next.clip = clip;
     frameBuffer->GetData()->next.scale = scale;
@@ -280,8 +285,23 @@ void ModelAnimator::UpdateFrame(Motion* motion)
 
         if (frame->time >= 1.0f)
         {
-            ++frame->curFrame %= clip->frameCount - 1;
             frame->time -= 1.0f;
+            if (frame->curFrame + 1 >= clip->frameCount)
+            {
+                if (isLoop)
+                {
+                    frame->curFrame = 0;
+                }
+                else
+                {
+                    isPlay = false;
+                    frame->curFrame = clip->frameCount - 1; 
+                }
+            }
+            else
+            {
+                frame->curFrame++;
+            }
         }
     }
 }

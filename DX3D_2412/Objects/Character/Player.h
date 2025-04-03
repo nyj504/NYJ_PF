@@ -11,7 +11,7 @@ class Player : public Character
 private:
 	enum PlayerState
 	{
-		IDLE, MOVE, JUMP, FALL, LAND, TOUCH
+		IDLE, WALK, RUN, MINING, FALL, LAND, DYING
 	};
 
 private:
@@ -32,7 +32,7 @@ public:
 	ModelAnimator* GetModelAnimator() { return modelAnimator; }
 
 	bool IsMove() { return isMove; }
-	bool IsMining() { return isMining; }
+	//bool IsMining() { return isMining; }
 
 	void SetPlayerEquipInfo(PlayerEquipmentInfo info) { this->equipInfo = info; }
 	PlayerEquipmentInfo GetPlayerEquipInfo() { return equipInfo; }

@@ -25,7 +25,8 @@ void SubChunk::Update()
 	RaycastHit hit;
 	Block* closestBlock = nullptr;
 
-	Vector3 rayStartPos = (CAM->IsFPSView()) ? CAM->GetLocalPosition() : PLAYER->GetLocalPosition();
+	Vector3 playerPos = PLAYER->GetLocalPosition();
+	float maxDistance = PLAYER->GetPlayerReach(false);
 
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
@@ -34,7 +35,6 @@ void SubChunk::Update()
 		if (block->IsOcclusion()) continue;
 		if (!block->IsActive()) continue;
 
-		Vector3 playerPos = PLAYER->GetLocalPosition();
 		Vector3 blockPos = block->GetLocalPosition();
 
 		float xDistance = abs(playerPos.x - blockPos.x);
@@ -43,8 +43,6 @@ void SubChunk::Update()
 
 		if (xDistance <= 6 && yDistance <= 6 && zDistance <= 6)
 		{
-			float maxDistance = PLAYER->GetPlayerReach(false);
-
 			if (block->GetCollider()->IsRayCollision(ray, &hit))
 			{
 				if (hit.distance > 0.0f && hit.distance <= maxDistance && hit.distance < minDistance)
@@ -316,6 +314,7 @@ void SubChunk::CheckPlayerCollision()
 	RaycastHit hit;
 
 	float maxHeight = 0.0f;
+	float epsilonY = 0.1f;
 	Vector3 playerPos = PLAYER->GetLocalPosition();
 	Vector3 maxPlayerPosition = PLAYER->GetLocalPosition() + PLAYER->GetCollider()->HalfSize();
 	Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
@@ -375,7 +374,8 @@ void SubChunk::CheckPlayerCollision()
 
 			if (block->GetCollider()->IsBoxCollision(PLAYER->GetCollider(), &overlap))
 			{
-				if (minPlayerPosition.y < maxBoxPosition.y && maxPlayerPosition.y > minBoxPosition.y)
+				if (minPlayerPosition.y < maxBoxPosition.y - epsilonY &&
+					maxPlayerPosition.y > minBoxPosition.y + epsilonY)
 				{
 					if (abs(overlap.x) < abs(overlap.z))
 					{
@@ -406,9 +406,11 @@ void SubChunk::CheckMonsterCollision()
 	RaycastHit hit;
 
 	float maxHeight = 0.0f;
+	float epsilonY = 0.1f;
+
 	Vector3 monsterPos = monster->GetLocalPosition();
-	Vector3 maxMonsterPosition = monster->GetLocalPosition() + monster->GetCollider()->HalfSize();
-	Vector3 minMonsterPosition = monster->GetLocalPosition() - monster->GetCollider()->HalfSize();
+	Vector3 maxMonsterPosition = monsterPos + monster->GetCollider()->HalfSize();
+	Vector3 minMonsterPosition = monsterPos - monster->GetCollider()->HalfSize();
 	Vector3 overlap;
 
 	for (const pair<UINT64, Block*> pair : blocks)
@@ -465,7 +467,8 @@ void SubChunk::CheckMonsterCollision()
 
 			if (block->GetCollider()->IsBoxCollision(monster->GetCollider(), &overlap))
 			{
-				if (minMonsterPosition.y < maxBoxPosition.y && maxMonsterPosition.y > minBoxPosition.y)
+				if (minMonsterPosition.y < maxBoxPosition.y - epsilonY &&
+					maxMonsterPosition.y > minBoxPosition.y + epsilonY)
 				{
 					if (abs(overlap.x) < abs(overlap.z))
 					{

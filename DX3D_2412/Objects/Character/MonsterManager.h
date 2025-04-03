@@ -11,6 +11,7 @@ private:
 public:
 	void Update();
 	void Render();
+	void GetDamaged();
 
 	void Spawn();
 

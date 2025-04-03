@@ -13,6 +13,8 @@ public:
 	virtual void GUIRender() override;
 
 private:
+	Transform* test;
+
 	ModelAnimator* model;
 	BoxCollider* collider;
 };

@@ -29,8 +29,12 @@ void MonsterManager::Update()
 	for (Monster* monster : monsters)
 	{
 		if (monster->IsActive())
+		{
 			monster->Update();
+		}
 	}
+
+	GetDamaged();
 }
 
 void MonsterManager::Render()
@@ -39,6 +43,30 @@ void MonsterManager::Render()
 	{
 		if (monster->IsActive())
 			monster->Render();
+	}
+}
+
+void MonsterManager::GetDamaged()
+{
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+	RaycastHit hit;
+
+	Vector3 playerPos = PLAYER->GetLocalPosition();
+
+	for (Monster* monster : monsters)
+	{
+		if (monster->IsActive())
+		{
+			Vector3 monsterPos = monster->GetLocalPosition();
+
+			if (monster->GetCollider()->IsRayCollision(ray, &hit))
+			{
+				if (KEY->Down(VK_LBUTTON) && hit.distance < 2.0f)
+				{
+					monster->Damaged(PLAYER->GetPlayerEquipInfo().weaponAtk);
+				}
+			}
+		}
 	}
 }
 
@@ -61,6 +89,7 @@ Monster* MonsterManager::GetMonsters()
 	{
 		if (monster->IsActive())
 		{
+			monster->UpdateWorld();
 			return monster;
 		}
 	}

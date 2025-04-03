@@ -21,13 +21,13 @@ void Player::Update()
 
 	if (KEY->Down(VK_SPACE))
 	{
-		SetPlayerState(JUMP);
+		velocity.y += JUMP_POWER;
 	}
 
 	BuildAndMining();
 	SetCursor();
 	Control();
-	Move();
+	//Move();
 	CAM->UpdateWorld();
 }
 
@@ -38,22 +38,18 @@ void Player::Render()
 
 void Player::SetPlayerState(PlayerState state)
 {
-	this->playerState = state;
+	if (state == playerState) return;
 
-	switch (playerState)
+	playerState = state;
+	int clipNum = (int)playerState;
+
+	if (state == MINING)
 	{
-	case Player::IDLE:
-		modelAnimator->PlayClip(0);
-		break;
-	case Player::MOVE:
-		break;
-	case Player::JUMP:
-		velocity.y += JUMP_POWER;
-		break;
-	case Player::TOUCH:
-		modelAnimator->PlayClip(3);
-	default:
-		break;
+		modelAnimator->PlayClip(clipNum, 2.0f, 0.2f);
+	}
+	else
+	{
+		modelAnimator->PlayClip(clipNum);
 	}
 }
 
@@ -77,11 +73,29 @@ void Player::Control()
 	{
 		dir += GetRight();
 	}
-
 	dir.Normalize();
+
+	float walkSpeed = characterData.moveSpeed;
+	float runSpeed = characterData.moveSpeed * 2.0f;
+
+	if (KEY->Press(VK_SHIFT))
+	{
+		SetPlayerState(RUN);
+		Translate(velocity * runSpeed * DELTA);
+	}
+	else if(dir != 0.0f)
+	{
+		SetPlayerState(WALK);
+		Translate(velocity * walkSpeed * DELTA);
+	}
 
 	velocity.x = dir.x;
 	velocity.z = dir.z;
+
+	if (velocity.x <= 0.1f && velocity.z <= 0.1f && playerState != MINING)
+	{
+		SetPlayerState(IDLE);
+	}
 
 	if (!UIManager::Get()->IsPopup())
 	{
@@ -110,27 +124,29 @@ void Player::BuildAndMining()
 			BlockManager::Get()->InteractingBlock();
 		else
 		{	
-
+			SetPlayerState(MINING);
 			BlockManager::Get()->BuildBlock();
 		}
 	}
+	if (KEY->Up(VK_RBUTTON))
+	{
+		SetPlayerState(IDLE);
+	}
+
 	if (KEY->Down(VK_LBUTTON))
 	{
+		SetPlayerState(MINING);
+
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())
 			return;
 
 		BlockManager::Get()->GetCrackEffect()->SetMining(block);
 		BlockManager::Get()->MiningBlock();
-		SetPlayerState(TOUCH);
-		isMining = true;
-	}
-	if (KEY->Press(VK_LBUTTON))
-	{
 		isMining = true;
 	}
 	if (KEY->Up(VK_LBUTTON))
 	{
-		isMining = false;
+		SetPlayerState(IDLE);
 		BlockManager::Get()->CallStopMining();
 		BlockManager::Get()->GetCrackEffect()->ResetMining();
 	}

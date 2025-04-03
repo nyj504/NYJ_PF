@@ -28,20 +28,17 @@ Character::Character(string name)
         modelAnimator->Load();
 
         modelAnimator->ReadClip("Idle"); //0
+        modelAnimator->ReadClip("Walk"); 
+        modelAnimator->ReadClip("Run");
+        modelAnimator->ReadClip("Mining");
         modelAnimator->ReadClip("Dying"); //1
-        modelAnimator->ReadClip("Jump"); //2
-        modelAnimator->ReadClip("Mining"); //3
-        modelAnimator->ReadClip("Run"); //4
-        modelAnimator->ReadClip("Walk"); //5
-        modelAnimator->ReadClip("Dance"); //6 
-        modelAnimator->ReadClip("Mining"); //7
+        modelAnimator->ReadClip("Dance"); //5
         modelAnimator->CreateTexture();
         modelAnimator->SetParent(this);
 
         collider = new BoxCollider();
         collider->SetTag("PlayerCollider");
-        collider->SetParent(modelAnimator);
-        collider->UpdateWorld();
+        collider->SetParent(this);
         collider->Load();
         break;
     case Character::CharacterType::ANIMAL:
@@ -51,24 +48,22 @@ Character::Character(string name)
 
         collider = new BoxCollider();
         collider->SetTag("chickenCollider");
-        collider->SetParent(model);
-        collider->UpdateWorld();
         collider->Load();
         break;
     case Character::CharacterType::MONSTER:
         modelAnimator = new ModelAnimator(name);
         modelAnimator->Load();
-        modelAnimator->SetParent(this);
 
-        modelAnimator->ReadClip("Zombie_Bite"); //0
-        modelAnimator->ReadClip("Zombie_Dying"); //1
-        modelAnimator->ReadClip("Zombie_Walk"); //2
+        modelAnimator->ReadClip("Zombie_Idle"); 
+        modelAnimator->ReadClip("Zombie_Walk");
+        modelAnimator->ReadClip("Zombie_Bite"); 
+        modelAnimator->ReadClip("Zombie_Dying"); 
         modelAnimator->CreateTexture();
+        modelAnimator->SetParent(this);
 
         collider = new BoxCollider();
         collider->SetTag("ZombieCollider");
-        collider->SetParent(modelAnimator);
-        collider->UpdateWorld();
+        collider->SetParent(this);
         collider->Load();
         break;
     default:
@@ -98,6 +93,7 @@ void Character::Update()
     }
 
     collider->UpdateWorld();
+    UpdateWorld();
 }
 
 void Character::Render()

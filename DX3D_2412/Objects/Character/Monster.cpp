@@ -14,7 +14,33 @@ void Monster::Update()
 	UpdateWorld();
 
 	TargetInRange();
+	switch (monsterState)
+	{
+	case Monster::IDLE:
+	{
+		velocity.x = 0;
+		velocity.z = 0;
+	}
+		break;
+	case Monster::MOVE:
+	{
+		this->LookAt(PLAYER->GetLocalPosition());
 
+		Vector3 dir = PLAYER->GetGlobalPosition() - this->GetGlobalPosition();
+		dir.y = 0;
+		dir.Normalize();
+
+		velocity.x = dir.x;
+		velocity.z = dir.z;
+	}
+		break;
+	case Monster::ATTACK:
+		velocity.x = 0;
+		velocity.z = 0;
+		break;
+	case Monster::DIE:
+		break;
+	}
 	Move();
 }
 
@@ -28,14 +54,13 @@ void Monster::Move()
 	Character::Move();
 }
 
-void Monster::Attack()
+void Monster::Damaged(float damage)
 {
-	Vector3 overlap;
-	if (collider->IsBoxCollision(PLAYER->GetCollider(), &overlap))
+	curHp -= damage;
+
+	if (curHp <= 0)
 	{
-		if(overlap.x > 0.1f && overlap.z > 0.1f)
-		velocity = 0;
-		SetMonsterState(ATTACK);
+		SetActive(false);
 	}
 }
 
@@ -51,17 +76,22 @@ void Monster::SetMonsterState(MonsterState state)
 
 void Monster::TargetInRange()
 {
-	if (Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition()) <= IN_RANGE)
+	Vector3 overlap;
+
+	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
+	if (distance <= IN_RANGE)
 	{
-		this->LookAt(PLAYER->GetLocalPosition());
-
-		Vector3 dir = PLAYER->GetGlobalPosition() - this->GetGlobalPosition();
-		dir.y = 0;
-		dir.Normalize();
-
-		velocity.x = dir.x;
-		velocity.z = dir.z;
-
-		SetMonsterState(INRANGE);
+		if (distance <= ATK_RANGE)
+		{
+			SetMonsterState(ATTACK);
+		}
+		else
+		{
+			SetMonsterState(MOVE);
+		}
+	}
+	else
+	{
+		SetMonsterState(IDLE);
 	}
 }

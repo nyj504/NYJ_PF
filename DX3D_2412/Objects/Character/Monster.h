@@ -4,9 +4,10 @@ class Monster : public Character
 private:
 	enum MonsterState
 	{
-		INRANGE, ATTACK, DIE
+		IDLE, MOVE, ATTACK, DIE
 	};
 	const int IN_RANGE = 5;
+	const float ATK_RANGE = 1.5f;
 public:
 	Monster(string name);
 	~Monster();
@@ -15,11 +16,11 @@ public:
 	void Render();
 
 	void Move() override;
-	void Attack();
+	void Damaged(float damage);
 	void SetMonsterState(MonsterState state);
 
 	void TargetInRange();
 
 private:
-	MonsterState monsterState = INRANGE;
+	MonsterState monsterState = IDLE;
 };

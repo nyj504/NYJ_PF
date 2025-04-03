@@ -3,19 +3,22 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	model = new ModelAnimator("Zombie");
+	test = new Transform();
+
+	model = new ModelAnimator("SteveRigged");
 	model->Load();
+	model->SetParent(test);
 
 	collider = new BoxCollider();
-	collider->SetTag("ZombieCollider");
+	collider->SetTag("PlayerCollider");
 	collider->Load();
-	collider->SetParent(model);
+	collider->SetParent(test);
 
-	model->ReadClip("Zombie_Bite");
-	model->ReadClip("Zombie_Dying");
-	model->ReadClip("Zombie_Walk");
+	//model->ReadClip("Zombie_Dying");
+	//model->ReadClip("Zombie_Dying");
+	//model->ReadClip("Zombie_Walk");
 	//model->ReadClip("BowShoot");
-	//model->ReadClip("Jump");
+	model->ReadClip("Jump");
 	//model->ReadClip("Mining");
 	//model->ReadClip("Dance");
 	//model->ReadClip("Swimming");
@@ -39,11 +42,11 @@ void ModelAnimationScene::Update()
 	}
 	if (KEY->Down('2'))
 	{
-		model->PlayClip(1);
+		//model->PlayClip(1);
 	}
 	if (KEY->Down('3'))
 	{
-		model->PlayClip(2);
+		//model->PlayClip(2);
 	}
 	//if (KEY->Down('4'))
 	//{
@@ -78,6 +81,7 @@ void ModelAnimationScene::Update()
 	//	model->PlayClip(10);
 	//}
 
+	test->UpdateWorld();
 	model->Update();
 	collider->UpdateWorld();
 }

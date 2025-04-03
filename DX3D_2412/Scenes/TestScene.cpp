@@ -51,7 +51,7 @@ void TestScene::Update()
 	if (KEY->Down(VK_F10))
 	{
 		CAM->SetTarget(PLAYER);
-		CAM->TargetOptionLoad("QuaterViewMode");
+		CAM->TargetOptionLoad("RenderTargetMode");
 		CAM->SetQuaterView(true);
 	}
 

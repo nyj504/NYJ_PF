@@ -20,7 +20,7 @@ CrackEffect::~CrackEffect()
 
 void CrackEffect::Update()
 {
-    if (!isActive && !PLAYER->IsMining()) return;
+    if (!isActive) return;
 
     Cube::Update();
 
@@ -29,7 +29,7 @@ void CrackEffect::Update()
 
 void CrackEffect::Render()
 {
-    if (!isActive && !PLAYER->IsMining()) return;
+    if (!isActive) return;
 
     spriteBuffer->SetPS(10);
 

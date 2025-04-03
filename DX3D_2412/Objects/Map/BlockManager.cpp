@@ -17,12 +17,6 @@ BlockManager::BlockManager()
 BlockManager::~BlockManager()
 {
 	delete worldGenerator;
-	for (const pair<UINT64, MainChunk*>& chunk : activeChunks)
-	{
-		delete chunk.second;
-	}
-	activeChunks.clear();
-
 	delete particle;
 	delete crackEffect;
 }

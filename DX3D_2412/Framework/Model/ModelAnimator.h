@@ -65,7 +65,8 @@ public:
     void Edit();
 
     void ReadClip(string clipName, UINT clipNum = 0);
-    void PlayClip(int clip, float scale = 1.0f, float duration = 0.2f);
+    void PlayClip(int clip, float scale = 1.0f, float duration = 0.2f, bool isLoop = true);
+    void StopClip() { isPlay = false; }
 
     void CreateTexture();
 
@@ -91,4 +92,5 @@ protected:
     FrameBuffer* frameBuffer;
 
     bool isPlay = true;
+    bool isLoop = true;
 };

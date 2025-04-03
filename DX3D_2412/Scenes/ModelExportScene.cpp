@@ -12,23 +12,23 @@ ModelExportScene::ModelExportScene()
     //exporter->ExportMesh();
     //delete exporter;
 
-    string clipName = "Zombie_Bite";
+    string clipName = "Zombie_Idle";
     file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
     ModelExporter * exporter = new ModelExporter(name, file);
     exporter->ExportClip(clipName);
     delete exporter;
     
-    clipName = "Zombie_Dying";
-    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
-    
-    clipName = "Zombie_Walk";
-    file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
-    exporter = new ModelExporter(name, file);
-    exporter->ExportClip(clipName);
-    delete exporter;
+    //clipName = "Zombie_Dying";
+    //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
+    //
+    //clipName = "Zombie_Walk";
+    //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
+    //exporter = new ModelExporter(name, file);
+    //exporter->ExportClip(clipName);
+    //delete exporter;
     // 
     // clipName = "Jump";
     //file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";
