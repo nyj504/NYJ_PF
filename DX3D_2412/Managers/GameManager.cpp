@@ -57,6 +57,7 @@ void GameManager::Update()
 {
 	Keyboard::Get()->Update();
 	Timer::Get()->Update();
+	Audio::Get()->Update();
 
 	SCENE->Update();
 
@@ -70,6 +71,7 @@ void GameManager::Render()
 	Device::Get()->Clear();
 
 	Environment::Get()->SetRender();
+	Environment::Get()->SetViewport();
 	SCENE->Render();
 
 	ImGui_ImplDX11_NewFrame();
@@ -111,6 +113,7 @@ void GameManager::Create()
 	EventManager::Get();
 	Font::Get();
 	Observer::Get();
+	Audio::Get();
 
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -134,9 +137,8 @@ void GameManager::Release()
 	Keyboard::Delete();
 	SceneManager::Delete();
 	Font::Delete();
-	PlayerSingleton::Delete();
-	InventorySingleton::Delete();
 	Observer::Delete();
+	Audio::Delete();
 
 	Shader::Delete();
 	Texture::Delete();

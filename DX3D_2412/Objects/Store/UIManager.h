@@ -9,6 +9,7 @@ private:
 
 public:
 	void Update();
+	void PreRender();
 	void PostRender();
 	void Edit();
 

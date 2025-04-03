@@ -23,6 +23,16 @@ public:
 		localRotation += Vector3(x, y, z);
 	}
 
+	void LookAt(Vector3 target)
+	{
+		Vector3 dir = target - this->GetGlobalPosition();
+		dir.y = 0;
+		dir.Normalize();
+
+		float yaw = atan2(dir.x, dir.z);
+		SetLocalRotation(Vector3(0, yaw, 0));
+	}
+
 	Vector3 GetRight() const { return right.GetNormalized(); }
 	Vector3 GetLeft() const { return -right.GetNormalized(); }
 	Vector3 GetUp() const { return up.GetNormalized(); }

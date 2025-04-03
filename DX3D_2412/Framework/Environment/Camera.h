@@ -22,6 +22,7 @@ public:
     bool ContainSphere(Vector3 center, float radius);
 
     void SetTarget(Transform* target) { this->target = target; }
+    void UpdateInvenCamera();
 
     bool IsFollowMode() { return isFollowMode; }
    

@@ -10,6 +10,21 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	cloneIcon->SetActive(false);
 	CreateSlot();
 
+	invenCamera = new Camera();
+	invenCamera->SetTarget(PLAYER);
+	invenCamera->TargetOptionLoad("RenderTargetMode");
+	invenCamera->UpdateWorld();
+
+	renderTarget = new RenderTarget();
+	depthStencil = new DepthStencil();
+
+	Texture* texture = Texture::Add(L"Target", renderTarget->GetSRV());
+	quad = new Quad(Vector2(100, 142));
+	quad->GetMaterial()->SetShader(L"Basic/Texture.hlsl");	
+	quad->GetMaterial()->SetDiffuseMap(texture);
+	quad->SetLocalPosition(Vector3(CENTER.x - 75, CENTER.y + 163));
+	quad->UpdateWorld();
+
 	//AddItem(70, 1); //µµ³¢ ½Ã¸®Áî
 	//AddItem(80, 1);
 	//AddItem(59, 1);
@@ -35,6 +50,10 @@ Inventory::~Inventory()
 	for (InventorySlot* slot : slots)
 		delete slot;
 	delete cloneIcon;
+	delete renderTarget;
+	delete depthStencil;
+	delete quad;
+	delete invenCamera;
 }
 
 void Inventory::Update()
@@ -51,6 +70,16 @@ void Inventory::Update()
 		cloneIcon->SetGlobalPosition(mousePos);
 		cloneIcon->UpdateWorld();
 	}
+	invenCamera->Update();
+}
+
+void Inventory::PreRender()
+{
+	if (!isActive) return;
+
+	renderTarget->Set(depthStencil);
+	invenCamera->SetView();
+	PLAYER->Render();
 }
 
 void Inventory::Render()
@@ -63,6 +92,7 @@ void Inventory::Render()
 		slot->Render();
 
 	cloneIcon->Render();
+	quad->Render();
 }
 
 void Inventory::CreateSlot()

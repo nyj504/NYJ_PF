@@ -436,6 +436,7 @@ void SubChunk::CheckMonsterCollision()
 
 	if (maxHeight >= minMonsterPosition.y)
 	{
+		monster->Translate(0, maxHeight - minMonsterPosition.y, 0);
 		monster->SetLand();
 	}
 	else if (maxHeight - minMonsterPosition.y < 0.1f)

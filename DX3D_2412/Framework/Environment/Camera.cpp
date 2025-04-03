@@ -241,6 +241,31 @@ bool Camera::ContainSphere(Vector3 center, float radius)
     return true;
 }
 
+void Camera::UpdateInvenCamera()
+{
+    Vector3 playerPos = PLAYER->GetGlobalPosition();
+    float playerYaw = PLAYER->GetLocalRotation().y;
+
+    Matrix rotY = XMMatrixRotationY(playerYaw);
+    Vector3 forward = Vector3::Forward() * rotY;
+
+    float cameraDistance = 2.5f; // 적절히 조정 가능
+    float cameraHeight = 1.8f;   // 눈높이 정도
+
+    Vector3 camPos = playerPos + forward * cameraDistance;
+    camPos.y += cameraHeight;
+
+    Vector3 dir = playerPos - camPos;
+    dir.Normalize();
+
+    float pitch = asin(dir.y);
+    float yaw = atan2(dir.x, dir.z);
+
+    SetLocalPosition(camPos);
+    SetLocalRotation(Vector3(pitch, yaw, 0));
+    UpdateWorld(); 
+}
+
 void Camera::FreeMode()
 {
     isFollowMode = false;

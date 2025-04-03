@@ -46,11 +46,15 @@ void UIManager::Update()
 	pauseMenuUI->Update();
 }
 
+void UIManager::PreRender()
+{
+	InventorySingleton::Get()->PreRender();
+}
+
 void UIManager::PostRender()
 {
-	InventorySingleton::Get()->Render();
-	
 	craftingUI->PostRender();
+	InventorySingleton::Get()->Render();
 	quickSlot->Render();
 	pauseMenuUI->Render();
 

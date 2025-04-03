@@ -22,6 +22,7 @@ public:
 	~Inventory();
 
 	void Update();
+	void PreRender();
 	void Render();
 	void CreateSlot();
 
@@ -46,6 +47,7 @@ public:
 
 private:
 	vector<InventorySlot*> slots;
+	Camera* invenCamera;
 
 	bool isExcuteCrafting = false;
 	bool isFirstSwap = true;
@@ -56,4 +58,9 @@ private:
 
 	InventorySlot* fromSlot = nullptr;
 	InventorySlot* toSlot = nullptr;
+
+	RenderTarget* renderTarget;
+	DepthStencil* depthStencil;
+
+	Quad* quad;
 };

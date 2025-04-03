@@ -29,6 +29,8 @@ TestScene::~TestScene()
 	UIManager::Delete();
 	EquipManager::Delete();
 	MonsterManager::Delete();
+	PlayerSingleton::Delete();
+	InventorySingleton::Delete();
 	delete sky;
 }
 
@@ -46,7 +48,7 @@ void TestScene::Update()
 		CAM->SetFPSView(true);
 	}
 
-	if (KEY->Down(VK_F4))
+	if (KEY->Down(VK_F10))
 	{
 		CAM->SetTarget(PLAYER);
 		CAM->TargetOptionLoad("QuaterViewMode");
@@ -67,6 +69,7 @@ void TestScene::Update()
 
 void TestScene::PreRender()
 {
+	UIManager::Get()->PreRender();
 }
 
 void TestScene::Render()

@@ -16,6 +16,11 @@ void InventorySingleton::Update()
 	inventory->Update();
 }
 
+void InventorySingleton::PreRender()
+{
+	inventory->PreRender();
+}
+
 void InventorySingleton::Render()
 {
 	inventory->Render();

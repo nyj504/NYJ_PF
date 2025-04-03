@@ -9,6 +9,7 @@ private:
 
 public:
 	void Update();
+	void PreRender();
 	void Render();
 
 	Inventory* GetInventory() { return inventory; }
