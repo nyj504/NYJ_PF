@@ -18,5 +18,10 @@ public:
 	Monster* GetMonsters();
 
 private:
+	float deadTimer = 0.0f;
+	bool isActiveParticle = false;
+	Vector3 deadPosition;
 	vector<Monster*>monsters;
+
+	ParticleSystem* particle;
 };

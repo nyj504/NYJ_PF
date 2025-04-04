@@ -73,6 +73,7 @@ void SubChunk::Update()
 			block->GetCollider()->SetColor(0, 1, 0);
 	}
 	CheckPlayerCollision();
+
 	CheckMonsterCollision();
 }
 
@@ -400,6 +401,7 @@ void SubChunk::CheckPlayerCollision()
 void SubChunk::CheckMonsterCollision()
 {
 	Monster* monster = MonsterManager::Get()->GetMonsters();
+
 	if (!monster) return;
 
 	Ray ray(monster->GetLocalPosition(), Vector3::Down());

@@ -20,7 +20,10 @@ public:
 	void SetMonsterState(MonsterState state);
 
 	void TargetInRange();
+	void Spawn(Vector3 pos);
+	bool IsAlive() { return isAlive; }
 
 private:
+	bool isAlive = false;
 	MonsterState monsterState = IDLE;
 };

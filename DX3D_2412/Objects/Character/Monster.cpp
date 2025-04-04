@@ -2,10 +2,12 @@
 
 Monster::Monster(string name) : Character(name)
 {
+	
 }
 
 Monster::~Monster()
 {
+	
 }
 
 void Monster::Update()
@@ -14,6 +16,7 @@ void Monster::Update()
 	UpdateWorld();
 
 	TargetInRange();
+	
 	switch (monsterState)
 	{
 	case Monster::IDLE:
@@ -39,6 +42,7 @@ void Monster::Update()
 		velocity.z = 0;
 		break;
 	case Monster::DIE:
+		velocity = 0;
 		break;
 	}
 	Move();
@@ -47,6 +51,7 @@ void Monster::Update()
 void Monster::Render()
 {
 	Character::Render();
+	
 }
 
 void Monster::Move()
@@ -60,7 +65,7 @@ void Monster::Damaged(float damage)
 
 	if (curHp <= 0)
 	{
-		SetActive(false);
+		SetMonsterState(DIE);
 	}
 }
 
@@ -76,6 +81,7 @@ void Monster::SetMonsterState(MonsterState state)
 
 void Monster::TargetInRange()
 {
+	if (monsterState == DIE) return;
 	Vector3 overlap;
 
 	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
@@ -94,4 +100,14 @@ void Monster::TargetInRange()
 	{
 		SetMonsterState(IDLE);
 	}
+}
+
+void Monster::Spawn(Vector3 pos)
+{
+	this->SetLocalPosition(pos);
+	isAlive = true;
+	isActive = true;
+	curHp = characterData.maxHp;
+	SetMonsterState(IDLE);
+	UpdateWorld();
 }
