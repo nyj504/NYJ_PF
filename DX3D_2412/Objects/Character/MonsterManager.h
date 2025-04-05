@@ -14,6 +14,7 @@ public:
 	void GetDamaged();
 
 	void Spawn();
+	void ExcuteDie();
 
 	Monster* GetMonsters();
 
@@ -22,6 +23,8 @@ private:
 	bool isActiveParticle = false;
 	Vector3 deadPosition;
 	vector<Monster*>monsters;
+	
+	Monster* curMonster = nullptr;
 
 	ParticleSystem* particle;
 };

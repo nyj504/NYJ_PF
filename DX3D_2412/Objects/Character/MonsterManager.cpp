@@ -16,6 +16,9 @@ MonsterManager::MonsterManager()
 	}
 
 	particle = new ParticleSystem("Resources/Textures/Particle/character_dead.fx");
+
+	EventManager::Get()->AddEvent("ExcuteDie", [this]() 
+		{ this->ExcuteDie(); });
 }
 
 MonsterManager::~MonsterManager()
@@ -32,15 +35,6 @@ void MonsterManager::Update()
 {
 	particle->Update();
 
-	if (deadTimer >= 0.0f)
-	{
-		deadTimer -= DELTA;
-	}
-	if (deadTimer <= 0.2f && !isActiveParticle)
-	{
-		particle->Play(deadPosition);
-		isActiveParticle = true;
-	}
 	for (Monster* monster : monsters)
 	{
 		if (monster->IsActive())
@@ -76,12 +70,12 @@ void MonsterManager::GetDamaged()
 			{
 				if (KEY->Down(VK_LBUTTON) && hit.distance < 2.0f)
 				{
-					monster->Damaged(PLAYER->GetPlayerEquipInfo().weaponAtk);
-					
+					monster->Damaged(PLAYER->GetPlayerEquipInfo().weaponAtk, PLAYER);
+					curMonster = monster;
+
 					if (monster->GetHp() <= 0.0f)
 					{
-						deadTimer = 1.0f;
-						deadPosition = monster->GetLocalPosition();
+						deadPosition = monster->GetLocalPosition() - monster->GetCollider()->HalfSize();
 					}
 				}
 			}
@@ -99,6 +93,15 @@ void MonsterManager::Spawn()
 			return;
 		}
 	}
+}
+
+void MonsterManager::ExcuteDie()
+{
+	CharacterData data = curMonster->GetCharacterData();
+	ItemManager::Get()->DropItem(data.dropItemKey, deadPosition, data.dropItemAmount);
+	curMonster->SetActive(false);
+	particle->Play(deadPosition);
+	curMonster = nullptr;
 }
 
 Monster* MonsterManager::GetMonsters()

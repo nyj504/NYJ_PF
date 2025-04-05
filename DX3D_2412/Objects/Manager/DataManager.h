@@ -38,6 +38,9 @@ struct CharacterData
     UINT maxHp;
     UINT atk;
     float moveSpeed;
+    UINT range;
+    UINT dropItemKey;
+    UINT dropItemAmount;
 };
 
 class DataManager : public Singleton<DataManager>

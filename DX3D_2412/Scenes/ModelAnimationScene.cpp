@@ -18,7 +18,7 @@ ModelAnimationScene::ModelAnimationScene()
 	//model->ReadClip("Zombie_Dying");
 	//model->ReadClip("Zombie_Walk");
 	//model->ReadClip("BowShoot");
-	model->ReadClip("Jump");
+	model->ReadClip("Run");
 	//model->ReadClip("Mining");
 	//model->ReadClip("Dance");
 	//model->ReadClip("Swimming");

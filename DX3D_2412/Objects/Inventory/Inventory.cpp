@@ -151,7 +151,7 @@ void Inventory::UpdateCloneIcon()
 
 void Inventory::Clear()
 {
-	if (fromSlot->GetTag() == "SyncQuickSlot")
+	if (toSlot->GetTag() == "SyncQuickSlot")
 	{
 		isRefreshQuickSlot = true;
 	}
@@ -377,11 +377,5 @@ InventorySlot* Inventory::FindSlotAtPosition()
 
 pair<UINT, UINT> Inventory::GetQuickSlotData(int index)
 {
-	if (index < 0 || index >= 9) 
-		return { 0, 0 };
-
-	if (slots[index]->GetTag() == "SyncQuickSlot")
-		return { slots[index]->GetKey(), slots[index]->GetCount() };
-
-	return { 0, 0 };
+	return { slots[index]->GetKey(), slots[index]->GetCount() };
 }

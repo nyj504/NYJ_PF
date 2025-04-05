@@ -2,7 +2,38 @@
 
 Monster::Monster(string name) : Character(name)
 {
-	
+	EventManager::Get()->AddEvent("ExcuteAttack", [this]()
+		{ this->ExcuteAttack(); });
+
+	if (name == "Zombie")
+	{
+		modelAnimator = new ModelAnimator(name);
+		modelAnimator->Load();
+
+		modelAnimator->ReadClip("Zombie_Idle"); //0
+		modelAnimator->ReadClip("Zombie_Walk"); //1
+		modelAnimator->ReadClip("Zombie_Bite"); //2
+		modelAnimator->ReadClip("Zombie_Dying"); //3
+		modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteAttack"); }, 0.45f);
+		modelAnimator->GetClip(3)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDie"); }, 0.85f);
+		modelAnimator->CreateTexture();
+		modelAnimator->SetParent(this);
+
+		collider = new BoxCollider();
+		collider->SetTag("ZombieCollider");
+		collider->SetParent(this);
+		collider->Load();
+	}
+	else
+	{
+		model = new Model(name);
+		model->Load();
+		model->SetParent(this);
+
+		collider = new BoxCollider();
+		collider->SetTag("chickenCollider");
+		collider->Load();
+	}
 }
 
 Monster::~Monster()
@@ -59,9 +90,9 @@ void Monster::Move()
 	Character::Move();
 }
 
-void Monster::Damaged(float damage)
+void Monster::Damaged(float damage, Character* target)
 {
-	curHp -= damage;
+	Character::Damaged(damage, target);
 
 	if (curHp <= 0)
 	{
@@ -74,9 +105,17 @@ void Monster::SetMonsterState(MonsterState state)
 	if (state == monsterState) return;
 
 	monsterState = state; 
-	int clipNum = (int)monsterState;
 
-	modelAnimator->PlayClip(clipNum);
+	if (modelAnimator)
+	{
+		int clipNum = (int)monsterState;
+		modelAnimator->PlayClip(clipNum);
+	}
+}
+
+void Monster::ExcuteAttack()
+{
+	PLAYER->Damaged(characterData.atk, this);
 }
 
 void Monster::TargetInRange()
@@ -85,7 +124,7 @@ void Monster::TargetInRange()
 	Vector3 overlap;
 
 	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
-	if (distance <= IN_RANGE)
+	if (distance <= characterData.range)
 	{
 		if (distance <= ATK_RANGE)
 		{

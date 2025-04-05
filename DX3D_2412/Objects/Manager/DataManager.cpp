@@ -107,6 +107,9 @@ void DataManager::LoadCharacterData()
         data.maxHp = stoi(rowData[2]);
         data.atk = stoi(rowData[3]);
         data.moveSpeed = stof(rowData[4]);
+        data.range = stoi(rowData[5]);
+        data.dropItemKey = stoi(rowData[6]);
+        data.dropItemAmount = stoi(rowData[7]);
 
         characterDatas[data.key] = data;
     }

@@ -65,9 +65,9 @@ public:
     void Edit();
 
     void ReadClip(string clipName, UINT clipNum = 0);
-    void PlayClip(int clip, float scale = 1.0f, float duration = 0.2f, bool isLoop = true);
+    void PlayClip(int clip, float scale = 1.0f, float duration = 0.2f);
     void StopClip() { isPlay = false; }
-
+  
     void CreateTexture();
 
     Matrix GetTransformByNode(int nodeIndex);
@@ -92,5 +92,4 @@ protected:
     FrameBuffer* frameBuffer;
 
     bool isPlay = true;
-    bool isLoop = true;
 };

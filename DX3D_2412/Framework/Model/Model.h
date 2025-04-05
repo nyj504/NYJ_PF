@@ -12,6 +12,7 @@ public:
     void SetShader(wstring file);
     void SetVertexShader(wstring file);
     void SetPixelShader(wstring file);
+    vector<Material*> GetMaterials() { return materials; }
 
 private:
     void ReadMaterial();

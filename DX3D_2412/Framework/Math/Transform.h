@@ -32,6 +32,15 @@ public:
 		float yaw = atan2(dir.x, dir.z);
 		SetLocalRotation(Vector3(0, yaw, 0));
 	}
+	void EscapeFrom(Vector3 target)
+	{
+		Vector3 dir = this->GetGlobalPosition() - target; 
+		dir.y = 0;
+		dir.Normalize();
+
+		float yaw = atan2(dir.x, dir.z);
+		SetLocalRotation(Vector3(0, yaw, 0));
+	}
 
 	Vector3 GetRight() const { return right.GetNormalized(); }
 	Vector3 GetLeft() const { return -right.GetNormalized(); }

@@ -58,4 +58,6 @@ void SlotIcon::SetItem(UINT key, UINT count)
 		path = "Resources/Textures/Item/" + data.image + ".png";
 
 	material->SetDiffuseMap(Utility::ToWString(path));
+
+	SetActive(true);
 }

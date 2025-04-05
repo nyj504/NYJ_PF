@@ -20,55 +20,6 @@ Character::Character(string name)
 
     characterData = DataManager::Get()->GetCharacterData(characterKey);
     curHp = characterData.maxHp;
-
-    switch (characterType)
-    {
-    case Character::CharacterType::STEVE:
-        modelAnimator = new ModelAnimator(name);
-        modelAnimator->Load();
-
-        modelAnimator->ReadClip("Idle"); //0
-        modelAnimator->ReadClip("Walk"); 
-        modelAnimator->ReadClip("Run");
-        modelAnimator->ReadClip("Mining");
-        modelAnimator->ReadClip("Dying"); //1
-        modelAnimator->ReadClip("Dance"); //5
-        modelAnimator->CreateTexture();
-        modelAnimator->SetParent(this);
-
-        collider = new BoxCollider();
-        collider->SetTag("PlayerCollider");
-        collider->SetParent(this);
-        collider->Load();
-        break;
-    case Character::CharacterType::ANIMAL:
-        model = new Model(name);
-        model->Load();
-        model->SetParent(this);
-
-        collider = new BoxCollider();
-        collider->SetTag("chickenCollider");
-        collider->Load();
-        break;
-    case Character::CharacterType::MONSTER:
-        modelAnimator = new ModelAnimator(name);
-        modelAnimator->Load();
-
-        modelAnimator->ReadClip("Zombie_Idle"); 
-        modelAnimator->ReadClip("Zombie_Walk");
-        modelAnimator->ReadClip("Zombie_Bite"); 
-        modelAnimator->ReadClip("Zombie_Dying"); 
-        modelAnimator->CreateTexture();
-        modelAnimator->SetParent(this);
-
-        collider = new BoxCollider();
-        collider->SetTag("ZombieCollider");
-        collider->SetParent(this);
-        collider->Load();
-        break;
-    default:
-        break;
-    }
 }
 
 Character::~Character()
@@ -83,6 +34,8 @@ Character::~Character()
 
 void Character::Update()
 {
+    DeactivateHitState();
+
     if (modelAnimator)
     {
         modelAnimator->Update();
@@ -112,4 +65,69 @@ void Character::Render()
 void Character::Move()
 {
     Translate(velocity * characterData.moveSpeed * DELTA);
+}
+
+
+void Character::ActivateHitState()
+{
+    hitTimer = 0.0f;
+    isHitEffect = true;
+
+    vector<Material*> materials;
+
+    if (characterType == CharacterType::ANIMAL )
+    {
+        materials = model->GetMaterials();
+    }
+    else
+    {
+        materials = modelAnimator->GetMaterials();
+    }
+
+    for (Material* material : materials)
+    {
+        material->GetData()->diffuse = { 1.0f, 0.0f, 0.0f, 1.0f };
+    }
+}
+
+void Character::DeactivateHitState()
+{
+    if (isHitEffect)
+    {
+        hitTimer += DELTA;
+
+        if (hitTimer >= HIT_DURATION)
+        {
+            vector<Material*> materials;
+
+            if (characterType == CharacterType::ANIMAL)
+            {
+                materials = model->GetMaterials();
+            }
+            else
+            {
+                materials = modelAnimator->GetMaterials();
+            }
+
+            for (Material* material : materials)
+            {
+                material->GetData()->diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+            }
+
+            isHitEffect = false;
+        }
+    }
+}
+
+void Character::Damaged(float damage, Character* target)
+{
+    curHp -= damage;
+
+    Vector3 dir = this->GetGlobalPosition() - target->GetGlobalPosition();
+    dir.y = 0.0f;
+    dir.Normalize();
+
+    this->Translate(dir * KNOCKBACK_RANGE);
+
+    ActivateHitState();
 }

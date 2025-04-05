@@ -1,4 +1,4 @@
-key,name,hp,atk,moveSpeed
-1001,Steve,20,2,5
-1002,Zombie,20,2,0.5
-1003,chicken,10,0,1.5
+key,name,hp,atk,moveSpeed,range,dropItemKey,dropItemAmount
+1001,Steve,20,2,3,2,0,0
+1002,Zombie,20,2,1,6,54,1
+1003,chicken,10,0,1.5,10,51,3

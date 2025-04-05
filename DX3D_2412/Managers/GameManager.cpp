@@ -17,19 +17,15 @@
 
 GameManager::GameManager()
 {
-	//SCENE->Create("Grid", new GridScene());
-	//SCENE->Create("Start", new LightScene());
-	//SCENE->Create("Start", new InstancingScene());
-	//SCENE->Create("Start", new TerrainScene());
-
 	//SCENE->Create("Start", new ModelAnimationScene());
 	//SCENE->Create("Start", new ModelInstancingScene());
 	//SCENE->Create("Start", new BlockTestScene());
 	//SCENE->Create("Start", new ModelEquipScene());
-	 
-	//SCENE->Create("Start", new ParticleEditorScene());
 	//SCENE->Create("Start", new WeatherScene());
 
+	//SCENE->Create("Grid", new GridScene());
+	//SCENE->Create("Start", new ParticleEditorScene());
+	//
 	//SCENE->Add("Start");
 	//SCENE->Add("Grid");
 	

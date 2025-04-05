@@ -4,6 +4,23 @@ Player::Player(string name) : Character(name)
 {
 	tag = "Player";
 
+	modelAnimator = new ModelAnimator(name);
+	modelAnimator->Load();
+
+	modelAnimator->ReadClip("Idle"); //0
+	modelAnimator->ReadClip("Walk");
+	modelAnimator->ReadClip("Run");
+	modelAnimator->ReadClip("Mining");
+	modelAnimator->ReadClip("Dying"); //1
+	modelAnimator->ReadClip("Dance"); //5
+	modelAnimator->CreateTexture();
+	modelAnimator->SetParent(this);
+
+	collider = new BoxCollider();
+	collider->SetTag("PlayerCollider");
+	collider->SetParent(this);
+	collider->Load();
+
 	clientCenterPos = { SCREEN_WIDTH >> 1, SCREEN_HEIGHT >> 1 };
 	ClientToScreen(hWnd, &clientCenterPos);
 	SetCursorPos(clientCenterPos.x, clientCenterPos.y);

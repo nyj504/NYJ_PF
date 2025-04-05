@@ -52,7 +52,7 @@ key,name,image,weakType,particle,canBuild,canCraft,textureType,craftingType,text
 51,깃털,feather,EVERYTHING,None,0,0,Quad,None,0,0,51,1,None,Material,0,0,0
 52,청금석,lapis_lazuli,EVERYTHING,None,0,0,Quad,None,0,0,52,1,None,Material,0,0,0
 53,레드스톤,redstone,EVERYTHING,None,0,0,Quad,None,0,0,53,1,None,Material,0,0,0
-54,김치,leather,EVERYTHING,None,0,0,Quad,None,0,0,54,1,None,Food,0,0,0
+54,김치,rotten_flesh,EVERYTHING,None,0,0,Quad,None,0,0,54,1,None,Food,0,0,0
 55,수박조각,melon_slice,EVERYTHING,None,0,0,Quad,None,0,0,55,1,None,Food,0,0,0
 56,유리,glass,EVERYTHING,None,0,0,Quad,None,0,0,56,1,None,Block,0,0,0
 57,물양동이,water_bucket,EVERYTHING,None,0,0,Quad,None,0,0,57,1,None,Weapon,0,0,0
@@ -96,3 +96,5 @@ key,name,image,weakType,particle,canBuild,canCraft,textureType,craftingType,text
 95,다이아바지,diamond_leggings,EVERYTHING,None,0,1,Quad,CraftingBox,0,0,95,1,49_49_49_49_0_49_49_0_49,Armor,0,0,1
 96,책,book,EVERYTHING,None,0,1,Quad,CraftingBox,0,0,96,1,2_2_2_2_2_2_0_0_0,Material,1,0,4
 97,실,string,EVERYTHING,None,0,0,Quad,CraftingBox,0,0,97,1,None,Material,0,0,0
+98,닭고기,chicken_raw,EVERYTHING,None,0,1,Quad,None,0,0,98,1,99,Food,0,1,1
+99,치킨,chicken_cooked,EVERYTHING,None,0,1,Quad,Furnace,0,0,99,1,None,Food,0,0,0

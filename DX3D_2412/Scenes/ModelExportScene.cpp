@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-    string name = "Zombie";
+    string name = "SteveRigged";
     string extension = "fbx";
     string file = "Resources/Models/FBX/" + name + "." + extension;
     
@@ -12,7 +12,7 @@ ModelExportScene::ModelExportScene()
     //exporter->ExportMesh();
     //delete exporter;
 
-    string clipName = "Zombie_Idle";
+    string clipName = "Run";
     file = "Resources/Models/Animations/" + name + "/" + clipName + ".fbx";    
     ModelExporter * exporter = new ModelExporter(name, file);
     exporter->ExportClip(clipName);

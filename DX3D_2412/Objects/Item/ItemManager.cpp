@@ -22,7 +22,6 @@ ItemManager::ItemManager()
 
 ItemManager::~ItemManager()
 {
-
 	for (DropQuad* item : dropItems)
 		delete item;
 	for (DropCube* singleBlock : dropSingleBlocks)
