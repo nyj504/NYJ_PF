@@ -5,13 +5,15 @@ public:
 	PlayerHUD();
 	~PlayerHUD();
 
-	void Update();
 	void Render();
+	void UpdateArmorBar(int count);
+	void UpdateHpBar(int amount);
+	void UpdateHungerBar();
 
 	void CreateHUDSlot();
 
 private:
-	vector<Quad*>hungerSlots;
-	vector<Quad*>healthSlots;
-	vector<Quad*>armorSlots;
+	HUDBar* hpBar;
+	HUDBar* armorBar;
+	HUDBar* hungerBar;
 };

@@ -123,7 +123,7 @@ void Character::Damaged(float damage, Character* target)
 {
     curHp -= damage;
 
-    Vector3 dir = this->GetGlobalPosition() - target->GetGlobalPosition();
+    Vector3 dir = this->GetLocalPosition() - target->GetLocalPosition();
     dir.y = 0.0f;
     dir.Normalize();
 

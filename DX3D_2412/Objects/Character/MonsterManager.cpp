@@ -19,6 +19,8 @@ MonsterManager::MonsterManager()
 
 	EventManager::Get()->AddEvent("ExcuteDie", [this]() 
 		{ this->ExcuteDie(); });
+	EventManager::Get()->AddEvent("ExcuteDamaged", [this]()
+		{ this->ExcuteDamaged(); });
 }
 
 MonsterManager::~MonsterManager()
@@ -102,6 +104,11 @@ void MonsterManager::ExcuteDie()
 	curMonster->SetActive(false);
 	particle->Play(deadPosition);
 	curMonster = nullptr;
+}
+
+void MonsterManager::ExcuteDamaged()
+{
+	attackMonster->ExcuteAttack();
 }
 
 Monster* MonsterManager::GetMonsters()

@@ -15,23 +15,29 @@ void HUDBar::Create(const string& texturePath, Vector3 startPos)
 	}
 }
 
-void HUDBar::UpdateArmorBar(int count)
+void HUDBar::UpdateBar(string type, int count)
 {
 	int fullSlot = count / 2;
 	int halfSlot = count - (fullSlot * 2);
 
 	for (int i = 0; i < fullSlot; i++)
 	{
-		slots[i]->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/armor_full.png");
+		string path = "Resources/Textures/UI/" + type + "_full.png";
+		slots[i]->GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
 	}
 
 	for (int i = fullSlot; i < MAX_SLOTS; i++)
 	{
-		slots[i]->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/armor_empty.png");
+		string path = "Resources/Textures/UI/" + type + "_empty.png";
+
+		slots[i]->GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
 	}
+
 	if (halfSlot != 0)
 	{
-		slots[fullSlot]->GetMaterial()->SetDiffuseMap(L"Resources/Textures/UI/armor_half.png");
+		string path = "Resources/Textures/UI/" + type + "_half.png";
+
+		slots[fullSlot]->GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
 	}
 }
 

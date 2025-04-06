@@ -23,7 +23,6 @@ public:
 
 	void TargetInRange();
 	void Spawn(Vector3 pos);
-	bool IsAlive() { return isAlive; }
 
 protected:
 	float idleWanderTimer = 0.0f;

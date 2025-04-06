@@ -5,15 +5,13 @@ struct PlayerEquipmentInfo
 	float weaponAtk = 10.0f;
 	UINT armorDef;
 };
+enum PlayerState
+{
+	IDLE, WALK, RUN, MINING, DYING, DANCE
+};
 
 class Player : public Character
 {
-private:
-	enum PlayerState
-	{
-		IDLE, WALK, RUN, MINING, FALL, LAND, DYING
-	};
-
 private:
 	const float JUMP_POWER = 4.5f;
 	const float MAX_BLOCK_REACH = 5.0f;

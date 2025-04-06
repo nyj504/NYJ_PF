@@ -15,8 +15,10 @@ public:
 
 	void Spawn();
 	void ExcuteDie();
+	void ExcuteDamaged();
 
 	Monster* GetMonsters();
+	void SetAttackingMonster(Monster* monster) { attackMonster = monster; }
 
 private:
 	float deadTimer = 0.0f;
@@ -25,6 +27,7 @@ private:
 	vector<Monster*>monsters;
 	
 	Monster* curMonster = nullptr;
+	Monster* attackMonster = nullptr;
 
 	ParticleSystem* particle;
 };

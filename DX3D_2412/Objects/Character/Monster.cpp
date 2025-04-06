@@ -2,9 +2,6 @@
 
 Monster::Monster(string name) : Character(name)
 {
-	EventManager::Get()->AddEvent("ExcuteAttack", [this]()
-		{ this->ExcuteAttack(); });
-
 	if (name == "Zombie")
 	{
 		modelAnimator = new ModelAnimator(name);
@@ -14,7 +11,7 @@ Monster::Monster(string name) : Character(name)
 		modelAnimator->ReadClip("Zombie_Walk"); //1
 		modelAnimator->ReadClip("Zombie_Bite"); //2
 		modelAnimator->ReadClip("Zombie_Dying"); //3
-		modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteAttack"); }, 0.45f);
+		modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDamaged"); }, 0.40f);
 		modelAnimator->GetClip(3)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDie"); }, 0.85f);
 		modelAnimator->CreateTexture();
 		modelAnimator->SetParent(this);
@@ -111,11 +108,24 @@ void Monster::SetMonsterState(MonsterState state)
 		int clipNum = (int)monsterState;
 		modelAnimator->PlayClip(clipNum);
 	}
+	if (state == ATTACK)
+	{
+		MonsterManager::Get()->SetAttackingMonster(this);
+	}
 }
 
 void Monster::ExcuteAttack()
 {
 	PLAYER->Damaged(characterData.atk, this);
+	
+	if (PLAYER->GetHp() <= 0)
+	{
+		PLAYER->SetPlayerState(PlayerState::DYING);
+	}
+	else
+	{
+		UIManager::Get()->GetPlayerHUDBar()->UpdateHpBar(PLAYER->GetHp());
+	}
 }
 
 void Monster::TargetInRange()
@@ -126,7 +136,7 @@ void Monster::TargetInRange()
 	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
 	if (distance <= characterData.range)
 	{
-		if (distance <= ATK_RANGE)
+		if (distance <= ATK_RANGE && monsterState)
 		{
 			SetMonsterState(ATTACK);
 		}
