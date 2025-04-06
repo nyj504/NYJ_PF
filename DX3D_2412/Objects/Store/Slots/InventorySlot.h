@@ -21,7 +21,8 @@ public:
 	void Render();
 
 	void SetItem(UINT key, UINT count);
-	void DecreaseItem(UINT key, UINT count);
+	void DecreaseItem(UINT count);
+	void ConsumeItem();
 
 	UINT GetKey() { return slotKey; }
 	int GetCount() { return itemCount; }

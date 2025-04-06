@@ -11,26 +11,14 @@ CraftSlot::CraftSlot(CraftBox* craftBox)
 void CraftSlot::Update()
 {
 	InventorySlot::Update();
-	
-	if (tag == "CraftSlot" || tag == "ResultSlot")
-	{
-		TriggerCraftItem();
-	}
-	else if (tag == "HelmetSlot" || tag == "ChestPlateSlot" || 
+
+	if (tag == "HelmetSlot" || tag == "ChestPlateSlot" || 
 		tag == "LeggingsSlot" || tag == "BootsSlot" || slotKey != 0)
 	{
 		TriggerEquipItem();
 	}
 }
 
-void CraftSlot::TriggerCraftItem()
-{
-	if (isChanged)
-	{
-		craftBox->CraftItem();
-		isChanged = false;
-	}
-}
 
 void CraftSlot::TriggerEquipItem()
 {

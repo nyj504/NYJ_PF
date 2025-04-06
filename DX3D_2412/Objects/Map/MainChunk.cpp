@@ -48,8 +48,8 @@ void MainChunk::GenerateTerrain()
             float worldX = (chunkPosition.x + x) / 20.0f;
             float worldZ = (chunkPosition.z + z) / 20.0f;
 
-            float baseHeight = 0.0f;
-            float noiseFactor = 0.0f;
+            float baseHeight = 0.0f; //지표면 서브청크의 기본 높이
+            float noiseFactor = 0.0f; // 펄린 노이즈 흔들림
 
             switch (terrainType)
             {
@@ -66,9 +66,8 @@ void MainChunk::GenerateTerrain()
                 noiseFactor = 11.0f;
                 break;
             }
-
             float height = perlin.Noise(worldX, worldZ) * noiseFactor + baseHeight;
-            heightMap[x][z] = (int)(height);
+            heightMap[x][z] = (int)(height); //서브청크의 높이맵 결정 
         }
     }
 

@@ -74,7 +74,7 @@ void Furnace::CraftItem()
         UINT totalResultCount = ingredientData.craftAmount * ingredientCount;
 
         craftSlots[2]->SetItem(stoi(ingredientData.serialKey), totalResultCount);
-        craftSlots[1]->DecreaseItem(fuelKey, 1);
-        craftSlots[0]->DecreaseItem(ingredientKey, ingredientCount);
+        craftSlots[1]->DecreaseItem(1);
+        craftSlots[0]->DecreaseItem(ingredientCount);
     }
 }

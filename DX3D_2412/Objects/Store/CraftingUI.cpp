@@ -45,4 +45,13 @@ void CraftingUI::SetTopSlot(string type)
 	currentTopSlot = craftBoxes[type];
 	currentTopSlot->SetActive(isActive);
 	INVEN->SetActive(isActive);
+
+	if (type == "CraftInventory")
+	{
+		INVEN->SetRenderTargetActivate(true);
+	}
+	else
+	{
+		INVEN->SetRenderTargetActivate(false);
+	}
 }

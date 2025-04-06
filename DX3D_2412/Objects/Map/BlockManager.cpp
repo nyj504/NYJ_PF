@@ -55,6 +55,7 @@ void BlockManager::BuildBlock()
 	if (!selectedBlock) return;
 
 	pair<UINT, UINT>quickSlotData = QUICKSLOT->GetSelectedIndexData();
+	UINT selectedSlotNum = QUICKSLOT->GetSelectedIndex();
 	
 	if (quickSlotData.first == 0) return;
 
@@ -71,6 +72,7 @@ void BlockManager::BuildBlock()
 	{
 		Vector3 buildPosition = selectedBlock->GetGlobalPosition() + hit.normal;
 		worldGenerator->BuildBlock(buildPosition, quickSlotData.first);
+		INVEN->ConsumeItem(selectedSlotNum);
 	}
 }
 
@@ -125,7 +127,7 @@ void BlockManager::CallStopMining()
 
 void BlockManager::ActivateRenderingChunks()
 {
-	int renderDistance = 4; 
+	int renderDistance = 6; 
 
 	activeChunks.clear();
 

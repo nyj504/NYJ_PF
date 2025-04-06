@@ -539,27 +539,24 @@ void SubChunk::FindVisibleBlocks()
 				}
 
 				InstanceData visibleInstanceData;
-				UVInfo uvInfo = block->GetUVInfo();
+				UVInfo uvInfo = block->GetUVInfo(); 
 
-				block->SetOcclusion(false);
+				block->SetOcclusion(false); // 블록이 한 방위라도 노출되면 인스턴스 데이터 추가
 
 				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
 				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
 
-				visibleInstanceData.curFrame = uvInfo.uvStart;
+				visibleInstanceData.curFrame = uvInfo.uvStart; 
 				visibleInstanceData.maxFrame = uvInfo.uvEnd;
 
-				visibleInstanceData.index = block->GetBlockInstanceID();
+				visibleInstanceData.index = block->GetBlockInstanceID(); //블록 고유의 인스턴스 아이디 
 				visibleInstanceData.isActive = block->IsActive();
 					
-				if (block->IsNormal())
-				{
+				if (block->IsNormal()) // 모든 면이 동일한 블럭 
 					visibleSingleInstanceDatas.push_back(visibleInstanceData);
-				}
-				else
-				{
+				else // 각기 다른 면을 가진 블럭 
 					visibleMultiInstanceDatas.push_back(visibleInstanceData);
-				}
+				
 			}
 		}
 	}
@@ -576,6 +573,36 @@ void SubChunk::ActiveCollider()
 	hasCollider = true;
 }
 
+void SubChunk::Test()
+{
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+		
+		InstanceData visibleInstanceData;
+		UVInfo uvInfo = block->GetUVInfo();
+
+		Vector3 blockWorldPos = block->GetGlobalPosition();
+
+		visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
+		visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
+
+		visibleInstanceData.curFrame = uvInfo.uvStart;
+		visibleInstanceData.maxFrame = uvInfo.uvEnd;
+
+		visibleInstanceData.index = block->GetBlockInstanceID();
+
+		if (block->IsNormal())
+		{
+			visibleSingleInstanceDatas.push_back(visibleInstanceData);
+		}
+		else
+		{
+			visibleMultiInstanceDatas.push_back(visibleInstanceData);
+		}
+	}
+}
+
 void SubChunk::BuildBlock(Vector3 pos, int blockType)
 {
 	UINT64 blockID = GameMath::GenerateBlockID(pos);
@@ -587,6 +614,7 @@ void SubChunk::BuildBlock(Vector3 pos, int blockType)
 	newBlock->UpdateWorld();
 	newBlock->EnableCollider();
 	newBlock->SetActive(true);
+	newBlock->SetOcclusion(false);
 	newBlock->SetBlockInstanceID(blockIndex);
 	blocks[blockID] = newBlock;
 

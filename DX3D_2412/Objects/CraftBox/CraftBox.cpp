@@ -3,6 +3,9 @@
 CraftBox::CraftBox(wstring path) : Quad(path)
 {
 	craftingRecipes = DataManager::Get()->GetCraftingRecipes();
+
+	EventManager::Get()->AddEvent("ExcuteCrafting", [this]()
+		{this->CraftItem(); });
 }
 
 CraftBox::~CraftBox() 

@@ -19,7 +19,7 @@ ModelAnimator::~ModelAnimator()
 
     texture->Release();
     srv->Release();
-}
+}       
 
 void ModelAnimator::Update()
 {

@@ -35,7 +35,7 @@ void SlotIcon::UpdateFromSlot(InventorySlot* slot)
 	itemCounts.first = slot->GetKey();
 	itemCounts.second = slot->GetCount();
 
-	if (itemCounts.first != 0)
+	if (itemCounts.first != 0 && itemCounts.second != 0)
 		SetActive(true);
 }
 

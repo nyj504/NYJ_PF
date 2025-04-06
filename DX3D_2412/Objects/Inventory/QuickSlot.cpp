@@ -14,6 +14,7 @@ QuickSlot::QuickSlot() : Quad(L"Resources/Textures/UI/HotBar.png")
     Font::Get()->AddStyle("Default", L"µ¸¿òÃ¼");
 
     SetActive(true);
+    UpdateHoldingHands();
 }
 
 QuickSlot::~QuickSlot()
@@ -80,7 +81,13 @@ void QuickSlot::OnMouseWheel(int delta)
     {
         selectedIndex = (selectedIndex - 1 + MAX_SLOTSIZE) % MAX_SLOTSIZE;
     }
+    UpdateHoldingHands();
 
+    HighlightSelectedQuickSlot();
+}
+
+void QuickSlot::UpdateHoldingHands()
+{
     pair<UINT, UINT>quickSlotData = GetSelectedIndexData();
 
     if (quickSlotData.first != 0)
@@ -132,8 +139,6 @@ void QuickSlot::OnMouseWheel(int delta)
     }
     else
         EquipManager::Get()->UnEquipWeapon();
-
-    HighlightSelectedQuickSlot();
 }
 
 void QuickSlot::SyncWithInventory()
@@ -144,12 +149,14 @@ void QuickSlot::SyncWithInventory()
     {
         pair<UINT, UINT> quickSlotData = INVEN->GetQuickSlotData(i); 
 
-        if (quickSlotData.first == 0)
+        if (quickSlotData.first == 0 || quickSlotData.second <= 0)
             quickSlotIcons[i]->Clear();
         else
             quickSlotIcons[i]->SetItem(quickSlotData.first, quickSlotData.second);
     }
         
+    UpdateHoldingHands();
+
     INVEN->SetRefreshQuickSlot(false);
     
 }

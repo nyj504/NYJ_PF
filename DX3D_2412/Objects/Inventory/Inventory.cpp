@@ -34,13 +34,18 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	//AddItem(61, 1); // 삽 시리즈
 	//AddItem(68, 1);
 	//AddItem(72, 1);
-	//AddItem(90, 1);
+	AddItem(45, 2);
+	AddItem(47, 2);
+	AddItem(42, 10);
+	AddItem(98, 10);
 	//
 	AddItem(46, 64); // 철 주괴
 	AddItem(49, 64); // 다이아
 	AddItem(24, 64); // 참나무
 	AddItem(35, 1); // 작업대
 	AddItem(64, 40); // 나무 막대
+	AddItem(64, 40); // 나무 막대
+	AddItem(37, 1); // 나무 막대
 
 	SetActive(false);
 }
@@ -70,16 +75,21 @@ void Inventory::Update()
 		cloneIcon->SetGlobalPosition(mousePos);
 		cloneIcon->UpdateWorld();
 	}
-	invenCamera->Update();
+
+	if (isRenderTargetActivate)
+	{
+		invenCamera->Update();
+	}
 }
 
 void Inventory::PreRender()
 {
-	if (!isActive) return;
+	if (!isActive && isRenderTargetActivate) return;
 
 	renderTarget->Set(depthStencil);
 	invenCamera->SetView();
 	PLAYER->Render();
+	EquipManager::Get()->Render();
 }
 
 void Inventory::Render()
@@ -92,6 +102,8 @@ void Inventory::Render()
 		slot->Render();
 
 	cloneIcon->Render();
+
+	if(isRenderTargetActivate)
 	quad->Render();
 }
 
@@ -140,7 +152,7 @@ void Inventory::CreateSlot()
 
 void Inventory::UpdateCloneIcon()
 {
-	if (fromSlot->IsPressShift()) return;
+	if (fromSlot->IsPressShift() && cloneIcon->GetItemCount().second < 0) return;
 
 	if (fromSlot != nullptr && isFirstSwap)
 	{
@@ -154,6 +166,10 @@ void Inventory::Clear()
 	if (toSlot->GetTag() == "SyncQuickSlot")
 	{
 		isRefreshQuickSlot = true;
+	}
+	if (toSlot->GetTag() == "CraftSlot" || fromSlot->GetTag() == "CraftSlot")
+	{
+		EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 	}
 	cloneIcon->SetActive(false);
 	toSlot->SetRest(true);
@@ -192,19 +208,27 @@ void Inventory::AddItem(UINT key, UINT count)
 	}
 }
 
-void Inventory::DecreaseItem(UINT key, UINT count)
+void Inventory::DecreaseItem(UINT count)
 {
-	if (key == 0 || count == 0) return;
+	if (count == 0) return;
 
 	for (InventorySlot* slot : slots)
 	{
-		slot->DecreaseItem(key, count);
+		slot->DecreaseItem(count);
 		
 		if (slot->GetTag() == "SyncQuickSlot")
 		{
 			isRefreshQuickSlot = true;
 		}
 	}
+}
+
+void Inventory::ConsumeItem(UINT slotNum)
+{
+	if (slots[slotNum]->GetCount() <= 0) return;
+
+	slots[slotNum]->ConsumeItem();
+	isRefreshQuickSlot = true;
 }
 
 void Inventory::TransferItem()
@@ -224,21 +248,24 @@ void Inventory::TransferItem()
 		return;
 	}
 
-	if (toSlot->GetTag() == "CraftSlot")
+	if (toSlot->IsPush())
 	{
-		if (!fromSlot->IsPressShift())
+		fromSlot->ConsumeItem();
+
+		if (fromSlot->GetCount() <= 0)
 		{
-			toSlot->SetItem(fromKey, fromCount);
-			
-			fromSlot->SetItem(0, 0);
 			Clear();
 			return;
 		}
-		else
+		else 
 		{
-			toSlot->SetItem(cloneIconKey, cloneIconCount);
-			
-			Clear();
+			fromSlot->GetIcon()->SetActive(false);
+
+			toSlot->SetItem(fromKey, 1);
+			toSlot->SetRest(true);
+			cloneIcon->SetItem(fromKey, fromCount);
+			UpdateCloneIcon();
+			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 			return;
 		}
 	}
@@ -267,7 +294,6 @@ void Inventory::TransferItem()
 		{
 			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
 		}
-
 		else
 		{
 			toSlot->SetItem(fromKey, fromCount);
@@ -288,12 +314,7 @@ void Inventory::TransferItem()
 		if (fromSlot->IsPressShift())
 		{
 			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
-			isFirstSwap = false;
-			//fromSlot->SetRest(true);
-			toSlot = nullptr;
 			cloneIcon->SetItem(toKey, toCount);
-			UpdateCloneIcon();
-			return;
 		}
 		else if (isFirstSwap)
 		{
@@ -301,18 +322,15 @@ void Inventory::TransferItem()
 			toSlot->SetItem(fromKey, fromCount);
 			isFirstSwap = false; 
 			fromSlot = toSlot;
-			toSlot = nullptr;
 			cloneIcon->SetItem(toKey, toCount);
-			UpdateCloneIcon();
 		}
 		else
 		{
 			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
 			fromSlot = toSlot;
-			toSlot = nullptr;
 			cloneIcon->SetItem(toKey, toCount);
-			UpdateCloneIcon();
 		}
+		UpdateCloneIcon();
 	}
 	
 }
@@ -327,6 +345,7 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 			fromSlot->GetIcon()->SetActive(false);
 			isExcuteCrafting = true;
 			fromSlot->SetChanged(true);
+			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 			
 			UpdateCloneIcon();
 		}
@@ -335,9 +354,10 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 
 	if (fromSlot == nullptr && inventorySlot->GetKey() == 0) return;
 
-	if (fromSlot == nullptr)
+	if (fromSlot == nullptr && !inventorySlot->IsPush())
 	{
 		fromSlot = inventorySlot;
+
 		if (!fromSlot->IsPressShift())
 		{
 			fromSlot->GetIcon()->SetActive(false);
@@ -348,31 +368,24 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 			UINT cloneCount = (totalCount % 2 == 1) ? (totalCount / 2 + 1) : (totalCount / 2);
 			UINT remainingCount = totalCount - cloneCount;
 
-			fromSlot->DecreaseItem(fromSlot->GetKey(), cloneCount);
+			fromSlot->DecreaseItem(cloneCount);
 			fromSlot->GetIcon()->SetActive(remainingCount > 0);
 			cloneIcon->SetItem(fromSlot->GetKey(), cloneCount);
-			cloneIcon->SetActive(true);
 		}
 		UpdateCloneIcon();
 		return;
 	}
+	else
+	{
+		inventorySlot->SetRest(true);
+	}
+
 	if (fromSlot != nullptr)
 	{
 		toSlot = inventorySlot;
+
 		TransferItem();
 	}
-}
-
-InventorySlot* Inventory::FindSlotAtPosition()
-{
-	for (InventorySlot* slot : slots)
-	{
-		if (slot->IsPointCollision(mousePos))  
-		{
-			return slot;  
-		}
-	}
-	return nullptr;
 }
 
 pair<UINT, UINT> Inventory::GetQuickSlotData(int index)

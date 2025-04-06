@@ -27,12 +27,12 @@ public:
 	void CreateSlot();
 
 	void UpdateCloneIcon();
+	void SetRenderTargetActivate(bool isRenderTargetActivate) { this->isRenderTargetActivate = isRenderTargetActivate; }
 	void Clear();
 
 	void AddItem(UINT key, UINT count);
-	void DecreaseItem(UINT key, UINT count);
-
-	InventorySlot* FindSlotAtPosition();
+	void DecreaseItem(UINT count);
+	void ConsumeItem(UINT slotNum);
 
 	void OnSelectSlot(InventorySlot* inventorySlot);
 
@@ -52,6 +52,7 @@ private:
 	bool isExcuteCrafting = false;
 	bool isFirstSwap = true;
 	bool isRefreshQuickSlot = false;
+	bool isRenderTargetActivate = false;
 
 	unordered_map<UINT, InventoryItem>itemDatas;
 	SlotIcon* cloneIcon;

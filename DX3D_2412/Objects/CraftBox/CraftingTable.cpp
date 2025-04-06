@@ -82,7 +82,7 @@ void CraftingTable::CraftItem()
         {
             if (craftSlots[i]->GetKey() != 0 && INVEN->IsExcuteCrafting())
             {
-                craftSlots[i]->DecreaseItem(craftSlots[i]->GetKey(), minCount);
+                craftSlots[i]->DecreaseItem(minCount);
             }
         }
         craftSlots[MAX_SLOTSIZE - 1]->SetChanged(false);

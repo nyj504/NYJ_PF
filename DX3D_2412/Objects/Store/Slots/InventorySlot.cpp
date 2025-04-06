@@ -46,19 +46,9 @@ void InventorySlot::Update()
 		if (isRButtonDown)
 		{
 			isPush = true;
-			SetSlotState(PUSH);
+			SetSlotState(DROP);
 			INVEN->OnSelectSlot(this);
 		}
-	}
-
-	if (state == HOLD && isLButtonDown)
-	{
-		SetSlotState(DROP);
-	}
-
-	if(state == CLICK && isLButtonDown)
-	{
-		SetSlotState(HOLD);
 	}
 
 	UpdateWorld();
@@ -85,18 +75,26 @@ void InventorySlot::SetItem(UINT key, UINT count)
 	{
 		slotKey = key;
 		itemCount = count;
-		isChanged = true;
 	}
+	isChanged = true;
 	icon->UpdateFromSlot(this);
 }
 
-void InventorySlot::DecreaseItem(UINT key, UINT count)
+void InventorySlot::DecreaseItem(UINT count)
 {
-	if (slotKey != key) return;
-	if (itemCount <= 0) return;
-	
+	if (slotKey == 0 || itemCount <= 0) return;
+	if (itemCount - count < 0) return;
+
 	itemCount -= count;
 	
+	icon->UpdateFromSlot(this);
+
+	isChanged = true;
+}
+
+void InventorySlot::ConsumeItem()
+{
+	itemCount--;
 	icon->UpdateFromSlot(this);
 
 	isChanged = true;
@@ -129,6 +127,11 @@ void InventorySlot::SetSlotState(SlotState newState)
 		icon->GetMaterial()->GetData()->diffuse = NORMAL_COLOR;
 		break;
 	case REST:
+		if (itemCount <= 0)
+		{
+			slotKey = 0;
+		}
+		isPush = false;
 		isPressShift = false;
 		icon->UpdateFromSlot(this);
 		INVEN->SetRefreshQuickSlot(true);

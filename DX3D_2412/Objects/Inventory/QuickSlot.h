@@ -14,9 +14,11 @@ public:
 	void HighlightSelectedQuickSlot();
 	
 	void OnMouseWheel(int delta);
+	void UpdateHoldingHands();
 	void SyncWithInventory();
 
 	pair<UINT, UINT> GetSelectedIndexData() { return quickSlotIcons[selectedIndex]->GetItemCount(); }
+	int GetSelectedIndex() { return selectedIndex; }
 
 private:
 	int selectedIndex = 0;

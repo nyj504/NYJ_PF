@@ -99,14 +99,6 @@ EquipManager::EquipManager()
 
 EquipManager::~EquipManager()
 {
-	for (const pair<string, Model*>equipment : equipments)
-		delete equipment.second;
-	equipments.clear();
-	
-	delete singleBlock;
-	delete multiBlock;
-	delete item;
-
 	delete modelAnimator;
 	delete weaponSocket;
 
@@ -358,7 +350,8 @@ void EquipManager::UnEquipWeapon()
 	isEquipWeapon = false;
 	isEquipItem = false;
 
-	weapon->SetActive(false);
+	if (weapon)
+		weapon->SetActive(false);
 	singleBlock->SetActive(false);
 	multiBlock->SetActive(false);
 	item->SetActive(false);
@@ -391,6 +384,7 @@ void EquipManager::EquipItem(ItemType type, string path)
 	case ItemType::MODEL:
 		break;
 	default:
+
 		break;
 	}
 

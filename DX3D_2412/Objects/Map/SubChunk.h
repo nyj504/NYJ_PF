@@ -24,6 +24,7 @@ public:
 	void CheckMonsterCollision();
 
 	void ActiveCollider();
+	void Test();
 
 	void SetParentIndex(UINT64 parentIndex) { this->parentIndex = parentIndex; }
 	UINT64 GetParentIndex() { return parentIndex; }
