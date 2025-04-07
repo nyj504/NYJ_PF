@@ -5,6 +5,7 @@ struct ItemData
     UINT key;
     string name;
     string image;
+    string soundType;
     WeaponType weakType;
     string particle;
     bool canBuild;

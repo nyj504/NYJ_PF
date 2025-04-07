@@ -57,8 +57,11 @@ void Button::ClickEvent()
     if (IsCollision(mousePos))
     {
         if (KEY->Down(VK_LBUTTON))
+        {
             isDownCheck = true;
-
+            Audio::Get()->Play("click");
+        }
+            
         if (KEY->Press(VK_LBUTTON))
             state = DOWN;
         else

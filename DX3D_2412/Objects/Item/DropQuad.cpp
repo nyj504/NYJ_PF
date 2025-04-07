@@ -37,6 +37,7 @@ void DropQuad::Update()
 
 	if (collider->IsCollision(PLAYER->GetCollider()))
 	{
+		Audio::Get()->Play("pop");
 		ItemData data = DataManager::Get()->GetItemData(key);
 		INVEN->AddItem(data.dropItemKey, data.dropsAmount);
 		isActive = false;

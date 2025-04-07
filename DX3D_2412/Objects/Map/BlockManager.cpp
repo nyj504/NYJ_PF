@@ -53,7 +53,7 @@ void BlockManager::PostRender()
 void BlockManager::BuildBlock()
 {
 	if (!selectedBlock) return;
-
+	
 	pair<UINT, UINT>quickSlotData = QUICKSLOT->GetSelectedIndexData();
 	UINT selectedSlotNum = QUICKSLOT->GetSelectedIndex();
 	
@@ -70,6 +70,7 @@ void BlockManager::BuildBlock()
 
 	if (selectedBlock->GetCollider()->IsRayCollision(ray, &hit))
 	{
+		Audio::Get()->Play("build");
 		Vector3 buildPosition = selectedBlock->GetGlobalPosition() + hit.normal;
 		worldGenerator->BuildBlock(buildPosition, quickSlotData.first);
 		INVEN->ConsumeItem(selectedSlotNum);
@@ -86,7 +87,7 @@ void BlockManager::MiningBlock()
 		if (!isParticlePlayed) 
 		{
 			string particlePath = "Resources/Textures/FX/";
-			string blockTexturePath = selectedBlock->GetParticlePath() + ".png";
+			string blockTexturePath = selectedBlock->GetItemData().particle + ".png";
 			particle->GetMaterial()->SetDiffuseMap(Utility::ToWString(particlePath + blockTexturePath));
 
 			particle->GetParticleData().minAccelation = hit.normal * 2;

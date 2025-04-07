@@ -265,7 +265,7 @@
     <ClInclude Include="Scenes\ParticleEditorScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\TerrainScene.h" />
-    <ClInclude Include="Scenes\TestScene.h" />
+    <ClInclude Include="Scenes\InGameScene.h" />
     <ClInclude Include="Scenes\WeatherScene.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -384,7 +384,7 @@
     <ClCompile Include="Scenes\ModelRenderScene.cpp" />
     <ClCompile Include="Scenes\ParticleEditorScene.cpp" />
     <ClCompile Include="Scenes\TerrainScene.cpp" />
-    <ClCompile Include="Scenes\TestScene.cpp" />
+    <ClCompile Include="Scenes\InGameScene.cpp" />
     <ClCompile Include="Scenes\WeatherScene.cpp" />
   </ItemGroup>
   <ItemGroup>

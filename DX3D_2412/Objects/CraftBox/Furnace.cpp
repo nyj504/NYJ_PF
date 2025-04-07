@@ -10,6 +10,27 @@ Furnace::~Furnace()
 {
 }
 
+void Furnace::Update()
+{
+    if (canSmelting && isFuel)
+    {
+        meltingTimer += DELTA;
+
+        if (!Audio::Get()->IsPlaySound("blastfurnace"))
+        {
+            Audio::Get()->Play("blastfurnace");
+        }
+    }
+       
+    CraftBox::Update();
+
+    if (meltingTimer >= SMELTING_TIME)
+    {
+        meltingTimer -= SMELTING_TIME;
+        MeltingItem();
+    }
+}
+
 void Furnace::CreateSlot()
 {
 	craftSlots.resize(MAX_SLOTSIZE);
@@ -43,8 +64,6 @@ void Furnace::CraftItem()
     ItemData ingredientData;
 
     bool isChanged = false;
-    bool canSmelting = false;
-    bool isFuel = false;
 
     UINT ingredientKey = craftSlots[0]->GetKey();
     UINT ingredientCount = craftSlots[0]->GetCount();
@@ -68,13 +87,27 @@ void Furnace::CraftItem()
                 isFuel = true;
         }
     }
-    
-    if (isFuel && canSmelting)
-    {
-        UINT totalResultCount = ingredientData.craftAmount * ingredientCount;
+}
 
-        craftSlots[2]->SetItem(stoi(ingredientData.serialKey), totalResultCount);
-        craftSlots[1]->DecreaseItem(1);
-        craftSlots[0]->DecreaseItem(ingredientCount);
+void Furnace::MeltingItem()
+{
+    UINT ingredientKey = craftSlots[0]->GetKey();
+    UINT ingredientCount = craftSlots[0]->GetCount();
+    UINT fuelKey = craftSlots[1]->GetKey();
+    UINT fuelCount = craftSlots[1]->GetCount();
+
+    if (fuelCount <= 0)
+    {
+        isFuel = false;
+        canSmelting = false;
+        return;
     }
+
+    ItemData ingredientData = DataManager::Get()->GetItemData(ingredientKey);
+
+    UINT totalResultCount = ingredientData.craftAmount * ingredientCount;
+
+    craftSlots[2]->SetItem(stoi(ingredientData.serialKey), totalResultCount);
+    craftSlots[1]->DecreaseItem(1);
+    craftSlots[0]->DecreaseItem(ingredientCount);
 }

@@ -42,6 +42,6 @@ float4 PS(PixelInput input) : SV_TARGET
     
     float4 startColor = skyMapStart.Sample(samp, uv); 
     float4 endColor = skyMapEnd.Sample(samp, uv); 
-    
+    //시간이 흐르면서 자연스럽게 하늘이 섞임
     return lerp(startColor, endColor, time) * mDiffuse;
 }

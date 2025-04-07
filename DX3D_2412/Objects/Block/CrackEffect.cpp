@@ -49,6 +49,10 @@ void CrackEffect::UpdateFrame()
 
     if (time >= intervalSpeed)
     {
+        int randNum = GameMath::Random(1, 5);
+        string soundType = BlockManager::Get()->GetSelectedBlock()->GetItemData().soundType;
+        Audio::Get()->Play(soundType + to_string(randNum));
+        
         time -= intervalSpeed;
 
         curFrame = ++curFrame % (maxFrame.x * maxFrame.y);
@@ -69,7 +73,7 @@ void CrackEffect::SetMining(Block* block)
 {
     PlayerEquipmentInfo playerEquipmentType = PLAYER->GetPlayerEquipInfo();
 
-    if (block->GetBlockWeakType() == playerEquipmentType.type)
+    if (block->GetItemData().weakType == playerEquipmentType.type)
     {
         float intervalTime = 1 / playerEquipmentType.weaponAtk;
         intervalSpeed = FRAME_INTERVAL * intervalTime;

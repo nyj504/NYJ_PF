@@ -53,6 +53,7 @@ private:
 	unordered_map<UINT64,Block*>blocks; 
 
 	Block* selectedBlock = nullptr;
+	Block* steppedBlock = nullptr;
 
 	vector<InstanceData> visibleSingleInstanceDatas;
 	vector<InstanceData> visibleMultiInstanceDatas;

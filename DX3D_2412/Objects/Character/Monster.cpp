@@ -27,6 +27,15 @@ Monster::~Monster()
 
 void Monster::Update()
 {
+	sayingTimer += DELTA;
+	if (sayingTimer >= SAYING_INTERVAL && monsterState != DIE)
+	{
+		sayingTimer -= SAYING_INTERVAL;
+
+		int randNum = GameMath::Random(1, 4);
+		Audio::Get()->Play("Zombie_say" + to_string(randNum));
+	}
+
 	Character::Update();
 	UpdateWorld();
 
@@ -78,8 +87,13 @@ void Monster::Damaged(float damage, Character* target)
 {
 	Character::Damaged(damage, target);
 
+	int hitSoundNum = GameMath::Random(1, 3);
+
+	Audio::Get()->Play("Zombie_hurt" + to_string(hitSoundNum));
+
 	if (curHp <= 0)
 	{
+		Audio::Get()->Play("Zombie_death");
 		SetMonsterState(DIE);
 	}
 }

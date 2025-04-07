@@ -24,7 +24,9 @@ public:
 	void Update();
 	void Render();
 
+	void Damaged(float damage, Character* target) override;
 	void SetPlayerState(PlayerState state);
+	Vector3 GetPlayerVelocity() { return velocity; }
 	
 	float GetPlayerReach(bool interationType) { return interationType ? MAX_INTERACT_REACH : MAX_BLOCK_REACH; } 
 	ModelAnimator* GetModelAnimator() { return modelAnimator; }

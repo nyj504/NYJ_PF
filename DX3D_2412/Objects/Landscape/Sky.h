@@ -4,7 +4,14 @@ class Sky : public Sphere
 private:
 	enum class SkyState
 	{
-		SUNRIZE, MIDDAY, SUNSET, DEEPDUSK, MIDNIGHT, DAYBREAK, DAWN, COUNT
+		SUNRIZE, //일출
+		MIDDAY,  //한낮
+		SUNSET,  //해질녘
+		DEEPDUSK,//황혼
+		MIDNIGHT,//자정 
+		DAYBREAK,//새벽 
+		DAWN,    //여명
+		COUNT
 	};
 	const float WORLD_TIME = 0.01f;
 	const float DAYBREAK_TIME = 0.1f;

@@ -53,6 +53,18 @@ void Player::Render()
 	Character::Render();
 }
 
+void Player::Damaged(float damage, Character* target)
+{
+	Character::Damaged(damage, target);
+
+	bool hitSound = GameMath::Random(0, 2);
+
+	if (hitSound)
+		Audio::Get()->Play("Steve_hurt");
+
+	Audio::Get()->Play("Steve_hit");
+}
+
 void Player::SetPlayerState(PlayerState state)
 {
 	if (state == playerState) return;
@@ -152,6 +164,8 @@ void Player::BuildAndMining()
 
 	if (KEY->Down(VK_LBUTTON))
 	{
+		Audio::Get()->Play("Steve_sweep");
+
 		SetPlayerState(MINING);
 
 		if (BlockManager::Get()->GetSelectedBlock()->GetBlockType() == 1 && UIManager::Get()->IsCrafting())

@@ -29,11 +29,12 @@ public:
     void Add(string key, string file,
         bool bgm = false, bool loop = false, bool is3D = false);
 
-    void Play(string key, float valume = 1.0f);
-    void Play(string key, Float3 position, float valume = 1.0f);
+    void Play(string key, float volume = 1.0f);
+    void Play(string key, Float3 position, float volume = 1.0f);
     void Stop(string key);
     void Pause(string key);
     void Resume(string key);
+    void LoadAudioFiles(const string& path);
 
     bool IsPlaySound(string key);
 

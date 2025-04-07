@@ -9,6 +9,7 @@ protected:
 	const float GRAVITY = 4.9f;
 	const Vector3 KNOCKBACK_RANGE = { 0.2f, 0.2f, 0.2f };
 	const float HIT_DURATION = 0.2f;
+	const float SAYING_INTERVAL = 7.5f;
 
 public:
 	Character(string name);
@@ -34,6 +35,7 @@ public:
 protected:
 	bool isHitEffect = false;
 	float hitTimer = 0.0f;
+	float sayingTimer = 0.0f;
 	UINT characterKey;
 	int curHp;
 	CharacterData characterData;

@@ -18,6 +18,14 @@ Animal::~Animal()
 
 void Animal::Update()
 {
+	sayingTimer += DELTA;
+	if (sayingTimer >= SAYING_INTERVAL && animalState != DIE)
+	{
+		sayingTimer -= SAYING_INTERVAL;
+
+		int randNum = GameMath::Random(1, 4);
+		Audio::Get()->Play("Chicken_say" + to_string(randNum));
+	}
 	Character::Update();
 
 	UpdateWorld();
@@ -61,6 +69,7 @@ void Animal::Update()
 		{
 			isAlive = false;
 			EventManager::Get()->ExcuteEvent("ExcuteDie");
+			Audio::Get()->Play("Chicken_hurt2", this->GetLocalPosition());
 		}
 	}
 	break;
@@ -82,6 +91,9 @@ void Animal::Move()
 
 void Animal::Damaged(float damage, Character* target)
 {
+	int randNum = GameMath::Random(1, 3);
+	Audio::Get()->Play("Chicken_hurt" + to_string(randNum), this->GetLocalPosition());
+
 	Character::Damaged(damage, target);
 
 	if (curHp <= 0)

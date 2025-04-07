@@ -44,57 +44,57 @@ EquipManager::EquipManager()
 	item->Load();
 	item->SetParent(weaponSocket);
 
-	//string weapon = "Bow";
-	//Model* model = new Model(weapon);
-	//model->Load();
-	//model->SetParent(weaponSocket);
-	//equipments[weapon] = model;
-	//
-	//for (const string& type : types)
-	//{
-	//	for (int i = 0; i < names.size(); ++i)
-	//	{
-	//		if ((type == "Wood" || type == "Stone") && i < 8)
-	//			continue;
-	//
-	//		string key = type + names[i];
-	//
-	//		Model* model = new Model(key);
-	//		model->Load();
-	//
-	//		switch (i)
-	//		{
-	//		case 0:
-	//			model->SetParent(leftBootsSocket);
-	//			break;
-	//		case 1:
-	//			model->SetParent(rightBootsSocket);
-	//			break;
-	//		case 2:
-	//			model->SetParent(leftLegSocket);
-	//			break;
-	//		case 3:
-	//			model->SetParent(rightLegSocket);
-	//			break;
-	//		case 4:
-	//			model->SetParent(chestPlateSocket);
-	//			break;
-	//		case 5:
-	//			model->SetParent(leftArmSocket);
-	//			break;
-	//		case 6:
-	//			model->SetParent(rightArmSocket);
-	//			break;
-	//		case 7:
-	//			model->SetParent(helmetSocket);
-	//			break;
-	//		default:
-	//			model->SetParent(weaponSocket);
-	//			break;
-	//		}
-	//		equipments[key] = model;
-	//	}
-	//}
+	string weapon = "Bow";
+	Model* model = new Model(weapon);
+	model->Load();
+	model->SetParent(weaponSocket);
+	equipments[weapon] = model;
+	
+	for (const string& type : types)
+	{
+		for (int i = 0; i < names.size(); ++i)
+		{
+			if ((type == "Wood" || type == "Stone") && i < 8)
+				continue;
+	
+			string key = type + names[i];
+	
+			Model* model = new Model(key);
+			model->Load();
+	
+			switch (i)
+			{
+			case 0:
+				model->SetParent(leftBootsSocket);
+				break;
+			case 1:
+				model->SetParent(rightBootsSocket);
+				break;
+			case 2:
+				model->SetParent(leftLegSocket);
+				break;
+			case 3:
+				model->SetParent(rightLegSocket);
+				break;
+			case 4:
+				model->SetParent(chestPlateSocket);
+				break;
+			case 5:
+				model->SetParent(leftArmSocket);
+				break;
+			case 6:
+				model->SetParent(rightArmSocket);
+				break;
+			case 7:
+				model->SetParent(helmetSocket);
+				break;
+			default:
+				model->SetParent(weaponSocket);
+				break;
+			}
+			equipments[key] = model;
+		}
+	}
 }
 
 EquipManager::~EquipManager()
@@ -248,47 +248,49 @@ void EquipManager::EquipArmor(AmoType type, string name)
 		break;
 	}
 
-	//for (const string& partName : slotNames)
-	//{
-	//	string key = name + partName;
-	//
-	//	auto it = equipments.find(key);
-	//	if (it != equipments.end())
-	//	{
-	//		it->second->SetActive(true);
-	//		if (type == AmoType::HELMET)
-	//		{
-	//			isEquipHelmet = true;
-	//			helmet = it->second;
-	//		}
-	//		if (type == AmoType::CHESTPLATE)
-	//		{
-	//			isEquipChestPlate = true;
-	//			if (partName == "ChestPlate")
-	//				chestPlate = it->second;
-	//			else if (partName == "Chestplate_LeftArm")
-	//				leftArm = it->second;
-	//			else if (partName == "Chestplate_RightArm")
-	//				rightArm = it->second;
-	//		}
-	//		if (type == AmoType::LEGGINGS)
-	//		{
-	//			isEquipLeggings = true;
-	//			if (partName == "Leggings_Left")
-	//				leftLeg = it->second;
-	//			else if (partName == "Leggings_Right")
-	//				rightLeg = it->second;
-	//		}
-	//		if (type == AmoType::BOOTS)
-	//		{
-	//			isEquipBoots = true;
-	//			if (partName == "Boots_Left")
-	//				leftBoots = it->second;
-	//			else if (partName == "Boots_Right")
-	//				rightBoots = it->second;
-	//		}
-	//	}
-	//}
+	for (const string& partName : slotNames)
+	{
+		string key = name + partName;
+	
+		auto it = equipments.find(key);
+		if (it != equipments.end())
+		{
+			it->second->SetActive(true);
+			if (type == AmoType::HELMET)
+			{
+				isEquipHelmet = true;
+				helmet = it->second;
+			}
+			if (type == AmoType::CHESTPLATE)
+			{
+				isEquipChestPlate = true;
+				if (partName == "ChestPlate")
+					chestPlate = it->second;
+				else if (partName == "Chestplate_LeftArm")
+					leftArm = it->second;
+				else if (partName == "Chestplate_RightArm")
+					rightArm = it->second;
+			}
+			if (type == AmoType::LEGGINGS)
+			{
+				isEquipLeggings = true;
+				if (partName == "Leggings_Left")
+					leftLeg = it->second;
+				else if (partName == "Leggings_Right")
+					rightLeg = it->second;
+			}
+			if (type == AmoType::BOOTS)
+			{
+				isEquipBoots = true;
+				if (partName == "Boots_Left")
+					leftBoots = it->second;
+				else if (partName == "Boots_Right")
+					rightBoots = it->second;
+			}
+		}
+	}
+
+	Audio::Get()->Play("equip");
 }
 
 void EquipManager::UnequipArmor(AmoType type)

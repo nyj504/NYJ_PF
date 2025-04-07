@@ -1,7 +1,7 @@
 #include "Framework.h"
 
 #include "Scenes/GridScene.h"
-#include "Scenes/TestScene.h"
+#include "Scenes/InGameScene.h"
 #include "Scenes/LightScene.h"
 #include "Scenes/TerrainScene.h"
 #include "Scenes/LobbyScene.h"
@@ -37,7 +37,7 @@ GameManager::GameManager()
 	
 
 	SCENE->Create("Lobby", new LobbyScene());
-	SCENE->Create("Test", new TestScene());
+	SCENE->Create("InGame", new InGameScene());
 	
 	SCENE->Add("Lobby");
 	

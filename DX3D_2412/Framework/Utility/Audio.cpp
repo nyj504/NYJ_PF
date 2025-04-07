@@ -68,23 +68,23 @@ void Audio::Add(string key, string file, bool bgm, bool loop, bool is3D)
     sounds[key] = info;
 }
 
-void Audio::Play(string key, float valume)
+void Audio::Play(string key, float volume)
 {
     if (sounds.count(key) == 0) return;
 
     soundSystem->playSound(sounds[key]->sound,
         nullptr, false, &sounds[key]->channel);
-    sounds[key]->channel->setVolume(valume);
+    sounds[key]->channel->setVolume(volume);
 }
 
-void Audio::Play(string key, Float3 position, float valume)
+void Audio::Play(string key, Float3 position, float volume)
 {
     if (sounds.count(key) == 0) return;
 
     soundSystem->playSound(sounds[key]->sound,
         nullptr, false, &sounds[key]->channel);
 
-    sounds[key]->channel->setVolume(valume);    
+    sounds[key]->channel->setVolume(volume);
     FMOD_VECTOR pos = { position.x, position.y, position.z };        
     FMOD_VECTOR vel = {};
     sounds[key]->channel->set3DAttributes(&pos, &vel);    
@@ -110,6 +110,26 @@ void Audio::Resume(string key)
     if (sounds.count(key) == 0) return;
 
     sounds[key]->channel->setPaused(false);
+}
+
+void Audio::LoadAudioFiles(const string& path)
+{
+    string searchPath = path + "\\*.ogg";
+    WIN32_FIND_DATAA findData;
+    HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+
+    do
+    {
+        string filename = findData.cFileName;
+        string fullPath = path + "\\" + filename;
+
+        string key = filename.substr(0, filename.find_last_of('.'));
+
+        Audio::Get()->Add(key, fullPath, false, false);
+
+    } while (FindNextFileA(hFind, &findData));
+
+    FindClose(hFind);
 }
 
 bool Audio::IsPlaySound(string key)

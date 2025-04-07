@@ -31,17 +31,13 @@ public:
 	void Render();
 	void EnableCollider();
 
-	UINT GetItemKey() const { return itemData.key; }
-	void SetItemKey(UINT key) { this->itemData.key = key; }
+	ItemData GetItemData() const { return itemData; }
 
 	bool HasCollider() { return hasCollider; }
 	BoxCollider* GetCollider() { return collider; }
 
-	string GetParticlePath() { return itemData.particle; }
-
 	bool GetBlockType() { return blockType; }
-	WeaponType GetBlockWeakType() { return itemData.weakType; }
-	
+
 	bool IsNormal() { return isNormal; }
 	
 	bool IsOcclusion() { return isOcclusion; }

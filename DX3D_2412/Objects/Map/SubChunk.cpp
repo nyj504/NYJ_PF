@@ -45,7 +45,7 @@ void SubChunk::Update()
 		{
 			if (block->GetCollider()->IsRayCollision(ray, &hit))
 			{
-				if (hit.distance > 0.0f && hit.distance <= maxDistance && hit.distance < minDistance)
+				if (hit.distance <= maxDistance)
 				{
 					minDistance = hit.distance;
 					closestBlock = block;
@@ -340,18 +340,34 @@ void SubChunk::CheckPlayerCollision()
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
 		{
 			if (hit.point.y > maxHeight)
+			{
 				maxHeight = hit.point.y;
+				steppedBlock = block;
+			}
 		}	
 	}
 
 	if (maxHeight >= minPlayerPosition.y)
 	{
+		Vector3 playerVelocity = PLAYER->GetPlayerVelocity();
+		
 		PLAYER->Translate(0, maxHeight - minPlayerPosition.y, 0);
 		PLAYER->SetLand();
+
+		if (playerVelocity.x >= 0.1f || playerVelocity.z >= 0.1f)
+		{
+			string stepSound = "step_" + steppedBlock->GetItemData().soundType;
+			
+			if (!Audio::Get()->IsPlaySound(stepSound))
+			{
+				Audio::Get()->Play(stepSound);
+			}
+		}
 	}
 	else if (maxHeight - minPlayerPosition.y < 0.1f)
 	{
 		PLAYER->SetFall();
+		steppedBlock = nullptr;
 	}
 
 	for (const pair<UINT64, Block*> pair : blocks)

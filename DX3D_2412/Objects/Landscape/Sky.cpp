@@ -42,17 +42,11 @@ Sky::~Sky()
 
 void Sky::Update()
 {
-	//if (startSkyState == SkyState::SUNSET || startSkyState == SkyState::DEEPDUSK ||
-	//	startSkyState == SkyState::DAWN)
-	//{
-	//	buffer->Get()[0] += DELTA * DAYBREAK_TIME;
-	//}
-	//else
-	//{
-	//	buffer->Get()[0] += DELTA * WORLD_TIME;
-	//}
-
-	buffer->Get()[0] += DELTA * DAYBREAK_TIME;
+	if (startSkyState == SkyState::SUNSET || startSkyState == SkyState::DEEPDUSK ||
+		startSkyState == SkyState::DAWN)
+		buffer->Get()[0] += DELTA * DAYBREAK_TIME;
+	else
+		buffer->Get()[0] += DELTA * WORLD_TIME;
 
 	if (buffer->Get()[0] >= 1.0f)
 	{

@@ -1,6 +1,6 @@
 #include "Framework.h"
-#include "TestScene.h"
-TestScene::TestScene() : isPaused(false)
+#include "InGameScene.h"
+InGameScene::InGameScene() : isPaused(false)
 {
 	PlayerSingleton::Get();
 	UIManager::Get();
@@ -20,9 +20,11 @@ TestScene::TestScene() : isPaused(false)
 	PLAYER->SetLocalPosition(0, 4, 0);
 
 	MonsterManager::Get()->Spawn();
+
+	curMusic = "BGM0";
 }
 
-TestScene::~TestScene()
+InGameScene::~InGameScene()
 {
 	BlockManager::Delete();
 	EquipManager::Delete();
@@ -34,8 +36,14 @@ TestScene::~TestScene()
 	delete sky;
 }
 
-void TestScene::Update()
+void InGameScene::Update()
 {
+	isSceneActive = true;
+	if (!Audio::Get()->IsPlaySound(curMusic))
+	{
+		silenceTimer += DELTA;
+	}
+
 	if (KEY->Down(VK_F2))
 	{
 		CAM->SetTarget(nullptr);
@@ -65,14 +73,20 @@ void TestScene::Update()
 		MonsterManager::Get()->Update();
 		sky->Update();
 ;	}
+
+	if (!Audio::Get()->IsPlaySound(curMusic) && isSceneActive && silenceTimer >= BGM_INTERVAL)
+	{
+		silenceTimer -= BGM_INTERVAL;
+		ChangeBGM();
+	}
 }
 
-void TestScene::PreRender()
+void InGameScene::PreRender()
 {
 	UIManager::Get()->PreRender();
 }
 
-void TestScene::Render()
+void InGameScene::Render()
 {
 	sky->Render();
 
@@ -86,13 +100,13 @@ void TestScene::Render()
 	}
 }
 
-void TestScene::PostRender()
+void InGameScene::PostRender()
 {
 	BlockManager::Get()->PostRender();
 	UIManager::Get()->PostRender();
 }
 
-void TestScene::GUIRender()
+void InGameScene::GUIRender()
 {
 	UIManager::Get()->Edit();
 
@@ -112,4 +126,12 @@ void TestScene::GUIRender()
 
 		ImGui::End();*/
 	}
+}
+
+void InGameScene::ChangeBGM()
+{
+	musicIndex = (musicIndex + 1) % 3;
+	string name = "BGM" + to_string(musicIndex);
+	curMusic = name;
+	Audio::Get()->Play(curMusic);
 }

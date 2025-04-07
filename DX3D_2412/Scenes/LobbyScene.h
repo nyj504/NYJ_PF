@@ -17,6 +17,8 @@ public:
 	void GUIRender() override;
 
 	void GameStart();
+
+	void InitAudio();
 private:
 	Quad* title;
 	Quad* background;

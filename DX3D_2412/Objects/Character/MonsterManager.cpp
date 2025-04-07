@@ -6,13 +6,13 @@ MonsterManager::MonsterManager()
 
 	for (int i = 0; i < MONSTER_COUNT; i++)
 	{
-		Animal* animal = new Animal("chicken");
-		animal->SetActive(false);
-		monsters.push_back(animal);
-
 		Monster* monster = new Monster("Zombie");
 		monster->SetActive(false);
 		monsters.push_back(monster);
+
+		Animal* animal = new Animal("chicken");
+		animal->SetActive(false);
+		monsters.push_back(animal);
 	}
 
 	particle = new ParticleSystem("Resources/Textures/Particle/character_dead.fx");

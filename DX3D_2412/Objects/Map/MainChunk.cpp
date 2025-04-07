@@ -24,15 +24,18 @@ void MainChunk::Update()
     if (!subChunks[activeChunkIndex]->HasCollider())
     {
         subChunks[activeChunkIndex]->ActiveCollider();
+        subChunks[1]->ActiveCollider();
     }
 
      subChunks[activeChunkIndex]->Update();
+     subChunks[1]->Update();
+    
 }
 
 void MainChunk::Render()
 {
-    if (subChunks[activeChunkIndex]->HasCollider())
     subChunks[activeChunkIndex]->Render();
+    subChunks[1]->Render();
 }
 
 void MainChunk::GenerateTerrain()
