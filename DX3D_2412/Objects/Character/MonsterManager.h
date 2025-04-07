@@ -2,7 +2,7 @@
 class MonsterManager : public Singleton<MonsterManager>
 {
 private:
-	const int MONSTER_COUNT = 5;
+	const int MONSTER_COUNT = 3;
 private:
 	friend class Singleton;
 	MonsterManager();
@@ -17,16 +17,17 @@ public:
 	void ExcuteDie();
 	void ExcuteDamaged();
 
-	Monster* GetMonsters();
+	Character* GetMonsters();
 	void SetAttackingMonster(Monster* monster) { attackMonster = monster; }
 
 private:
 	float deadTimer = 0.0f;
 	bool isActiveParticle = false;
 	Vector3 deadPosition;
-	vector<Monster*>monsters;
 	
-	Monster* curMonster = nullptr;
+	vector<Character*>monsters;
+	
+	Character* curMonster = nullptr;
 	Monster* attackMonster = nullptr;
 
 	ParticleSystem* particle;

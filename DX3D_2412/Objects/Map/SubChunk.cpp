@@ -400,7 +400,7 @@ void SubChunk::CheckPlayerCollision()
 
 void SubChunk::CheckMonsterCollision()
 {
-	Monster* monster = MonsterManager::Get()->GetMonsters();
+	Character* monster = MonsterManager::Get()->GetMonsters();
 
 	if (!monster) return;
 

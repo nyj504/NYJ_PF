@@ -6,13 +6,13 @@ MonsterManager::MonsterManager()
 
 	for (int i = 0; i < MONSTER_COUNT; i++)
 	{
+		Animal* animal = new Animal("chicken");
+		animal->SetActive(false);
+		monsters.push_back(animal);
+
 		Monster* monster = new Monster("Zombie");
 		monster->SetActive(false);
 		monsters.push_back(monster);
-
-		Monster* animal = new Animal("chicken");
-		animal->SetActive(false);
-		monsters.push_back(animal);
 	}
 
 	particle = new ParticleSystem("Resources/Textures/Particle/character_dead.fx");
@@ -25,7 +25,7 @@ MonsterManager::MonsterManager()
 
 MonsterManager::~MonsterManager()
 {
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		delete monster;
 	}
@@ -37,14 +37,13 @@ void MonsterManager::Update()
 {
 	particle->Update();
 
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		if (monster->IsActive())
 		{
 			monster->Update();
 		}
 	}
-
 	GetDamaged();
 }
 
@@ -52,7 +51,7 @@ void MonsterManager::Render()
 {
 	particle->Render();
 
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		if (monster->IsActive())
 			monster->Render();
@@ -64,7 +63,7 @@ void MonsterManager::GetDamaged()
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 	RaycastHit hit;
 
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		if (monster->IsActive())
 		{
@@ -87,7 +86,7 @@ void MonsterManager::GetDamaged()
 
 void MonsterManager::Spawn()
 {
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		if (!monster->IsActive())
 		{
@@ -111,9 +110,9 @@ void MonsterManager::ExcuteDamaged()
 	attackMonster->ExcuteAttack();
 }
 
-Monster* MonsterManager::GetMonsters()
+Character* MonsterManager::GetMonsters()
 {
-	for (Monster* monster : monsters)
+	for (Character* monster : monsters)
 	{
 		if (monster->IsActive())
 		{

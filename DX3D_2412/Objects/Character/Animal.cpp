@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Animal::Animal(string name) : Monster(name)
+Animal::Animal(string name) : Character(name)
 {
     model = new Model(name);
     model->Load();
@@ -9,6 +9,7 @@ Animal::Animal(string name) : Monster(name)
     collider = new BoxCollider();
     collider->SetTag("chickenCollider");
     collider->Load();
+	collider->SetParent(this);
 }
 
 Animal::~Animal()
@@ -17,9 +18,54 @@ Animal::~Animal()
 
 void Animal::Update()
 {
-	Monster::Update();
+	Character::Update();
 
 	UpdateWorld();
+
+	TargetOutRange();
+
+	MoveSideways();
+
+	switch (animalState)
+	{
+	case Animal::IDLE:
+	{
+		velocity.x = 0;
+		velocity.z = 0;
+	}
+	break;
+	case Animal::MOVE_AROUND:
+	{
+		idleWanderTimer += DELTA;
+	}
+	break;
+	case Animal::RUN_AWAY:
+	{
+		this->EscapeFrom(PLAYER->GetLocalPosition());
+
+		Vector3 dir = this->GetGlobalPosition() - PLAYER->GetGlobalPosition();
+		dir.y = 0;
+		dir.Normalize();
+
+		velocity.x = dir.x;
+		velocity.z = dir.z;
+	}
+	break;
+	case Animal::DIE:
+	{
+		velocity = 0;
+		deadTimer += DELTA;
+		SetLocalRotation(0.0f, 0.0f, 90.0f);
+
+		if (deadTimer >= ACTIVATE_PARTICLE && isAlive)
+		{
+			isAlive = false;
+			EventManager::Get()->ExcuteEvent("ExcuteDie");
+		}
+	}
+	break;
+	}
+	Move();
 }
 
 void Animal::Render()
@@ -27,10 +73,40 @@ void Animal::Render()
 	Character::Render();
 }
 
+void Animal::Move()
+{
+	if (animalState == DIE) return;
+
+	Character::Move();
+}
+
+void Animal::Damaged(float damage, Character* target)
+{
+	Character::Damaged(damage, target);
+
+	if (curHp <= 0)
+	{
+		SetAnimalState(DIE);
+		return;
+	}
+
+	SetAnimalState(RUN_AWAY);
+}
+
 void Animal::TargetOutRange()
 {
-	idleWanderTimer += DELTA;
+	if (animalState == DIE) return;
 
+	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
+
+	if (distance >= characterData.range)
+	{
+		SetAnimalState(MOVE_AROUND);
+	}
+}
+
+void Animal::MoveSideways()
+{
 	if (idleWanderTimer >= WANDER_DELAY)
 	{
 		idleWanderTimer -= WANDER_DELAY;
@@ -50,4 +126,14 @@ void Animal::TargetOutRange()
 		velocity.x = dir.x;
 		velocity.z = dir.z;
 	}
+}
+
+void Animal::Spawn(Vector3 pos)
+{
+	this->SetLocalPosition(pos);
+	isAlive = true;
+	isActive = true;
+	curHp = characterData.maxHp;
+	SetAnimalState(IDLE);
+	UpdateWorld();
 }

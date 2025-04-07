@@ -2,35 +2,22 @@
 
 Monster::Monster(string name) : Character(name)
 {
-	if (name == "Zombie")
-	{
-		modelAnimator = new ModelAnimator(name);
-		modelAnimator->Load();
+	modelAnimator = new ModelAnimator(name);
+	modelAnimator->Load();
 
-		modelAnimator->ReadClip("Zombie_Idle"); //0
-		modelAnimator->ReadClip("Zombie_Walk"); //1
-		modelAnimator->ReadClip("Zombie_Bite"); //2
-		modelAnimator->ReadClip("Zombie_Dying"); //3
-		modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDamaged"); }, 0.40f);
-		modelAnimator->GetClip(3)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDie"); }, 0.85f);
-		modelAnimator->CreateTexture();
-		modelAnimator->SetParent(this);
+	modelAnimator->ReadClip("Zombie_Idle"); //0
+	modelAnimator->ReadClip("Zombie_Walk"); //1
+	modelAnimator->ReadClip("Zombie_Bite"); //2
+	modelAnimator->ReadClip("Zombie_Dying"); //3
+	modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDamaged"); }, 0.40f);
+	modelAnimator->GetClip(3)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDie"); }, 0.85f);
+	modelAnimator->CreateTexture();
+	modelAnimator->SetParent(this);
 
-		collider = new BoxCollider();
-		collider->SetTag("ZombieCollider");
-		collider->SetParent(this);
-		collider->Load();
-	}
-	else
-	{
-		model = new Model(name);
-		model->Load();
-		model->SetParent(this);
-
-		collider = new BoxCollider();
-		collider->SetTag("chickenCollider");
-		collider->Load();
-	}
+	collider = new BoxCollider();
+	collider->SetTag("ZombieCollider");
+	collider->SetParent(this);
+	collider->Load();
 }
 
 Monster::~Monster()
@@ -131,8 +118,7 @@ void Monster::ExcuteAttack()
 void Monster::TargetInRange()
 {
 	if (monsterState == DIE) return;
-	Vector3 overlap;
-
+	
 	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
 	if (distance <= characterData.range)
 	{

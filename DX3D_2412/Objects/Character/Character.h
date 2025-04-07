@@ -22,6 +22,7 @@ public:
 	void ActivateHitState();
 	void DeactivateHitState();
 	virtual void Damaged(float damage, Character* target);
+	virtual void Spawn(Vector3 pos) {};
 
 	void SetLand() { velocity.y = 0; }
 	void SetFall() { velocity.y -= GRAVITY * DELTA; }

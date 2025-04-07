@@ -7,8 +7,7 @@ protected:
 		IDLE, MOVE, ATTACK, DIE
 	};
 	const float ATK_RANGE = 1.5f;
-	const float WANDER_DELAY = 2.0f;
-
+	
 public:
 	Monster(string name);
 	~Monster();
@@ -22,13 +21,9 @@ public:
 	void ExcuteAttack();
 
 	void TargetInRange();
-	void Spawn(Vector3 pos);
+	void Spawn(Vector3 pos) override;
 
 protected:
-	float idleWanderTimer = 0.0f;
-
-	Vector3 idlePosition;
-
 	bool isAlive = false;
 	MonsterState monsterState = IDLE;
 };
