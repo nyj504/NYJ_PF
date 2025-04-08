@@ -10,7 +10,7 @@ public:
 	void Edit();
 	void SetActive(bool isActive) { this->isActive = isActive; }
 
-	void OnExitButtonClick();
+	void OnSaveAndExitButtonClick();
 	void OnResumeButtonClick();
 private:
 	bool isActive = false;

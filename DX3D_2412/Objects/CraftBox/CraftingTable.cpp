@@ -57,14 +57,16 @@ void CraftingTable::CraftItem()
     {
         UINT itemKey = craftSlots[i]->GetKey();
         UINT itemCount = craftSlots[i]->GetCount();
+        if (itemCount <= 0)
+            itemKey = 0;
 
-        serialKey += to_string(craftSlots[i]->GetKey());
+        serialKey += to_string(itemKey);
 
         if (i < craftSlots.size() - 2)
         {
             serialKey += "_";
         }
-        if (itemKey > 0)
+        if (itemKey > 0 && itemCount > 0)
         {
             itemCounts[itemKey] = itemCount;
             if (itemCount < minCount)

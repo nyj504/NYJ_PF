@@ -24,6 +24,9 @@ public:
 
     vector<SubChunk*>GetSubchunks() { return subChunks; }
 
+    void Save();
+    void Load();
+
 private:
     Vector3 chunkPosition;
 

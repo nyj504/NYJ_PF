@@ -19,7 +19,6 @@ public:
 	vector<MainChunk*> GetClosestMainChunks();
 
 	void SetInstanceData(MainChunk* chunk, bool isChange);
-	void AddInstanceData(Block* block, Vector3 position);
 	void UpdateInstanceBuffer();
 
 	void MiningBlock(Block* block);
@@ -29,6 +28,9 @@ public:
 
 	UINT GetBlockInstanceIndex() { return globalBlockIndex++; }
 	void SetActiveSubChunk(SubChunk* subChunk) {activeSubChunk = subChunk;}
+
+	void Save();
+	void Load();
 
 private:
 	UINT globalBlockIndex = 0;

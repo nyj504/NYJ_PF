@@ -3,7 +3,7 @@
 
 WorldGenerator::WorldGenerator()
 {
-    CreateWorld();
+    Load();
 
     singleFaceBlock = new Cube();
     singleFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");
@@ -307,3 +307,39 @@ vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)
  
     return surroundingChunks;
 }
+
+void WorldGenerator::Save()
+{
+    for (const pair<UINT64, MainChunk*>& chunk : mainChunks)
+    {
+        chunk.second->Save();
+    }
+}
+
+void WorldGenerator::Load()
+{
+    int gridSize = 1;
+
+    for (int x = -gridSize; x <= gridSize; x++)
+    {
+        for (int z = -gridSize; z <= gridSize; z++)
+        {
+            float chunkX = x * CHUNK_WIDTH;
+            float chunkZ = z * CHUNK_DEPTH;
+
+            UINT64 chunkKey = GameMath::ChunkPosToKey(x, z);
+
+            if (mainChunks.find(chunkKey) != mainChunks.end()) continue;
+
+            TerrainType terrainType = TerrainType::PLAINS;
+
+            Vector3 chunkPosition = { chunkX, 0, chunkZ };
+            MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType, chunkKey, this);
+
+            mainChunk->Load();
+
+            mainChunks[chunkKey] = mainChunk;
+        }
+    }
+}
+

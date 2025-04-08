@@ -28,14 +28,14 @@ void MainChunk::Update()
     }
 
      subChunks[activeChunkIndex]->Update();
-     subChunks[1]->Update();
+     //subChunks[1]->Update();
     
 }
 
 void MainChunk::Render()
 {
     subChunks[activeChunkIndex]->Render();
-    subChunks[1]->Render();
+    //subChunks[1]->Render();
 }
 
 void MainChunk::GenerateTerrain()
@@ -78,7 +78,7 @@ void MainChunk::GenerateTerrain()
     {
         Vector3 subChunkPos = Vector3(chunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), chunkPosition.z);
 
-        SubChunk* subChunk = new SubChunk(i, worldGenerator);
+        SubChunk* subChunk = new SubChunk(i, myIndex, worldGenerator);
         subChunk->SetParentIndex(myIndex);
         subChunk->GenerateTerrain(subChunkPos, heightMap);
 
@@ -105,4 +105,42 @@ void MainChunk::SetInstanceData(bool isChange)
         totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
         totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
     }
+}
+
+void MainChunk::Save()
+{
+    string path = "Resources/Transforms/Map" + to_string(myIndex) + ".srt";
+    BinaryWriter* writer = new BinaryWriter(path);
+
+    writer->Data<Vector3>(chunkPosition);
+    writer->Data<UINT>(myIndex);
+
+    for (SubChunk* subChunk : subChunks)
+    {
+        subChunk->Save();
+    }
+
+    delete writer;
+}
+
+void MainChunk::Load()
+{
+    string path = "Resources/Transforms/Map" + to_string(myIndex) + ".srt";
+    BinaryReader* reader = new BinaryReader(path);
+
+    Vector3 mainchunkPosition = reader->Data<Vector3>();
+    UINT loadMyIndex = reader->Data<UINT>();
+
+    for (int i = 0; i < SUBCHUNK_SIZE; i++)
+    {
+        Vector3 subChunkPos = Vector3(mainchunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), mainchunkPosition.z);
+
+        SubChunk* subChunk = new SubChunk(i, loadMyIndex, worldGenerator);
+        subChunk->SetParentIndex(loadMyIndex);
+        subChunk->Load();
+
+        subChunks.push_back(subChunk);
+    }
+
+    delete reader;
 }

@@ -9,7 +9,7 @@ private:
 	};
 
 public:
-	SubChunk(int index, class WorldGenerator* worldGenerator);
+	SubChunk(int index, int mainchunkIndex, class WorldGenerator* worldGenerator);
 	~SubChunk();
 
 	void Update();
@@ -32,23 +32,25 @@ public:
 	void BuildBlock(Vector3 pos, int blockType);
 
 	bool HasCollider() { return hasCollider; }
-	bool IsMouseOverChunk() { return isMouseOver; }
-
+	
 	vector<InstanceData> GetVisibleSingleInstanceData() { return visibleSingleInstanceDatas; }
 	vector<InstanceData> GetVisibleMultiInstanceData() { return visibleMultiInstanceDatas; }
 
 	void FindVisibleBlocks();
 
+	void Save();
+	void Load();
+
 private:
 	TreeType treeType = CHAM;
 	bool hasCollider = false;
-	bool isMouseOver = false;
 
 	class WorldGenerator* worldGenerator;
 
 	Vector3 worldPos;
 	UINT64 parentIndex;
 	UINT index;
+	UINT mainchunkIndex;
 
 	unordered_map<UINT64,Block*>blocks; 
 

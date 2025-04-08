@@ -2,40 +2,17 @@
 
 #include "Scenes/GridScene.h"
 #include "Scenes/InGameScene.h"
-#include "Scenes/LightScene.h"
-#include "Scenes/TerrainScene.h"
 #include "Scenes/LobbyScene.h"
-#include "Scenes/InstancingScene.h"
-#include "Scenes/ModelRenderScene.h"
-#include "Scenes/ModelExportScene.h"
-#include "Scenes/ModelInstancingScene.h"
-#include "Scenes/ModelAnimationScene.h"
-#include "Scenes/BlockTestScene.h"
-#include "Scenes/ModelEquipScene.h"
-#include "Scenes/WeatherScene.h"
 #include "Scenes/ParticleEditorScene.h"
 
 GameManager::GameManager()
 {
-	//SCENE->Create("Start", new ModelAnimationScene());
-	//SCENE->Create("Start", new ModelInstancingScene());
-	//SCENE->Create("Start", new BlockTestScene());
-	//SCENE->Create("Start", new ModelEquipScene());
-	//SCENE->Create("Start", new WeatherScene());
-
 	//SCENE->Create("Grid", new GridScene());
 	//SCENE->Create("Start", new ParticleEditorScene());
 	//
 	//SCENE->Add("Start");
 	//SCENE->Add("Grid");
 	
-	//SCENE->Create("Model", new ModelExportScene());
-	//SCENE->Create("ModelRender", new ModelRenderScene());
-	
-	//SCENE->Add("Model");
-	//SCENE->Add("ModelRender");
-	
-
 	SCENE->Create("Lobby", new LobbyScene());
 	SCENE->Create("InGame", new InGameScene());
 	

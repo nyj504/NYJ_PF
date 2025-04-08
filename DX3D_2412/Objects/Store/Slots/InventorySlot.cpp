@@ -82,7 +82,12 @@ void InventorySlot::SetItem(UINT key, UINT count)
 
 void InventorySlot::DecreaseItem(UINT count)
 {
-	if (slotKey == 0 || itemCount <= 0) return;
+	if (itemCount <= 0 || itemCount <= 0)
+	{
+		slotKey = 0;
+		icon->UpdateFromSlot(this);
+		return;
+	}
 	if (itemCount - count < 0) return;
 
 	itemCount -= count;

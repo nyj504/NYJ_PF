@@ -321,6 +321,10 @@ void Inventory::TransferItem()
 			fromSlot->SetItem(0, 0); 
 			toSlot->SetItem(fromKey, fromCount);
 			isFirstSwap = false; 
+			if (fromSlot->GetTag() == "CraftSlot")
+			{
+				EventManager::Get()->ExcuteEvent("ExcuteCrafting");
+			}
 			fromSlot = toSlot;
 			cloneIcon->SetItem(toKey, toCount);
 		}
@@ -330,6 +334,12 @@ void Inventory::TransferItem()
 			fromSlot = toSlot;
 			cloneIcon->SetItem(toKey, toCount);
 		}
+		if (toSlot->GetTag() == "CraftSlot" || fromSlot->GetTag() == "CraftSlot")
+		{
+			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
+		}
+
+		
 		UpdateCloneIcon();
 	}
 	

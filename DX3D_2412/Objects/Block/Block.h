@@ -46,6 +46,9 @@ public:
 	UINT GetBlockInstanceID() { return blockInstanceID; }
 	void SetBlockInstanceID(UINT id) { this->blockInstanceID = id; }
 
+	void SetBlockID(UINT64 id) {this->blockID = id;}
+	UINT64 GetBlockID(UINT64 id) { return blockID;}
+
 	UVInfo GetUVInfo() { return uvInfo; }
 	void Mining();
 
@@ -56,6 +59,7 @@ private:
 private:
 	UINT key;
 	UINT64 parentIndex = 0;
+	UINT64 blockID = 0;
 
 	bool isOcclusion = false;
 

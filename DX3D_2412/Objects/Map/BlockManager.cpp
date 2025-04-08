@@ -71,7 +71,7 @@ void BlockManager::BuildBlock()
 	if (selectedBlock->GetCollider()->IsRayCollision(ray, &hit))
 	{
 		Audio::Get()->Play("build");
-		Vector3 buildPosition = selectedBlock->GetGlobalPosition() + hit.normal;
+		Vector3 buildPosition = selectedBlock->GetLocalPosition() + hit.normal;
 		worldGenerator->BuildBlock(buildPosition, quickSlotData.first);
 		INVEN->ConsumeItem(selectedSlotNum);
 	}
@@ -147,78 +147,14 @@ void BlockManager::ActivateRenderingChunks()
 	worldGenerator->UpdateInstanceBuffer();
 }
 
+void BlockManager::Save()
+{
+	worldGenerator->Save();
+}
 
-//
-//void BlockManager::Save()
-//{
-//	BinaryWriter* writer = new BinaryWriter("Resources/Transforms/Map.srt");
-//
-//	int count = blocks.size();
-//	writer->Data<int>(count); 
-//
-//	int index = 0;
-//
-//	for (Block* block : blocks)
-//	{
-//		writer->Data<int>(index);
-//		writer->Data<bool>(block->IsActive());
-//		writer->Data<Vector3>(block->GetGlobalPosition());
-//		writer->Data<Vector3>(block->GetGlobalRotation());
-//		writer->Data<Vector3>(block->GetGlobalScale());
-//		writer->Data<Vector3>(block->GetGlobalPivot());
-//		writer->Data<UINT>(block->GetItemKey());
-//
-//		index++;
-//	}
-//	delete writer;
-//}
-//
-//void BlockManager::Load()
-//{
-//	/*BinaryReader* reader = new BinaryReader("Resources/Transforms/Map.srt");
-//
-//	int blockCount = reader->Data<int>();
-//	blocks.clear();
-//	instanceDatas.clear();
-//
-//	blocks.reserve(blockCount);
-//	instanceDatas.resize(blockCount);
-//
-//	for (int i = 0; i < blockCount; i++)
-//	{
-//		int index = reader->Data<int>(); 
-//		bool isActive = reader->Data<bool>();
-//		Vector3 position = reader->Data<Vector3>(); 
-//		Vector3 rotation = reader->Data<Vector3>(); 
-//		Vector3 scale = reader->Data<Vector3>();
-//		Vector3 pivot = reader->Data<Vector3>();
-//		UINT key = reader->Data<UINT>();
-//		
-//		Block* editBlock = nullptr;
-//		ItemData data = DataManager::Get()->GetItemData(key);
-//
-//		if (data.textureType != "Model")
-//			editBlock = new SimpleBlock(key);
-//		else
-//			editBlock = new ComplexBlock(key);
-//
-//		
-//		editBlock->SetActive(isActive);
-//		editBlock->SetLocalPosition(position);
-//		editBlock->SetLocalRotation(rotation);
-//		editBlock->SetLocalScale(scale);
-//		editBlock->SetPivot(pivot);
-//		editBlock->GetMaterial()->SetShader(L"Instancing/Instancing.hlsl");
-//
-//		blocks.emplace_back(editBlock);
-//
-//		instanceDatas[i].transform = XMMatrixTranslation(position.x, position.y, position.z);
-//		instanceDatas[i].transform = XMMatrixTranspose(instanceDatas[i].transform);
-//	}
-//	UpdateInstanceBuffer();
-//
-//	delete reader;*/
-//}
-
+void BlockManager::Load()
+{
+	worldGenerator->Load();
+}
 
 

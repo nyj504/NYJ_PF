@@ -252,21 +252,11 @@
     <ClInclude Include="Objects\UI\Button.h" />
     <ClInclude Include="Objects\UI\ProgressBar.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Scenes\BlockTestScene.h" />
     <ClInclude Include="Scenes\GridScene.h" />
-    <ClInclude Include="Scenes\InstancingScene.h" />
-    <ClInclude Include="Scenes\LightScene.h" />
     <ClInclude Include="Scenes\LobbyScene.h" />
-    <ClInclude Include="Scenes\ModelAnimationScene.h" />
-    <ClInclude Include="Scenes\ModelEquipScene.h" />
-    <ClInclude Include="Scenes\ModelExportScene.h" />
-    <ClInclude Include="Scenes\ModelInstancingScene.h" />
-    <ClInclude Include="Scenes\ModelRenderScene.h" />
     <ClInclude Include="Scenes\ParticleEditorScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
-    <ClInclude Include="Scenes\TerrainScene.h" />
     <ClInclude Include="Scenes\InGameScene.h" />
-    <ClInclude Include="Scenes\WeatherScene.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -372,20 +362,10 @@
     <ClCompile Include="Objects\Store\Slots\SlotIcon.cpp" />
     <ClCompile Include="Objects\UI\Button.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
-    <ClCompile Include="Scenes\BlockTestScene.cpp" />
     <ClCompile Include="Scenes\GridScene.cpp" />
-    <ClCompile Include="Scenes\InstancingScene.cpp" />
-    <ClCompile Include="Scenes\LightScene.cpp" />
     <ClCompile Include="Scenes\LobbyScene.cpp" />
-    <ClCompile Include="Scenes\ModelAnimationScene.cpp" />
-    <ClCompile Include="Scenes\ModelEquipScene.cpp" />
-    <ClCompile Include="Scenes\ModelExportScene.cpp" />
-    <ClCompile Include="Scenes\ModelInstancingScene.cpp" />
-    <ClCompile Include="Scenes\ModelRenderScene.cpp" />
     <ClCompile Include="Scenes\ParticleEditorScene.cpp" />
-    <ClCompile Include="Scenes\TerrainScene.cpp" />
     <ClCompile Include="Scenes\InGameScene.cpp" />
-    <ClCompile Include="Scenes\WeatherScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3D_2412.rc" />

@@ -26,7 +26,7 @@ LobbyScene::LobbyScene()
 
 	Button* button1 = new Button(L"Resources/Textures/Lobby/lobbyButton.png");
 	button1->SetLocalPosition(Vector3(CENTER.x, CENTER.y - 50));
-	button1->SetText("Options...");
+	button1->SetText("Load Saved Game");
 	//button1->SetEvent(bind(&PauseMenuUI::OnExitButtonClick, this));
 	button1->UpdateWorld();
 

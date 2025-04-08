@@ -14,7 +14,7 @@ PauseMenuUI::PauseMenuUI()
 	Button* button1 = new Button(L"Resources/Textures/UI/longButton.png");
 	button1->SetLocalPosition(Vector3(CENTER.x, CENTER.y + 100));
 	button1->SetText("Save and Quit to Title");
-	button1->SetEvent(bind(&PauseMenuUI::OnExitButtonClick, this));
+	button1->SetEvent(bind(&PauseMenuUI::OnSaveAndExitButtonClick, this));
 	button1->UpdateWorld();
 	
 	buttons.push_back(button1);
@@ -50,11 +50,11 @@ void PauseMenuUI::Edit()
 		button->Edit();
 }
 
-void PauseMenuUI::OnExitButtonClick()
+void PauseMenuUI::OnSaveAndExitButtonClick()
 {
-	//MAP->Save();
+	MAP->Save();
 	SceneManager::Get()->Add("Lobby");
-	SceneManager::Get()->Remove("Test");
+	SceneManager::Get()->Remove("InGame");
 }
 
 void PauseMenuUI::OnResumeButtonClick()

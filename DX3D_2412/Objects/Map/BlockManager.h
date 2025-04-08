@@ -24,8 +24,8 @@ public:
 	CrackEffect* GetCrackEffect() { return crackEffect; }
 
 	void SetSelectedBlock(Block* block) { selectedBlock = block; }
-	//void Save();  
-	//void Load();
+	void Save();  
+	void Load();
 private:
 	bool isParticlePlayed = false;
 

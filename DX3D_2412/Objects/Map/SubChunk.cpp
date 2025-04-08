@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "SubChunk.h"
 
-SubChunk::SubChunk(int index, WorldGenerator* worldGenerator) : index(index), worldGenerator(worldGenerator)
+SubChunk::SubChunk(int index, int mainchunkIndex, WorldGenerator* worldGenerator) : index(index), mainchunkIndex(mainchunkIndex), worldGenerator(worldGenerator)
 {
 }
 
@@ -16,8 +16,6 @@ SubChunk::~SubChunk()
 
 void SubChunk::Update()
 {
-	isMouseOver = false;
-
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 
 	float minDistance = FLT_MAX;
@@ -58,7 +56,6 @@ void SubChunk::Update()
 
 	if (selectedBlock)
 	{
-		isMouseOver = true;
 		worldGenerator->SetActiveSubChunk(this);
 		BlockManager::Get()->SetSelectedBlock(selectedBlock);
 	}
@@ -194,6 +191,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 				newBlock->SetActive(true);
 				newBlock->SetLocalPosition(globalPos);
 				newBlock->SetBlockInstanceID(blockIndex);
+				newBlock->SetBlockID(blockID);
 				newBlock->UpdateWorld();
 
 				blocks[blockID] = newBlock;
@@ -239,6 +237,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 					leafBlock->SetActive(true);
 					leafBlock->SetLocalPosition(globalPos);
 					leafBlock->SetBlockInstanceID(blockIndex);
+					leafBlock->SetBlockID(blockID);
 					leafBlock->UpdateWorld();
 
 					blocks[blockID] = leafBlock;
@@ -271,6 +270,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 						logBlock->SetActive(true);
 						logBlock->SetLocalPosition(globalPos);
 						logBlock->SetBlockInstanceID(blockIndex);
+						logBlock->SetBlockID(blockID);
 						logBlock->UpdateWorld();
 
 						blocks[blockID] = logBlock;
@@ -283,6 +283,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 						leafBlock->SetActive(true);
 						leafBlock->SetLocalPosition(globalPos);
 						leafBlock->SetBlockInstanceID(blockIndex);
+						leafBlock->SetBlockID(blockID);
 						leafBlock->UpdateWorld();
 
 						blocks[blockID] = leafBlock;
@@ -303,6 +304,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 		logBlock->SetActive(true);
 		logBlock->SetLocalPosition(globalPos);
 		logBlock->SetBlockInstanceID(blockIndex);
+		logBlock->SetBlockID(blockID);
 		logBlock->UpdateWorld();
 
 		blocks[blockID] = logBlock;
@@ -356,7 +358,9 @@ void SubChunk::CheckPlayerCollision()
 
 		if (playerVelocity.x >= 0.1f || playerVelocity.z >= 0.1f)
 		{
-			string stepSound = "step_" + steppedBlock->GetItemData().soundType;
+			string stepSound;
+			if(steppedBlock)
+				stepSound = "step_" + steppedBlock->GetItemData().soundType;
 			
 			if (!Audio::Get()->IsPlaySound(stepSound))
 			{
@@ -525,56 +529,48 @@ void SubChunk::FindVisibleBlocks()
 
 	Vector3 playerPos = PLAYER->GetGlobalPosition();
 
-	for (int x = 0; x < CHUNK_WIDTH; x++)
+	for (const pair<UINT64, Block*> pair : blocks)
 	{
-		for (int z = 0; z < CHUNK_DEPTH; z++)
+		Block* block = pair.second;
+
+		if (!block) continue;
+
+		Vector3 blockWorldPos = block->GetGlobalPosition();
+
+		if (GetBlock({ blockWorldPos.x + 1, blockWorldPos.y, blockWorldPos.z }) &&
+			GetBlock({ blockWorldPos.x - 1, blockWorldPos.y, blockWorldPos.z }) &&
+			GetBlock({ blockWorldPos.x, blockWorldPos.y + 1, blockWorldPos.z }) &&
+			GetBlock({ blockWorldPos.x, blockWorldPos.y - 1, blockWorldPos.z }) &&
+			GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z + 1 }) &&
+			GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z - 1 }))
 		{
-			for (int y = 0; y < SUBCHUNK_HEIGHT; y++)
-			{
-				Vector3 blockPos = { worldPos.x + x, worldPos.y + y, worldPos.z + z };
-				Block* block = GetBlock(blockPos);
+			block->SetOcclusion(true);
+			continue;
+		} // 오클루젼 
 
-				if (!block) continue;
-
-				Vector3 blockWorldPos = block->GetGlobalPosition();
-
-				if (GetBlock({ blockWorldPos.x + 1, blockWorldPos.y, blockWorldPos.z }) &&
-					GetBlock({ blockWorldPos.x - 1, blockWorldPos.y, blockWorldPos.z }) &&
-					GetBlock({ blockWorldPos.x, blockWorldPos.y + 1, blockWorldPos.z }) &&
-					GetBlock({ blockWorldPos.x, blockWorldPos.y - 1, blockWorldPos.z }) &&
-					GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z + 1 }) &&
-					GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z - 1 }))
-				{
-					block->SetOcclusion(true);
-					continue;
-				} // 오클루젼 
-
-				if (blockWorldPos.y <= playerPos.y - 7)
-				{
-					continue;
-				}
-
-				InstanceData visibleInstanceData;
-				UVInfo uvInfo = block->GetUVInfo(); 
-
-				block->SetOcclusion(false); // 블록이 한 방위라도 노출되면 인스턴스 데이터 추가
-
-				visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
-				visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
-
-				visibleInstanceData.curFrame = uvInfo.uvStart; 
-				visibleInstanceData.maxFrame = uvInfo.uvEnd;
-
-				visibleInstanceData.index = block->GetBlockInstanceID(); //블록 고유의 인스턴스 아이디 
-				visibleInstanceData.isActive = block->IsActive();
-					
-				if (block->IsNormal()) // 모든 면이 동일한 블럭 
-					visibleSingleInstanceDatas.push_back(visibleInstanceData);
-				else // 각기 다른 면을 가진 블럭 
-					visibleMultiInstanceDatas.push_back(visibleInstanceData);
-				
-			}
+		if (blockWorldPos.y <= playerPos.y - 7)
+		{
+			continue;
 		}
+
+		InstanceData visibleInstanceData;
+		UVInfo uvInfo = block->GetUVInfo(); 
+
+		block->SetOcclusion(false); // 블록이 한 방위라도 노출되면 인스턴스 데이터 추가
+
+		visibleInstanceData.transform = XMMatrixTranslation(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z);
+		visibleInstanceData.transform = XMMatrixTranspose(visibleInstanceData.transform);
+
+		visibleInstanceData.curFrame = uvInfo.uvStart; 
+		visibleInstanceData.maxFrame = uvInfo.uvEnd;
+
+		visibleInstanceData.index = block->GetBlockInstanceID(); //블록 고유의 인스턴스 아이디 
+		visibleInstanceData.isActive = block->IsActive();
+					
+		if (block->IsNormal()) // 모든 면이 동일한 블럭 
+			visibleSingleInstanceDatas.push_back(visibleInstanceData);
+		else // 각기 다른 면을 가진 블럭 
+			visibleMultiInstanceDatas.push_back(visibleInstanceData);
 	}
 }
 
@@ -632,7 +628,60 @@ void SubChunk::BuildBlock(Vector3 pos, int blockType)
 	newBlock->SetActive(true);
 	newBlock->SetOcclusion(false);
 	newBlock->SetBlockInstanceID(blockIndex);
+	newBlock->SetBlockID(blockID);
 	blocks[blockID] = newBlock;
 
 	FindVisibleBlocks();
+}
+
+void SubChunk::Save()
+{
+	string path = "Resources/Transforms/Map" + to_string(mainchunkIndex) + to_string(index) + ".srt";
+	BinaryWriter* writer = new BinaryWriter(path);
+
+	int count = blocks.size();
+	writer->Data<int>(count); 
+
+	for (const pair<UINT64, Block*> pair : blocks)
+	{
+		Block* block = pair.second;
+
+		writer->Data<UINT>(block->GetItemData().key);
+		writer->Data<UINT>(block->GetBlockInstanceID());
+		writer->Data<Vector3>(block->GetLocalPosition());
+		writer->Data<bool>(block->IsActive());
+	}
+	delete writer;
+}
+
+void SubChunk::Load()
+{
+	string path = "Resources/Transforms/Map" + to_string(mainchunkIndex) + to_string(index) + ".srt";
+
+	BinaryReader* reader = new BinaryReader(path);
+
+	int blockCount = reader->Data<int>();
+	blocks.clear();
+	
+	blocks.reserve(blockCount);
+
+	for (int i = 0; i < blockCount; i++)
+	{
+		UINT key = reader->Data<UINT>();
+		UINT instanceID = reader->Data<UINT>();
+		Vector3 position = reader->Data<Vector3>(); 
+		bool isActive = reader->Data<bool>();
+		
+		UINT64 blockID = GameMath::GenerateBlockID(position);
+	
+		Block* newBlock = new Block(key);
+		newBlock->SetActive(isActive);
+		newBlock->SetLocalPosition(position);
+		newBlock->SetBlockInstanceID(instanceID);
+		newBlock->UpdateWorld();
+
+		blocks[blockID] = newBlock;
+	}
+
+	delete reader;
 }
