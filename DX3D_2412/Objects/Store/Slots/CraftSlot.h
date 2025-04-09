@@ -8,8 +8,7 @@ public:
 
 	void Update();
 
-	void TriggerCraftItem();
-	void TriggerEquipItem();
+	void SetItem(UINT key, UINT count) override;
 private:
 	CraftBox* craftBox;
 };

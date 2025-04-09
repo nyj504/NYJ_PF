@@ -77,6 +77,7 @@ void InventorySlot::SetItem(UINT key, UINT count)
 		itemCount = count;
 	}
 	isChanged = true;
+
 	icon->UpdateFromSlot(this);
 }
 

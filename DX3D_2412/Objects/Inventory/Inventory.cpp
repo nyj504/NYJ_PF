@@ -25,6 +25,11 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	quad->SetLocalPosition(Vector3(CENTER.x - 75, CENTER.y + 163));
 	quad->UpdateWorld();
 
+	AddItem(92, 1);
+	AddItem(93, 1);	
+	AddItem(94, 1);
+	AddItem(95, 1);
+
 	SetActive(false);
 }
 
@@ -145,10 +150,7 @@ void Inventory::Clear()
 	{
 		isRefreshQuickSlot = true;
 	}
-	if (toSlot->GetTag() == "CraftSlot" || fromSlot->GetTag() == "CraftSlot")
-	{
-		EventManager::Get()->ExcuteEvent("ExcuteCrafting");
-	}
+
 	cloneIcon->SetActive(false);
 	toSlot->SetRest(true);
 	fromSlot->SetRest(true);
@@ -229,9 +231,6 @@ void Inventory::TransferItem()
 		fromSlot->ConsumeItem();
 		toSlot->SetItem(fromKey, 1);
 
-		if (toSlot->GetTag() == "CraftSlot")
-			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
-
 		if (fromSlot->GetCount() <= 0)
 		{
 			Clear();
@@ -290,10 +289,6 @@ void Inventory::TransferItem()
 			fromSlot->SetItem(0, 0); 
 			toSlot->SetItem(fromKey, fromCount);
 			isFirstSwap = false; 
-			if (fromSlot->GetTag() == "CraftSlot")
-			{
-				EventManager::Get()->ExcuteEvent("ExcuteCrafting");
-			}
 			fromSlot = toSlot;
 			cloneIcon->SetItem(toKey, toCount);
 		}
@@ -302,10 +297,6 @@ void Inventory::TransferItem()
 			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
 			fromSlot = toSlot;
 			cloneIcon->SetItem(toKey, toCount);
-		}
-		if (toSlot->GetTag() == "CraftSlot" || fromSlot->GetTag() == "CraftSlot")
-		{
-			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 		}
 
 		UpdateCloneIcon();

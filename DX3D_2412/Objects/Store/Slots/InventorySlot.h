@@ -20,7 +20,7 @@ public:
 	void Update();
 	void Render();
 
-	void SetItem(UINT key, UINT count);
+	virtual void SetItem(UINT key, UINT count);
 	void DecreaseItem(UINT count);
 	void ConsumeItem();
 
