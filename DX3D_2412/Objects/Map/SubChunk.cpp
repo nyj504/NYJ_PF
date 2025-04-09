@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "SubChunk.h"
 
-SubChunk::SubChunk(int index, int mainchunkIndex, WorldGenerator* worldGenerator) : index(index), mainchunkIndex(mainchunkIndex), worldGenerator(worldGenerator)
+SubChunk::SubChunk(int index, WorldGenerator* worldGenerator) : index(index), worldGenerator(worldGenerator)
 {
 }
 
@@ -636,7 +636,7 @@ void SubChunk::BuildBlock(Vector3 pos, int blockType)
 
 void SubChunk::Save()
 {
-	string path = "Resources/Transforms/Map" + to_string(mainchunkIndex) + to_string(index) + ".srt";
+	string path = "Resources/Transforms/Map" + to_string(parentIndex) + to_string(index) + ".srt";
 	BinaryWriter* writer = new BinaryWriter(path);
 
 	int count = blocks.size();
@@ -649,14 +649,13 @@ void SubChunk::Save()
 		writer->Data<UINT>(block->GetItemData().key);
 		writer->Data<UINT>(block->GetBlockInstanceID());
 		writer->Data<Vector3>(block->GetLocalPosition());
-		writer->Data<bool>(block->IsActive());
 	}
 	delete writer;
 }
 
 void SubChunk::Load()
 {
-	string path = "Resources/Transforms/Map" + to_string(mainchunkIndex) + to_string(index) + ".srt";
+	string path = "Resources/Transforms/Map" + to_string(parentIndex) + to_string(index) + ".srt";
 
 	BinaryReader* reader = new BinaryReader(path);
 
@@ -670,12 +669,11 @@ void SubChunk::Load()
 		UINT key = reader->Data<UINT>();
 		UINT instanceID = reader->Data<UINT>();
 		Vector3 position = reader->Data<Vector3>(); 
-		bool isActive = reader->Data<bool>();
 		
 		UINT64 blockID = GameMath::GenerateBlockID(position);
 	
 		Block* newBlock = new Block(key);
-		newBlock->SetActive(isActive);
+		newBlock->SetActive(true);
 		newBlock->SetLocalPosition(position);
 		newBlock->SetBlockInstanceID(instanceID);
 		newBlock->UpdateWorld();

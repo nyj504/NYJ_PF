@@ -23,6 +23,7 @@ public:
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
 
     vector<SubChunk*>GetSubchunks() { return subChunks; }
+    UINT64 GetMyIndex() { return myIndex; }
 
     void Save();
     void Load();

@@ -78,7 +78,7 @@ void MainChunk::GenerateTerrain()
     {
         Vector3 subChunkPos = Vector3(chunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), chunkPosition.z);
 
-        SubChunk* subChunk = new SubChunk(i, myIndex, worldGenerator);
+        SubChunk* subChunk = new SubChunk(i, worldGenerator);
         subChunk->SetParentIndex(myIndex);
         subChunk->GenerateTerrain(subChunkPos, heightMap);
 
@@ -113,8 +113,7 @@ void MainChunk::Save()
     BinaryWriter* writer = new BinaryWriter(path);
 
     writer->Data<Vector3>(chunkPosition);
-    writer->Data<UINT>(myIndex);
-
+   
     for (SubChunk* subChunk : subChunks)
     {
         subChunk->Save();
@@ -129,14 +128,13 @@ void MainChunk::Load()
     BinaryReader* reader = new BinaryReader(path);
 
     Vector3 mainchunkPosition = reader->Data<Vector3>();
-    UINT loadMyIndex = reader->Data<UINT>();
-
+   
     for (int i = 0; i < SUBCHUNK_SIZE; i++)
     {
         Vector3 subChunkPos = Vector3(mainchunkPosition.x, chunkPosition.y - (SUBCHUNK_HEIGHT * i), mainchunkPosition.z);
 
-        SubChunk* subChunk = new SubChunk(i, loadMyIndex, worldGenerator);
-        subChunk->SetParentIndex(loadMyIndex);
+        SubChunk* subChunk = new SubChunk(i, worldGenerator);
+        subChunk->SetParentIndex(myIndex);
         subChunk->Load();
 
         subChunks.push_back(subChunk);

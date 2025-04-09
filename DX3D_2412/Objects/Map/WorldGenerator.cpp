@@ -310,36 +310,41 @@ vector<MainChunk*> WorldGenerator::GetChunksInRange(int distance)
 
 void WorldGenerator::Save()
 {
+    string path = "Resources/Transforms/World.srt";
+    BinaryWriter* writer = new BinaryWriter(path);
+
+    int count = mainChunks.size();
+    writer->Data<int>(count);
+
     for (const pair<UINT64, MainChunk*>& chunk : mainChunks)
     {
+        writer->Data<UINT64>(chunk.second->GetMyIndex());
+        writer->Data<Vector3>(chunk.second->GetChunkPosition());
         chunk.second->Save();
     }
+
+    delete writer;
 }
 
 void WorldGenerator::Load()
 {
-    int gridSize = 1;
+    string path = "Resources/Transforms/World.srt";
+    BinaryReader* reader = new BinaryReader(path);
 
-    for (int x = -gridSize; x <= gridSize; x++)
+    int count = reader->Data<int>();
+
+    for (int i = 0; i < count; i++)
     {
-        for (int z = -gridSize; z <= gridSize; z++)
-        {
-            float chunkX = x * CHUNK_WIDTH;
-            float chunkZ = z * CHUNK_DEPTH;
+        UINT64 chunkIndex = reader->Data<UINT64>();
+        Vector3 chunkPosition = reader->Data<Vector3>();
 
-            UINT64 chunkKey = GameMath::ChunkPosToKey(x, z);
+        MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType, chunkIndex, this);
 
-            if (mainChunks.find(chunkKey) != mainChunks.end()) continue;
+        mainChunk->Load();
 
-            TerrainType terrainType = TerrainType::PLAINS;
-
-            Vector3 chunkPosition = { chunkX, 0, chunkZ };
-            MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType, chunkKey, this);
-
-            mainChunk->Load();
-
-            mainChunks[chunkKey] = mainChunk;
-        }
+        mainChunks[chunkIndex] = mainChunk;
     }
+
+    delete reader;
 }
 

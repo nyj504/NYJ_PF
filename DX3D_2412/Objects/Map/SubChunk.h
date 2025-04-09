@@ -9,7 +9,7 @@ private:
 	};
 
 public:
-	SubChunk(int index, int mainchunkIndex, class WorldGenerator* worldGenerator);
+	SubChunk(int index, class WorldGenerator* worldGenerator);
 	~SubChunk();
 
 	void Update();
