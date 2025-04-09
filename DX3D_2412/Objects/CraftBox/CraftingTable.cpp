@@ -98,13 +98,12 @@ void CraftingTable::CraftItem()
         UINT finalResultCount = resultCount * minCount;
 
         craftSlots[MAX_SLOTSIZE - 1]->SetItem(resultKey, finalResultCount);
-
-        return;
+        craftSlots[MAX_SLOTSIZE - 1]->SetChanged(false);
     }
     else
     {
         craftSlots[MAX_SLOTSIZE - 1]->SetItem(0, 0);
-        return;
+        craftSlots[MAX_SLOTSIZE - 1]->SetChanged(false);
     }
 }
 

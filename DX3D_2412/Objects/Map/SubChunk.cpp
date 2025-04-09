@@ -24,29 +24,28 @@ void SubChunk::Update()
 	Block* closestBlock = nullptr;
 
 	Vector3 playerPos = PLAYER->GetLocalPosition();
-	float maxDistance = PLAYER->GetPlayerReach(false);
 
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
 		Block* block = pair.second;
 
-		if (block->IsOcclusion()) continue;
-		if (!block->IsActive()) continue;
+		if (block->IsOcclusion() || !block->IsActive()) continue;
 
 		Vector3 blockPos = block->GetLocalPosition();
 
-		float xDistance = abs(playerPos.x - blockPos.x);
-		float yDistance = abs(playerPos.y - blockPos.y);
-		float zDistance = abs(playerPos.z - blockPos.z);
+		float distance = Vector3::Distance(playerPos, blockPos);
 
-		if (xDistance <= 6 && yDistance <= 6 && zDistance <= 6)
+		if (distance <= INTERACTABLE_DISTANCE)
 		{
 			if (block->GetCollider()->IsRayCollision(ray, &hit))
 			{
-				if (hit.distance <= maxDistance)
+				if (hit.distance <= INTERACTABLE_DISTANCE)
 				{
-					minDistance = hit.distance;
-					closestBlock = block;
+					if (hit.distance < minDistance)
+					{
+						minDistance = hit.distance;
+						closestBlock = block;
+					}
 				}
 			}
 		}
@@ -56,13 +55,31 @@ void SubChunk::Update()
 
 	if (selectedBlock)
 	{
-		worldGenerator->SetActiveSubChunk(this);
-		BlockManager::Get()->SetSelectedBlock(selectedBlock);
+		if (BlockManager::Get()->GetSelectedBlock())
+		{
+			if (selectedBlock->GetParentIndex() != BlockManager::Get()->GetSelectedBlock()->GetParentIndex())
+			{
+				float otherBlockDistance = Vector3::Distance(playerPos, BlockManager::Get()->GetSelectedBlock()->GetLocalPosition());
+
+				if (minDistance < otherBlockDistance)
+				{
+					worldGenerator->SetActiveSubChunk(this);
+					BlockManager::Get()->SetSelectedBlock(selectedBlock);
+				}
+			}
+		}
+		else 
+		{
+			worldGenerator->SetActiveSubChunk(this);
+			BlockManager::Get()->SetSelectedBlock(selectedBlock);
+		}
 	}
 
 	for (const pair<UINT64, Block*> pair : blocks)
 	{
 		Block* block = pair.second;
+
+		if (block->IsOcclusion() || !block->IsActive()) continue;
 
 		if (block == closestBlock)
 			block->GetCollider()->SetColor(1, 0, 0);
@@ -83,11 +100,9 @@ void SubChunk::Render()
 		Vector3 playerPos = PLAYER->GetGlobalPosition();
 		Vector3 blockPos = block->GetGlobalPosition();
 
-		float xDistance = abs(playerPos.x - blockPos.x);
-		float yDistance = abs(playerPos.y - blockPos.y);
-		float zDistance = abs(playerPos.z - blockPos.z);
+		float distance = Vector3::Distance(playerPos, blockPos);
 
-		if (xDistance <= 6 && yDistance <= 6 && zDistance <= 6)
+		if (distance <= INTERACTABLE_DISTANCE)
 		{
 			block->Render();
 		}
@@ -189,6 +204,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 			
 				Block* newBlock = new Block(blockType);
 				newBlock->SetActive(true);
+				newBlock->SetParentIndex(index);
 				newBlock->SetLocalPosition(globalPos);
 				newBlock->SetBlockInstanceID(blockIndex);
 				newBlock->SetBlockID(blockID);
@@ -235,6 +251,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 
 					Block* leafBlock = new Block(leafType);
 					leafBlock->SetActive(true);
+					leafBlock->SetParentIndex(index);
 					leafBlock->SetLocalPosition(globalPos);
 					leafBlock->SetBlockInstanceID(blockIndex);
 					leafBlock->SetBlockID(blockID);
@@ -268,6 +285,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 					{
 						Block* logBlock = new Block(logType);
 						logBlock->SetActive(true);
+						logBlock->SetParentIndex(index);
 						logBlock->SetLocalPosition(globalPos);
 						logBlock->SetBlockInstanceID(blockIndex);
 						logBlock->SetBlockID(blockID);
@@ -281,6 +299,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 
 						Block* leafBlock = new Block(leafType);
 						leafBlock->SetActive(true);
+						leafBlock->SetParentIndex(index);
 						leafBlock->SetLocalPosition(globalPos);
 						leafBlock->SetBlockInstanceID(blockIndex);
 						leafBlock->SetBlockID(blockID);
@@ -302,6 +321,7 @@ void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
 
 		Block* logBlock = new Block(logType);
 		logBlock->SetActive(true);
+		logBlock->SetParentIndex(index);
 		logBlock->SetLocalPosition(globalPos);
 		logBlock->SetBlockInstanceID(blockIndex);
 		logBlock->SetBlockID(blockID);
@@ -329,14 +349,12 @@ void SubChunk::CheckPlayerCollision()
 
 		Vector3 blockPos = block->GetLocalPosition();
 
-		float xDistance = abs(playerPos.x - blockPos.x);
-		float yDistance = abs(playerPos.y - blockPos.y);
-		float zDistance = abs(playerPos.z - blockPos.z);
+		float distance = Vector3::Distance(playerPos, blockPos);
 
 		if (block->IsOcclusion() || !block->IsActive())
 			continue;
 
-		if (xDistance > 2 && yDistance > 2 && zDistance > 2)
+		if (distance > 2)
 			continue;
 
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -347,47 +365,8 @@ void SubChunk::CheckPlayerCollision()
 				steppedBlock = block;
 			}
 		}	
-	}
 
-	if (maxHeight >= minPlayerPosition.y)
-	{
-		Vector3 playerVelocity = PLAYER->GetPlayerVelocity();
-		
-		PLAYER->Translate(0, maxHeight - minPlayerPosition.y, 0);
-		PLAYER->SetLand();
-
-		if (playerVelocity.x >= 0.1f || playerVelocity.z >= 0.1f)
-		{
-			string stepSound;
-			if(steppedBlock)
-				stepSound = "step_" + steppedBlock->GetItemData().soundType;
-			
-			if (!Audio::Get()->IsPlaySound(stepSound))
-			{
-				Audio::Get()->Play(stepSound);
-			}
-		}
-	}
-	else if (maxHeight - minPlayerPosition.y < 0.1f)
-	{
-		PLAYER->SetFall();
-		steppedBlock = nullptr;
-	}
-
-	for (const pair<UINT64, Block*> pair : blocks)
-	{
-		Block* block = pair.second;
-
-		if (block->IsOcclusion() || !block->IsActive())
-			continue;
-
-		Vector3 blockPos = block->GetLocalPosition();
-
-		float xDistance = abs(playerPos.x - blockPos.x);
-		float yDistance = abs(playerPos.y - blockPos.y);
-		float zDistance = abs(playerPos.z - blockPos.z);
-
-		if (xDistance <= 2 && yDistance <= 2 && zDistance <= 2)
+		if (distance <= 2)
 		{
 			Vector3 blockPosition = block->GetLocalPosition();
 			Vector3 maxBoxPosition = blockPosition + block->GetCollider()->HalfSize();
@@ -416,6 +395,31 @@ void SubChunk::CheckPlayerCollision()
 			}
 		}
 	}
+
+	if (maxHeight >= minPlayerPosition.y)
+	{
+		Vector3 playerVelocity = PLAYER->GetPlayerVelocity();
+		
+		PLAYER->Translate(0, maxHeight - minPlayerPosition.y, 0);
+		PLAYER->SetLand();
+
+		if (playerVelocity.x >= 0.1f || playerVelocity.z >= 0.1f)
+		{
+			string stepSound;
+			if(steppedBlock)
+				stepSound = "step_" + steppedBlock->GetItemData().soundType;
+			
+			if (!Audio::Get()->IsPlaySound(stepSound))
+			{
+				Audio::Get()->Play(stepSound);
+			}
+		}
+	}
+	else if (maxHeight - minPlayerPosition.y < 0.1f)
+	{
+		PLAYER->SetFall();
+		steppedBlock = nullptr;
+	}
 }
 
 void SubChunk::CheckMonsterCollision()
@@ -441,14 +445,12 @@ void SubChunk::CheckMonsterCollision()
 
 		Vector3 blockPos = block->GetLocalPosition();
 
-		float xDistance = abs(monsterPos.x - blockPos.x);
-		float yDistance = abs(monsterPos.y - blockPos.y);
-		float zDistance = abs(monsterPos.z - blockPos.z);
+		float distance = Vector3::Distance(monsterPos, blockPos);
 
 		if (block->IsOcclusion() || !block->IsActive())
 			continue;
 
-		if (xDistance > 2 && yDistance > 2 && zDistance > 2)
+		if (distance > 2)
 			continue;
 
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -456,36 +458,10 @@ void SubChunk::CheckMonsterCollision()
 			if (hit.point.y > maxHeight)
 				maxHeight = hit.point.y;
 		}
-	}
-
-	if (maxHeight >= minMonsterPosition.y)
-	{
-		monster->Translate(0, maxHeight - minMonsterPosition.y, 0);
-		monster->SetLand();
-	}
-	else if (maxHeight - minMonsterPosition.y < 0.1f)
-	{
-		monster->SetFall();
-	}
-
-	for (const pair<UINT64, Block*> pair : blocks)
-	{
-		Block* block = pair.second;
-
-		if (block->IsOcclusion() || !block->IsActive())
-			continue;
-
-		Vector3 blockPos = block->GetLocalPosition();
-
-		float xDistance = abs(monsterPos.x - blockPos.x);
-		float yDistance = abs(monsterPos.y - blockPos.y);
-		float zDistance = abs(monsterPos.z - blockPos.z);
-
-		if (xDistance <= 2 && yDistance <= 2 && zDistance <= 2)
+		if (distance <= 2)
 		{
-			Vector3 blockPosition = block->GetLocalPosition();
-			Vector3 maxBoxPosition = blockPosition + block->GetCollider()->HalfSize();
-			Vector3 minBoxPosition = blockPosition - block->GetCollider()->HalfSize();
+			Vector3 maxBoxPosition = blockPos + block->GetCollider()->HalfSize();
+			Vector3 minBoxPosition = blockPos - block->GetCollider()->HalfSize();
 
 			if (block->GetCollider()->IsBoxCollision(monster->GetCollider(), &overlap))
 			{
@@ -509,6 +485,16 @@ void SubChunk::CheckMonsterCollision()
 				}
 			}
 		}
+	}
+
+	if (maxHeight >= minMonsterPosition.y)
+	{
+		monster->Translate(0, maxHeight - minMonsterPosition.y, 0);
+		monster->SetLand();
+	}
+	else if (maxHeight - minMonsterPosition.y < 0.1f)
+	{
+		monster->SetFall();
 	}
 }
 
@@ -622,6 +608,7 @@ void SubChunk::BuildBlock(Vector3 pos, int blockType)
 	unordered_map<UINT64, Block*>::iterator it = blocks.find(blockID);
 	
 	Block* newBlock = new Block(blockType);
+	newBlock->SetParentIndex(index);
 	newBlock->SetLocalPosition(pos);
 	newBlock->UpdateWorld();
 	newBlock->EnableCollider();

@@ -35,6 +35,7 @@ public:
 	bool IsHold() { return isHold; }
 	bool IsPush() { return isPush; }
 	bool IsPressShift() { return isPressShift; }
+	void SetPressShift(bool isPressShift) { this->isPressShift = isPressShift; }
 
 	void SetRest(bool isRest) { this->isRest = isRest; }
 

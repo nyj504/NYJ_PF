@@ -7,6 +7,7 @@ private:
 	{
 		CHAM, ACACIA
 	};
+	const int INTERACTABLE_DISTANCE = 5;
 
 public:
 	SubChunk(int index, int mainchunkIndex, class WorldGenerator* worldGenerator);
