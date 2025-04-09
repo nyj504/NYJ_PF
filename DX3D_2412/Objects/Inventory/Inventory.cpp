@@ -248,9 +248,13 @@ void Inventory::TransferItem()
 		return;
 	}
 
-	if (toSlot->IsPush())
+	if (toSlot->IsPush() && fromCount > 0)
 	{
 		fromSlot->ConsumeItem();
+		toSlot->SetItem(fromKey, 1);
+
+		if (toSlot->GetTag() == "CraftSlot")
+			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 
 		if (fromSlot->GetCount() <= 0)
 		{
@@ -260,51 +264,39 @@ void Inventory::TransferItem()
 		else 
 		{
 			fromSlot->GetIcon()->SetActive(false);
-
-			toSlot->SetItem(fromKey, 1);
 			toSlot->SetRest(true);
 			cloneIcon->SetItem(fromKey, fromCount);
 			UpdateCloneIcon();
-			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 			return;
 		}
 	}
 
-	if(fromSlot->IsPressShift())
-		isFirstSwap = false;
-
-	if (toKey == fromKey && !fromSlot->IsPressShift()) //같으면 더하기
+	if (toKey == fromKey) //같으면 더하기
 	{
-		toSlot->SetItem(fromKey, fromCount);
-		fromSlot->SetItem(0, 0);
-		Clear();
-		return;
-	}
-
-	if (toKey == fromKey && fromSlot->IsPressShift()) //같으면 더하기
-	{
-		toSlot->SetItem(fromKey, cloneIcon->GetItemCount().second);
-		Clear();	
-		return;
-	}	
-
-	if (toKey == 0 && isFirstSwap) //빈슬롯이면 그 슬롯에 넣기 //쉬프트 누른애 
-	{
-		if (fromSlot->IsPressShift())
-		{
-			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
-		}
-		else
+		if (!fromSlot->IsPressShift())
 		{
 			toSlot->SetItem(fromKey, fromCount);
 			fromSlot->SetItem(0, 0);
 		}
+		else
+		{
+			toSlot->SetItem(fromKey, cloneIcon->GetItemCount().second);
+		}
 		Clear();
 		return;
 	}
-	if (toKey == 0 && !isFirstSwap)
+
+	if (toKey == 0) //빈슬롯이면 그 슬롯에 넣기
 	{
-		toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
+		if (isFirstSwap)
+		{
+			fromSlot->SetItem(0, 0);
+			toSlot->SetItem(fromKey, fromCount);
+		}
+		else
+		{
+			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
+		}
 		Clear();
 		return;
 	}
@@ -313,6 +305,7 @@ void Inventory::TransferItem()
 	{
 		if (fromSlot->IsPressShift())
 		{
+			fromSlot->SetPressShift(false);
 			toSlot->SetItem(cloneIcon->GetItemCount().first, cloneIcon->GetItemCount().second);
 			cloneIcon->SetItem(toKey, toCount);
 		}
@@ -339,10 +332,8 @@ void Inventory::TransferItem()
 			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
 		}
 
-		
 		UpdateCloneIcon();
 	}
-	
 }
 
 void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
@@ -374,6 +365,7 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 		}
 		else
 		{
+			isFirstSwap = false;
 			UINT totalCount = fromSlot->GetCount();
 			UINT cloneCount = (totalCount % 2 == 1) ? (totalCount / 2 + 1) : (totalCount / 2);
 			UINT remainingCount = totalCount - cloneCount;

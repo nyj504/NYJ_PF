@@ -46,7 +46,7 @@ void InventorySlot::Update()
 		if (isRButtonDown)
 		{
 			isPush = true;
-			SetSlotState(DROP);
+			SetSlotState(CLICK);
 			INVEN->OnSelectSlot(this);
 		}
 	}
@@ -82,10 +82,11 @@ void InventorySlot::SetItem(UINT key, UINT count)
 
 void InventorySlot::DecreaseItem(UINT count)
 {
-	if (itemCount <= 0 || itemCount <= 0)
+	if (itemCount <= 0)
 	{
 		slotKey = 0;
 		icon->UpdateFromSlot(this);
+		isChanged = true;
 		return;
 	}
 	if (itemCount - count < 0) return;
@@ -127,7 +128,6 @@ void InventorySlot::SetSlotState(SlotState newState)
 		isHold = true;
 		break;
 	case DROP:
-		icon->UpdateFromSlot(this);
 		slot->GetMaterial()->GetData()->diffuse = NORMAL_COLOR;
 		icon->GetMaterial()->GetData()->diffuse = NORMAL_COLOR;
 		break;

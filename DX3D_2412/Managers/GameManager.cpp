@@ -56,9 +56,9 @@ void GameManager::Render()
 	string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
 	Font::Get()->RenderText(fps, { 100, SCREEN_HEIGHT - 10 });
 
-	//string position = "Pos X:" + to_string((int)PLAYER->GetGlobalPosition().x) +
-	//	" Pos Y:" + to_string((int)PLAYER->GetGlobalPosition().y) + " Pos Z:" + to_string((int)PLAYER->GetGlobalPosition().z);
-	//Font::Get()->RenderText(position, { 150, SCREEN_HEIGHT - 30 });
+	string position = "Pos X:" + to_string((int)PLAYER->GetGlobalPosition().x) +
+		" Pos Y:" + to_string((int)PLAYER->GetGlobalPosition().y) + " Pos Z:" + to_string((int)PLAYER->GetGlobalPosition().z);
+	Font::Get()->RenderText(position, { 150, SCREEN_HEIGHT - 30 });
 
 	Environment::Get()->SetPostRender();
 	SCENE->PostRender();

@@ -2,7 +2,7 @@
 class CrackEffect : public Cube
 {
 private:
-    const float FRAME_INTERVAL = 0.5f;
+    const float FRAME_INTERVAL = 0.05f;
 public:
 	CrackEffect();
 	~CrackEffect();

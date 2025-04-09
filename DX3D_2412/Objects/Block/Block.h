@@ -49,6 +49,8 @@ public:
 	void SetBlockID(UINT64 id) {this->blockID = id;}
 	UINT64 GetBlockID(UINT64 id) { return blockID;}
 
+	void SetParentIndex(UINT parentIndex) { this->parentIndex = parentIndex; }
+	UINT GetParentIndex() { return parentIndex; }
 	UVInfo GetUVInfo() { return uvInfo; }
 	void Mining();
 
@@ -58,7 +60,7 @@ private:
 
 private:
 	UINT key;
-	UINT64 parentIndex = 0;
+	UINT parentIndex = 0;
 	UINT64 blockID = 0;
 
 	bool isOcclusion = false;

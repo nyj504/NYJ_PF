@@ -49,6 +49,7 @@ void Block::Mining()
     Vector3 offset = { 0.0f, 0.3f, 0.0f };
     ItemManager::Get()->DropItem(itemData.dropItemKey, GetLocalPosition() - offset, itemData.dropsAmount);
     isActive = false;
+    isOcclusion = true;
 }
 
 void Block::SetBlockUV()

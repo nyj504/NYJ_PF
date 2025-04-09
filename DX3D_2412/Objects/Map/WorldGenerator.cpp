@@ -3,7 +3,7 @@
 
 WorldGenerator::WorldGenerator()
 {
-    Load();
+    CreateWorld();
 
     singleFaceBlock = new Cube();
     singleFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");

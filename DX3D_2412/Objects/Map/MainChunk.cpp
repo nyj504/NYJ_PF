@@ -28,14 +28,14 @@ void MainChunk::Update()
     }
 
      subChunks[activeChunkIndex]->Update();
-     //subChunks[1]->Update();
+     subChunks[1]->Update();
     
 }
 
 void MainChunk::Render()
 {
     subChunks[activeChunkIndex]->Render();
-    //subChunks[1]->Render();
+    subChunks[1]->Render();
 }
 
 void MainChunk::GenerateTerrain()
