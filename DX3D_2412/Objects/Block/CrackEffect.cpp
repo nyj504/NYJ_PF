@@ -51,7 +51,7 @@ void CrackEffect::UpdateFrame()
     {
         int randNum = GameMath::Random(1, 5);
         string soundType = BlockManager::Get()->GetSelectedBlock()->GetItemData().soundType;
-        Audio::Get()->Play(soundType + to_string(randNum));
+        Audio::Get()->Play(soundType + to_string(randNum), 0.3f);
         
         time -= intervalSpeed;
 

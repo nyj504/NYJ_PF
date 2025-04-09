@@ -1,4 +1,11 @@
 #pragma once
+enum class DepthLevel : int
+{
+	GROUND = 0,
+	SHALLOWS = -16,
+	MIDDEPTH = -32,
+	ABYSS = -48
+};
 
 class SubChunk
 {
@@ -7,6 +14,7 @@ private:
 	{
 		CHAM, ACACIA
 	};
+
 	const int INTERACTABLE_DISTANCE = 5;
 
 public:
@@ -19,8 +27,10 @@ public:
 	Block* GetBlock(Vector3 globalPos);
 
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
+	DepthLevel GetDepthLevelFromWorldY(int y);
 	void GenerateTree(TreeType type, Vector3 pos);
 
+	void CheckMousePosBlock();
 	void CheckPlayerCollision();
 	void CheckMonsterCollision();
 
@@ -44,6 +54,7 @@ public:
 
 private:
 	TreeType treeType = CHAM;
+	DepthLevel depthLevel = DepthLevel::GROUND;
 	bool hasCollider = false;
 
 	class WorldGenerator* worldGenerator;
@@ -54,6 +65,7 @@ private:
 	UINT mainchunkIndex;
 
 	unordered_map<UINT64,Block*>blocks; 
+	vector<Block*>interactableBlocks;
 
 	Block* selectedBlock = nullptr;
 	Block* steppedBlock = nullptr;

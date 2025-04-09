@@ -138,6 +138,7 @@ void InventorySlot::SetSlotState(SlotState newState)
 		}
 		isPush = false;
 		isPressShift = false;
+		isChanged = false;
 		icon->UpdateFromSlot(this);
 		INVEN->SetRefreshQuickSlot(true);
 		SetSlotState(NORMAL);

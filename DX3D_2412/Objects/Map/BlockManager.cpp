@@ -10,7 +10,6 @@ BlockManager::BlockManager()
 	crackEffect->SetActive(false);
 
 	lastPlayerPos = PLAYER->GetGlobalPosition();
-	ActivateRenderingChunks();
 	//Load();
 }
 
@@ -155,6 +154,13 @@ void BlockManager::Save()
 void BlockManager::Load()
 {
 	worldGenerator->Load();
+	ActivateRenderingChunks();
+}
+
+void BlockManager::CreateWorld()
+{
+	worldGenerator->CreateWorld();
+	ActivateRenderingChunks();
 }
 
 

@@ -19,7 +19,7 @@ void MainChunk::Update()
     int playerY = PLAYER->GetGlobalPosition().y;
     int minBaseY = chunkPosition.y;
     
-    activeChunkIndex = (playerY - minBaseY) / SUBCHUNK_HEIGHT;
+    activeChunkIndex = (abs(playerY - minBaseY) / SUBCHUNK_HEIGHT) % SUBCHUNK_SIZE;
 
     if (!subChunks[activeChunkIndex]->HasCollider())
     {
@@ -28,14 +28,14 @@ void MainChunk::Update()
     }
 
      subChunks[activeChunkIndex]->Update();
-     subChunks[1]->Update();
+     subChunks[activeChunkIndex + 1]->Update();
     
 }
 
 void MainChunk::Render()
 {
     subChunks[activeChunkIndex]->Render();
-    subChunks[1]->Render();
+    subChunks[activeChunkIndex + 1]->Render();
 }
 
 void MainChunk::GenerateTerrain()

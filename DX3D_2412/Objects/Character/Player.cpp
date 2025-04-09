@@ -33,18 +33,18 @@ Player::~Player()
 
 void Player::Update()
 {
+
+	SetCursor();
 	Character::Update();
 	UpdateWorld();
-
+	
 	if (KEY->Down(VK_SPACE))
 	{
 		velocity.y += JUMP_POWER;
 	}
 
 	BuildAndMining();
-	SetCursor();
 	Control();
-	//Move();
 	CAM->UpdateWorld();
 }
 
@@ -104,18 +104,15 @@ void Player::Control()
 	}
 	dir.Normalize();
 
-	float walkSpeed = characterData.moveSpeed;
-	float runSpeed = characterData.moveSpeed * 2.0f;
-
 	if (KEY->Press(VK_SHIFT))
 	{
 		SetPlayerState(RUN);
-		Translate(velocity * runSpeed * DELTA);
+		dir.x *= 2.0f;
+		dir.z *= 2.0f;
 	}
 	else if(dir != 0.0f)
 	{
 		SetPlayerState(WALK);
-		Translate(velocity * walkSpeed * DELTA);
 	}
 
 	velocity.x = dir.x;
@@ -132,11 +129,13 @@ void Player::Control()
 		Rotate(Vector3::Up(), delta.x * rotSpeed * DELTA);
 		CAM->Rotate(Vector3::Left(), delta.y * rotSpeed * DELTA);
 	}
+
+	Move();
 }
 
 void Player::Move()
 {
-	Character::Move();
+	Translate(velocity * characterData.moveSpeed * DELTA);
 }
 
 void Player::BuildAndMining()

@@ -21,11 +21,14 @@ public:
 	void ActivateRenderingChunks();
 
 	Block* GetSelectedBlock() { return selectedBlock; }
+	Block* GetSteppedBlock() { return steppedBlock; }
 	CrackEffect* GetCrackEffect() { return crackEffect; }
 
 	void SetSelectedBlock(Block* block) { selectedBlock = block; }
+	void SetSteppedBlock(Block* block) { steppedBlock = block; }
 	void Save();  
 	void Load();
+	void CreateWorld();
 private:
 	bool isParticlePlayed = false;
 
@@ -33,6 +36,7 @@ private:
 	float updateThreshold = 32.0f;
 
 	Block* selectedBlock = nullptr;
+	Block* steppedBlock = nullptr;
 	
 	unordered_map<UINT64, MainChunk*>activeChunks;
 

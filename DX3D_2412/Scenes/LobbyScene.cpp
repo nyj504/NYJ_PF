@@ -3,6 +3,8 @@
 
 LobbyScene::LobbyScene()
 {
+	BlockManager::Get();
+
 	ShowCursor(true);
 
 	InitAudio();
@@ -27,7 +29,7 @@ LobbyScene::LobbyScene()
 	Button* button1 = new Button(L"Resources/Textures/Lobby/lobbyButton.png");
 	button1->SetLocalPosition(Vector3(CENTER.x, CENTER.y - 50));
 	button1->SetText("Load Saved Game");
-	//button1->SetEvent(bind(&PauseMenuUI::OnExitButtonClick, this));
+	button1->SetEvent(bind(&LobbyScene::LoadGame, this));
 	button1->UpdateWorld();
 
 	buttons.push_back(button1);
@@ -107,7 +109,20 @@ void LobbyScene::GameStart()
 	ShowCursor(false);
 
 	Audio::Get()->Stop("Title");
+
+	BlockManager::Get()->CreateWorld();
 	
+	SceneManager::Get()->Add("InGame");
+	SceneManager::Get()->Remove("Lobby");
+}
+
+void LobbyScene::LoadGame()
+{
+	ShowCursor(false);
+	Audio::Get()->Stop("Title");
+
+	BlockManager::Get()->Load();
+
 	SceneManager::Get()->Add("InGame");
 	SceneManager::Get()->Remove("Lobby");
 }

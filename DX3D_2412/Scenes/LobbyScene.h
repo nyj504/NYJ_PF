@@ -17,6 +17,7 @@ public:
 	void GUIRender() override;
 
 	void GameStart();
+	void LoadGame();
 
 	void InitAudio();
 private:

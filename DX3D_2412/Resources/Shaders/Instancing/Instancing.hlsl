@@ -91,7 +91,7 @@ float4 PS(PixelInput input) : SV_TARGET
             result += CalcSpot(material, lights[i]);
     }
     
-    float4 color = result + ambient + mEmissive;
+    float4 color = result + ambient + mEmissive + material.baseColor;
     
     return float4(color.rgb, material.baseColor.a * mDiffuse.a);
 }

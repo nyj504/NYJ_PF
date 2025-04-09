@@ -59,6 +59,8 @@ void CraftingTable::CraftItem()
         UINT itemCount = craftSlots[i]->GetCount();
         if (itemCount <= 0)
             itemKey = 0;
+        if (itemKey == 23)
+            itemKey = 22;
 
         serialKey += to_string(itemKey);
 
@@ -74,6 +76,7 @@ void CraftingTable::CraftItem()
                 minCount = itemCount;
             }
         }
+        craftSlots[i]->SetRest(true);
     }
 
     unordered_map<string, pair<UINT, UINT>>::iterator it = craftingRecipes.find(serialKey);
@@ -87,7 +90,7 @@ void CraftingTable::CraftItem()
                 craftSlots[i]->DecreaseItem(minCount);
             }
         }
-        craftSlots[MAX_SLOTSIZE - 1]->SetChanged(false);
+        craftSlots[MAX_SLOTSIZE - 1]->SetRest(true);
         return;
     }
 

@@ -28,6 +28,7 @@ public:
 	void SetLand() { velocity.y = 0; }
 	void SetFall() { velocity.y -= GRAVITY * DELTA; }
 	int GetHp() { return curHp; }
+
 	CharacterData GetCharacterData() { return characterData; }
 
 	BoxCollider* GetCollider() { return collider; }

@@ -3,8 +3,6 @@
 
 WorldGenerator::WorldGenerator()
 {
-    CreateWorld();
-
     singleFaceBlock = new Cube();
     singleFaceBlock->GetMaterial()->SetDiffuseMap(L"Resources/Textures/BlockTexture/Atlasmap.png");
     singleFaceBlock->GetMaterial()->SetShader(L"Instancing/Instancing.hlsl");

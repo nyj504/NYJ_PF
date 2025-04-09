@@ -25,28 +25,6 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	quad->SetLocalPosition(Vector3(CENTER.x - 75, CENTER.y + 163));
 	quad->UpdateWorld();
 
-	//AddItem(70, 1); //도끼 시리즈
-	//AddItem(80, 1);
-	//AddItem(59, 1);
-	//AddItem(88, 1);
-	//AddItem(66, 1);
-	//
-	//AddItem(61, 1); // 삽 시리즈
-	//AddItem(68, 1);
-	//AddItem(72, 1);
-	AddItem(45, 2);
-	AddItem(47, 2);
-	AddItem(42, 10);
-	AddItem(98, 10);
-	//
-	AddItem(46, 64); // 철 주괴
-	AddItem(49, 64); // 다이아
-	AddItem(24, 64); // 참나무
-	AddItem(35, 1); // 작업대
-	AddItem(64, 40); // 나무 막대
-	AddItem(64, 40); // 나무 막대
-	AddItem(37, 1); // 나무 막대
-
 	SetActive(false);
 }
 
@@ -242,8 +220,6 @@ void Inventory::TransferItem()
 
 	if (toSlot == fromSlot)
 	{
-		fromSlot->SetItem(0, 0);
-		toSlot->SetItem(fromKey, fromCount);
 		Clear();
 		return;
 	}

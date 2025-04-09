@@ -33,7 +33,7 @@ void Monster::Update()
 		sayingTimer -= SAYING_INTERVAL;
 
 		int randNum = GameMath::Random(1, 4);
-		Audio::Get()->Play("Zombie_say" + to_string(randNum));
+		Audio::Get()->Play("Zombie_say" + to_string(randNum), 0.3f);
 	}
 
 	Character::Update();
