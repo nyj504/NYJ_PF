@@ -4,6 +4,7 @@
 LobbyScene::LobbyScene()
 {
 	BlockManager::Get();
+	InventorySingleton::Get();
 
 	ShowCursor(true);
 
@@ -122,6 +123,7 @@ void LobbyScene::LoadGame()
 	Audio::Get()->Stop("Title");
 
 	BlockManager::Get()->Load();
+	INVEN->Load();
 
 	SceneManager::Get()->Add("InGame");
 	SceneManager::Get()->Remove("Lobby");

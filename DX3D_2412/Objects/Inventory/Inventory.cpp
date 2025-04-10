@@ -25,11 +25,6 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	quad->SetLocalPosition(Vector3(CENTER.x - 75, CENTER.y + 163));
 	quad->UpdateWorld();
 
-	AddItem(92, 1);
-	AddItem(93, 1);	
-	AddItem(94, 1);
-	AddItem(95, 1);
-
 	SetActive(false);
 }
 
@@ -360,4 +355,41 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 pair<UINT, UINT> Inventory::GetQuickSlotData(int index)
 {
 	return { slots[index]->GetKey(), slots[index]->GetCount() };
+}
+
+void Inventory::Save()
+{
+	string path = "Resources/Transforms/Inven.srt";
+	BinaryWriter* writer = new BinaryWriter(path);
+
+	int count = slots.size();
+	writer->Data<int>(count);
+
+	for (InventorySlot* slot : slots)
+	{
+		writer->Data<UINT>(slot->GetKey());
+		writer->Data<UINT>(slot->GetCount());
+	}
+
+	delete writer;
+}
+
+void Inventory::Load()
+{
+	string path = "Resources/Transforms/Inven.srt";
+	BinaryReader* reader = new BinaryReader(path);
+
+	int count = reader->Data<int>();
+	
+	for (int i = 0; i < count; i++)
+	{
+		UINT key = reader->Data<UINT>();
+		UINT count = reader->Data<UINT>();
+
+		slots[i]->SetItem(key, count);
+	}
+	
+	isRefreshQuickSlot = true;
+
+	delete reader;
 }

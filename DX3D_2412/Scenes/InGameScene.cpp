@@ -4,7 +4,6 @@ InGameScene::InGameScene() : isPaused(false)
 {
 	PlayerSingleton::Get();
 	UIManager::Get();
-	InventorySingleton::Get();
 	ItemManager::Get();
 	MonsterManager::Get();
 

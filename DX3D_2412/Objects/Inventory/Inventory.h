@@ -45,6 +45,8 @@ public:
 	SlotIcon* GetCloneIcon() { return cloneIcon; }
 	pair<UINT, UINT> GetQuickSlotData(int index);
 
+	void Save();
+	void Load();
 private:
 	vector<InventorySlot*> slots;
 	Camera* invenCamera;

@@ -53,6 +53,8 @@ void PauseMenuUI::Edit()
 void PauseMenuUI::OnSaveAndExitButtonClick()
 {
 	MAP->Save();
+	INVEN->Save();
+
 	SceneManager::Get()->Add("Lobby");
 	SceneManager::Get()->Remove("InGame");
 }
