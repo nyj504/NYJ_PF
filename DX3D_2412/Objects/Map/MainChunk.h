@@ -7,6 +7,14 @@ private:
     const int MAINCHUNK_HEIGHT = 64;
     const int SUBCHUNK_SIZE = 4;
 
+    const float PLAIN_HEIGHT = 2.5f;
+    const float HILLS_HEIGHT = 8.5f;
+    const float MOUNTAIN_HEIGHT = 5.0f;
+
+    const float PLAIN_NOISE = 2.5f;
+    const float HILLS_NOISE = 3.5f;
+    const float MOUNTAIN_NOISE = 5.5f;
+
 public:
     MainChunk(Vector3 position, TerrainType terrainType, UINT64 myIndex, WorldGenerator* worldGenerator);
     ~MainChunk();

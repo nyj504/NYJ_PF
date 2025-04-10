@@ -127,7 +127,7 @@ void BlockManager::CallStopMining()
 
 void BlockManager::ActivateRenderingChunks()
 {
-	int renderDistance = 6; 
+	int renderDistance = MAX_RENDER_DISTANCE;
 
 	activeChunks.clear();
 
@@ -135,9 +135,7 @@ void BlockManager::ActivateRenderingChunks()
 
 	for (MainChunk* chunk : surroundingChunks)
 	{
-		UINT64 chunkKey = GameMath::ChunkPosToKey(chunk->GetChunkPosition().x / CHUNK_WIDTH,
-			chunk->GetChunkPosition().z / CHUNK_DEPTH);
-
+		UINT64 chunkKey = chunk->GetMyIndex();
 		worldGenerator->SetInstanceData(chunk, false);
 
 		activeChunks[chunkKey] = chunk;

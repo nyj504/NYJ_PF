@@ -64,8 +64,8 @@ void Inventory::PreRender()
 {
 	if (!isActive && isRenderTargetActivate) return;
 
-	renderTarget->Set(depthStencil);
-	invenCamera->SetView();
+	renderTarget->Set(depthStencil);//렌더 타겟을 depthStencil로 설정
+	invenCamera->SetView(); //invenCamera 뷰 설정
 	PLAYER->Render();
 	EquipManager::Get()->Render();
 }
@@ -222,7 +222,7 @@ void Inventory::TransferItem()
 	}
 
 	if (toSlot->IsPush() && fromCount > 0)
-	{
+	{   //아이템 든 상태로 1개씩 나눌 때
 		fromSlot->ConsumeItem();
 		toSlot->SetItem(fromKey, 1);
 
@@ -321,13 +321,13 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 	{
 		fromSlot = inventorySlot;
 
-		if (!fromSlot->IsPressShift())
+		if (!fromSlot->IsPressShift()) 
 		{
 			fromSlot->GetIcon()->SetActive(false);
 		}
-		else
+		else //Shift를 누른 상태 (절반으로 나누기)
 		{
-			isFirstSwap = false;
+			isFirstSwap = false; 
 			UINT totalCount = fromSlot->GetCount();
 			UINT cloneCount = (totalCount % 2 == 1) ? (totalCount / 2 + 1) : (totalCount / 2);
 			UINT remainingCount = totalCount - cloneCount;

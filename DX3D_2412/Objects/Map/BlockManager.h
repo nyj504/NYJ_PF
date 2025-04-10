@@ -2,6 +2,9 @@
 class BlockManager : public Singleton<BlockManager>
 {
 private:
+	const int MIN_RENDER_DISTANCE = 3;
+	const int MAX_RENDER_DISTANCE = 6;
+private:
 	friend class Singleton;
 
 	BlockManager();

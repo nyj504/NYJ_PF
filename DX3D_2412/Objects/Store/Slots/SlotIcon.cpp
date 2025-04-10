@@ -21,14 +21,6 @@ void SlotIcon::Render()
 
 void SlotIcon::UpdateFromSlot(InventorySlot* slot)
 {
-	if (slot->GetKey() <= 0 && slot->GetCount() <= 0)
-	{
-		itemCounts.first = 0;
-		itemCounts.second = 0;
-		isActive = false;
-		return;
-	}
-
 	ItemData data = DataManager::Get()->GetItemData(slot->GetKey());
 	string path = "Resources/Textures/Item/" + data.image + "_block.png";
 

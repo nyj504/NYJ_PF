@@ -57,16 +57,16 @@ void MainChunk::GenerateTerrain()
             switch (terrainType)
             {
             case TerrainType::PLAINS:
-                baseHeight = 2.5f;
-                noiseFactor = 2.5f;
+                baseHeight = PLAIN_HEIGHT;
+                noiseFactor = PLAIN_NOISE;
                 break;
             case TerrainType::HILLS:
-                baseHeight = 8.5f;
-                noiseFactor = 2.5f;
+                baseHeight = HILLS_HEIGHT;
+                noiseFactor = HILLS_NOISE;
                 break;
             case TerrainType::MOUNTAINS:
-                baseHeight = 5.0f;
-                noiseFactor = 11.0f;
+                baseHeight = MOUNTAIN_HEIGHT;
+                noiseFactor = MOUNTAIN_NOISE;
                 break;
             }
             float height = perlin.Noise(worldX, worldZ) * noiseFactor + baseHeight;

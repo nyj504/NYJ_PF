@@ -117,7 +117,8 @@ vector<MainChunk*> WorldGenerator::GetClosestMainChunks()
 
     if (localX >= halfX && localZ > halfZ) // 坷弗率 困
     {
-        chunkOffsets = {
+        chunkOffsets =
+        {
             {0, 0},   // 泅犁 没农
             {1, 0},   // 坷弗率 没农
             {0, 1},   // 困率 没农
@@ -126,7 +127,8 @@ vector<MainChunk*> WorldGenerator::GetClosestMainChunks()
     }
     else if (localX >= halfX && localZ < halfZ) // 坷弗率 酒贰 
     {
-        chunkOffsets = {
+        chunkOffsets =
+        {
             {0, 0},   // 泅犁 没农
             {1, 0},   // 坷弗率 没农
             {0, -1},  // 酒贰率 没农
