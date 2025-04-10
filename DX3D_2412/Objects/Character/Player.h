@@ -2,7 +2,7 @@
 struct PlayerEquipmentInfo
 {
 	WeaponType type = WeaponType::NONE;
-	float weaponAtk = 10.0f;
+	float weaponAtk;
 	UINT armorDef;
 };
 enum PlayerState

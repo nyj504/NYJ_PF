@@ -1,5 +1,6 @@
 #include "../VertexHeader.hlsli"
 #include "../PixelHeader.hlsli"
+#define PI 3.14159265f
 
 struct PixelInput
 {
@@ -30,8 +31,8 @@ Texture2D skyMapEnd : register(t11);
 float2 SphereToUV(float3 dir)
 {
     float2 uv;
-    uv.x = atan2(dir.x, dir.z) / (2.0 * 3.14159265f) + 0.5f;
-    uv.y = 0.5f - asin(dir.y) / 3.14159265f;
+    uv.x = atan2(dir.x, dir.z) / (2.0 * PI) + 0.5f;
+    uv.y = 0.5f - asin(dir.y) / PI;
     return uv;
 }
 

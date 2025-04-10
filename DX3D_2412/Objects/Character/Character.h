@@ -10,6 +10,7 @@ protected:
 	const Vector3 KNOCKBACK_RANGE = { 0.2f, 0.2f, 0.2f };
 	const float HIT_DURATION = 0.2f;
 	const float SAYING_INTERVAL = 7.5f;
+	const float WANDER_DELAY = 2.0f;
 
 public:
 	Character(string name);
@@ -22,6 +23,8 @@ public:
 
 	void ActivateHitState();
 	void DeactivateHitState();
+	
+	virtual void MoveSideways();
 	virtual void Damaged(float damage, Character* target);
 	virtual void Spawn(Vector3 pos) {};
 
@@ -35,13 +38,16 @@ public:
 
 protected:
 	bool isHitEffect = false;
+	float idleWanderTimer = 0.0f;
 	float hitTimer = 0.0f;
 	float sayingTimer = 0.0f;
 	UINT characterKey;
 	int curHp;
 	CharacterData characterData;
 	float rotSpeed = 1.0f;
+
 	Vector3 velocity;
+	Vector3 idlePosition;
 
 	CharacterType characterType = CharacterType::STEVE;
 	ModelAnimator* modelAnimator= nullptr;

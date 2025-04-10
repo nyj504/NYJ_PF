@@ -14,7 +14,7 @@ public:
 	void Update();
 	void Render();
 
-	void DropItem(UINT key, Vector3 pos, UINT amounts);
+	void DropItems(UINT key, Vector3 pos, UINT amounts);
 
 private:
 	vector<DropQuad*>dropItems;

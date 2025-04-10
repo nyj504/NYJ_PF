@@ -8,7 +8,7 @@ public:
 	void Render();
 	void UpdateArmorBar(int count);
 	void UpdateHpBar(int amount);
-	void UpdateHungerBar();
+	void UpdateHungerBar(int amount);
 
 	void CreateHUDSlot();
 

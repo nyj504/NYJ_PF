@@ -110,7 +110,6 @@ void InventoryCraftingSlot::CraftItem()
     int minCount = 0;
     bool isChanged = false;
 
-
     for (int i = 0; i < craftSlots.size() - 1; i++)
     {
         UINT itemKey = craftSlots[i]->GetKey();

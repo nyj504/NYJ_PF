@@ -99,7 +99,7 @@ void MonsterManager::Spawn()
 void MonsterManager::ExcuteDie()
 {
 	CharacterData data = curMonster->GetCharacterData();
-	ItemManager::Get()->DropItem(data.dropItemKey, deadPosition, data.dropItemAmount);
+	ItemManager::Get()->DropItems(data.dropItemKey, deadPosition, data.dropItemAmount);
 	curMonster->SetActive(false);
 	particle->Play(deadPosition);
 	curMonster = nullptr;

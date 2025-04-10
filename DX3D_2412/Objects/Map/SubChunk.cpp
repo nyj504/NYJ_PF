@@ -531,12 +531,16 @@ void SubChunk::FindVisibleBlocks()
 
 		Vector3 blockWorldPos = block->GetGlobalPosition();
 
-		if (GetBlock({ blockWorldPos.x + 1, blockWorldPos.y, blockWorldPos.z }) &&
-			GetBlock({ blockWorldPos.x - 1, blockWorldPos.y, blockWorldPos.z }) &&
-			GetBlock({ blockWorldPos.x, blockWorldPos.y + 1, blockWorldPos.z }) &&
-			GetBlock({ blockWorldPos.x, blockWorldPos.y - 1, blockWorldPos.z }) &&
-			GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z + 1 }) &&
-			GetBlock({ blockWorldPos.x, blockWorldPos.y, blockWorldPos.z - 1 }))
+		Vector3 rightBlockPos = { blockWorldPos.x + 1, blockWorldPos.y, blockWorldPos.z };
+		Vector3 leftBlockPos = { blockWorldPos.x - 1, blockWorldPos.y, blockWorldPos.z };
+		Vector3 topBlockPos = { blockWorldPos.x, blockWorldPos.y + 1, blockWorldPos.z };
+		Vector3 bottomBlockPos = { blockWorldPos.x, blockWorldPos.y - 1, blockWorldPos.z };
+		Vector3 fowardBlockPos = { blockWorldPos.x, blockWorldPos.y, blockWorldPos.z + 1 };
+		Vector3 backBlockPos = { blockWorldPos.x, blockWorldPos.y, blockWorldPos.z - 1 };
+
+		if (GetBlock(rightBlockPos) && GetBlock(leftBlockPos) &&
+			GetBlock(topBlockPos) && GetBlock(bottomBlockPos) &&
+			GetBlock(fowardBlockPos) && GetBlock(backBlockPos))
 		{
 			block->SetOcclusion(true);
 			continue;

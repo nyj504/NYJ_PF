@@ -33,7 +33,6 @@ Player::~Player()
 
 void Player::Update()
 {
-
 	SetCursor();
 	Character::Update();
 	UpdateWorld();

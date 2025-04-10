@@ -17,7 +17,6 @@ ItemManager::ItemManager()
 		DropCube* multiBlock = new DropCube(true);
 		dropMultiBlocks.push_back(multiBlock);
 	}
-
 }
 
 ItemManager::~ItemManager()
@@ -68,7 +67,7 @@ void ItemManager::Render()
 	}
 }
 
-void ItemManager::DropItem(UINT key, Vector3 pos, UINT amounts)
+void ItemManager::DropItems(UINT key, Vector3 pos, UINT amounts)
 {
 	ItemData data = DataManager::Get()->GetItemData(key);
 	

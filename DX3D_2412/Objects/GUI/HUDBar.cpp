@@ -29,14 +29,12 @@ void HUDBar::UpdateBar(string type, int count)
 	for (int i = fullSlot; i < MAX_SLOTS; i++)
 	{
 		string path = "Resources/Textures/UI/" + type + "_empty.png";
-
 		slots[i]->GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
 	}
 
 	if (halfSlot != 0)
 	{
 		string path = "Resources/Textures/UI/" + type + "_half.png";
-
 		slots[fullSlot]->GetMaterial()->SetDiffuseMap(Utility::ToWString(path));
 	}
 }

@@ -2,6 +2,10 @@
 class EquipManager : public Singleton<EquipManager>
 {
 private:
+	const int HAND_INDEX = 18;
+	const int HEAD_INDEX = 12;
+	const int CHEST_INDEX = 10;
+private:
 	friend class Singleton;
 
 	EquipManager();

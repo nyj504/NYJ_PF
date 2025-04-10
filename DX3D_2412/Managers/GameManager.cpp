@@ -4,19 +4,21 @@
 #include "Scenes/InGameScene.h"
 #include "Scenes/LobbyScene.h"
 #include "Scenes/ParticleEditorScene.h"
+#include "Scenes/ModelAnimatorScene.h"
 
 GameManager::GameManager()
 {
-	//SCENE->Create("Grid", new GridScene());
+	SCENE->Create("Grid", new GridScene());
 	//SCENE->Create("Start", new ParticleEditorScene());
+	SCENE->Create("Start", new ModelAnimationScene());
 	//
-	//SCENE->Add("Start");
-	//SCENE->Add("Grid");
+	SCENE->Add("Start");
+	SCENE->Add("Grid");
 	
-	SCENE->Create("Lobby", new LobbyScene());
-	SCENE->Create("InGame", new InGameScene());
-	
-	SCENE->Add("Lobby");
+	//SCENE->Create("Lobby", new LobbyScene());
+	//SCENE->Create("InGame", new InGameScene());
+	//
+	//SCENE->Add("Lobby");
 	
 	Create();
 }

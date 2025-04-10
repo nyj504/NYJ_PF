@@ -231,12 +231,6 @@
     <ClInclude Include="Objects\UI\ProgressBar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\LightScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\TerrainScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Utility\tinyxml2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -258,9 +252,6 @@
     <ClInclude Include="Framework\Utility\Audio.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\InstancingScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Model\Model.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -273,12 +264,6 @@
     <ClInclude Include="Framework\Model\ModelMesh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\ModelExportScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\ModelRenderScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Model\ModelAnimator.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -286,12 +271,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Model\ModelInstancing.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\ModelAnimationScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\ModelInstancingScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Map\SubChunk.h">
@@ -304,9 +283,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Map\MainChunk.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\BlockTestScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Shader\ComputeShader.h">
@@ -351,9 +327,6 @@
     <ClInclude Include="Objects\Particle\Sprite.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\ModelEquipScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Item\EquipManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -378,9 +351,6 @@
     <ClInclude Include="Scenes\ParticleEditorScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\WeatherScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Particle\Trail.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -397,6 +367,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Character\MonsterManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\ModelAnimatorScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -581,12 +554,6 @@
     <ClCompile Include="Objects\UI\ProgressBar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\LightScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\TerrainScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Utility\tinyxml2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -608,9 +575,6 @@
     <ClCompile Include="Framework\Utility\Audio.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\InstancingScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Model\Model.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -618,12 +582,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Model\ModelMesh.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\ModelExportScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\ModelRenderScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Model\ModelAnimator.cpp">
@@ -635,12 +593,6 @@
     <ClCompile Include="Framework\Model\ModelInstancing.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\ModelAnimationScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\ModelInstancingScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Map\SubChunk.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -648,9 +600,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Map\MainChunk.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenes\BlockTestScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Shader\ComputeShader.cpp">
@@ -695,9 +644,6 @@
     <ClCompile Include="Objects\Particle\Sprite.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\ModelEquipScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Item\EquipManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -722,9 +668,6 @@
     <ClCompile Include="Scenes\ParticleEditorScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\WeatherScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Particle\Trail.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -741,6 +684,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Character\MonsterManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\ModelAnimatorScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

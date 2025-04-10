@@ -26,6 +26,28 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	quad->UpdateWorld();
 
 	SetActive(false);
+
+	AddItem(55, 36);
+	AddItem(11, 10);
+	AddItem(96, 10);
+	AddItem(67, 1);
+	
+	AddItem(24, 64);
+	AddItem(26, 10);
+	AddItem(37, 2);
+	AddItem(39, 3);
+	
+	AddItem(36, 1);
+	AddItem(19, 64);
+	AddItem(76, 1);
+	AddItem(77, 1);
+	
+	AddItem(92, 1);
+	AddItem(93, 1);
+	AddItem(94, 1);
+	AddItem(95, 1);
+	AddItem(90, 1);
+
 }
 
 Inventory::~Inventory()

@@ -29,8 +29,9 @@ void PlayerHUD::UpdateHpBar(int amount)
 	hpBar->UpdateBar("heart", amount);
 }
 
-void PlayerHUD::UpdateHungerBar()
+void PlayerHUD::UpdateHungerBar(int amount)
 {
+	hungerBar->UpdateBar("hunger", amount);
 }
 
 void PlayerHUD::CreateHUDSlot()

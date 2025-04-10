@@ -20,17 +20,17 @@ enum class TerrainType
 	PLAINS, HILLS, MOUNTAINS
 };
 
-enum class AmoType
+enum class AmoType // 방어구
 {
 	HELMET, CHESTPLATE, LEGGINGS, BOOTS, WEAPON
 };
 
-enum class WeaponType
+enum class WeaponType // 장비
 {
 	NONE, SWORD, AXE, PICKAXE, SHOVEL, BOW
 };
 
-enum class ItemType
+enum class ItemType // 아이템 타입
 {
 	SINGLE, MULTI, QUAD, MODEL
 };

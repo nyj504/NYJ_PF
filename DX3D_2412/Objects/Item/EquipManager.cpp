@@ -50,51 +50,51 @@ EquipManager::EquipManager()
 	model->SetParent(weaponSocket);
 	equipments[weapon] = model;
 	
-	//for (const string& type : types)
-	//{
-	//	for (int i = 0; i < names.size(); ++i)
-	//	{
-	//		if ((type == "Wood" || type == "Stone") && i < 8)
-	//			continue;
-	//
-	//		string key = type + names[i];
-	//
-	//		Model* model = new Model(key);
-	//		model->Load();
-	//
-	//		switch (i)
-	//		{
-	//		case 0:
-	//			model->SetParent(leftBootsSocket);
-	//			break;
-	//		case 1:
-	//			model->SetParent(rightBootsSocket);
-	//			break;
-	//		case 2:
-	//			model->SetParent(leftLegSocket);
-	//			break;
-	//		case 3:
-	//			model->SetParent(rightLegSocket);
-	//			break;
-	//		case 4:
-	//			model->SetParent(chestPlateSocket);
-	//			break;
-	//		case 5:
-	//			model->SetParent(leftArmSocket);
-	//			break;
-	//		case 6:
-	//			model->SetParent(rightArmSocket);
-	//			break;
-	//		case 7:
-	//			model->SetParent(helmetSocket);
-	//			break;
-	//		default:
-	//			model->SetParent(weaponSocket);
-	//			break;
-	//		}
-	//		equipments[key] = model;
-	//	}
-	//}
+	for (const string& type : types)
+	{
+		for (int i = 0; i < names.size(); ++i)
+		{
+			if ((type == "Wood" || type == "Stone") && i < 8)
+				continue;
+	
+			string key = type + names[i];
+	
+			Model* model = new Model(key);
+			model->Load();
+	
+			switch (i)
+			{
+			case 0:
+				model->SetParent(leftBootsSocket);
+				break;
+			case 1:
+				model->SetParent(rightBootsSocket);
+				break;
+			case 2:
+				model->SetParent(leftLegSocket);
+				break;
+			case 3:
+				model->SetParent(rightLegSocket);
+				break;
+			case 4:
+				model->SetParent(chestPlateSocket);
+				break;
+			case 5:
+				model->SetParent(leftArmSocket);
+				break;
+			case 6:
+				model->SetParent(rightArmSocket);
+				break;
+			case 7:
+				model->SetParent(helmetSocket);
+				break;
+			default:
+				model->SetParent(weaponSocket);
+				break;
+			}
+			equipments[key] = model;
+		}
+	}
 }
 
 EquipManager::~EquipManager()
@@ -119,12 +119,12 @@ void EquipManager::Update()
 {
 	if (isEquipWeapon)
 	{
-		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(HAND_INDEX));
 		weapon->UpdateWorld();
 	}
 	if (isEquipItem)
 	{
-		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(18));
+		weaponSocket->SetWorld(modelAnimator->GetTransformByNode(HAND_INDEX));
 		if (singleBlock->IsActive())
 			singleBlock->UpdateWorld();
 		else if (multiBlock->IsActive())
@@ -134,7 +134,7 @@ void EquipManager::Update()
 	}
 	if (isEquipHelmet)
 	{
-		helmetSocket->SetWorld(modelAnimator->GetTransformByNode(12));
+		helmetSocket->SetWorld(modelAnimator->GetTransformByNode(HEAD_INDEX));
 		helmet->UpdateWorld();
 	}
 	if (isEquipChestPlate)
@@ -217,15 +217,12 @@ void EquipManager::EquipTotalArmor(const unordered_map<AmoType, UINT>& equips)
 			UnequipArmor(equip.first);
 			continue;
 		}
-
 		EquipmentData data = DataManager::Get()->GetEquipmentData(equip.second);
-
 		curDefense += data.defense;
 
-		EquipArmor(equip.first, data.equipType); 
+		EquipArmor(equip.first, data.equipType); //¹æ¾î±¸ ÀåÂø
 	}
-
-	UIManager::Get()->GetPlayerHUDBar()->UpdateArmorBar(curDefense);
+	UIManager::Get()->GetPlayerHUDBar()->UpdateArmorBar(curDefense); 
 }
 
 void EquipManager::EquipArmor(AmoType type, string name)

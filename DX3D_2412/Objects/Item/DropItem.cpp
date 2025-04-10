@@ -8,11 +8,11 @@ void DropItem::Update()
 	dir = dir.GetNormalized();
 
 	if (Vector3::Distance(PLAYER->GetLocalPosition(), GetLocalPosition()) <= ABSORB_DISTANCE)
-		Translate(dir * DELTA);
+		Translate(dir * DELTA);  //아이템 흡수
 
-	rotationY += XM_PI * 0.1f * DELTA;
-	floatTime += DELTA;
-	floatOffset = sinf(floatTime * 2.0f) * 0.1f * DELTA;
+	rotationY += XM_PI * FLOAT_AMPLITUDE * DELTA;
+	floatTime += DELTA; // 부유 시간
+	floatOffset = sinf(floatTime * FLOAT_FREQUENCY) * FLOAT_AMPLITUDE * DELTA;
 
 	SetLocalRotation(Vector3(0, rotationY, 0));
 

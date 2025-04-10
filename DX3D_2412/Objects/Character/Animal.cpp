@@ -119,25 +119,7 @@ void Animal::TargetOutRange()
 
 void Animal::MoveSideways()
 {
-	if (idleWanderTimer >= WANDER_DELAY)
-	{
-		idleWanderTimer -= WANDER_DELAY;
-
-		float offsetX = GameMath::Random(-3.0f, 3.0f);
-		float offsetZ = GameMath::Random(-3.0f, 3.0f);
-
-		Vector3 idleTargetPos = idlePosition + Vector3(offsetX, 0.0f, offsetZ);
-		idleWanderTimer = 0.0f;
-
-		LookAt(idleTargetPos);
-
-		Vector3 dir = idleTargetPos - GetLocalPosition();
-		dir.y = 0.0f;
-
-		dir.Normalize();
-		velocity.x = dir.x;
-		velocity.z = dir.z;
-	}
+	Character::MoveSideways();
 }
 
 void Animal::Spawn(Vector3 pos)

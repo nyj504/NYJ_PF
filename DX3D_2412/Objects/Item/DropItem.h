@@ -3,6 +3,8 @@ class DropItem : public Transform
 {
 protected:
     const int ABSORB_DISTANCE = 3;
+    const float FLOAT_FREQUENCY = 2.0f;
+    const float FLOAT_AMPLITUDE = 0.1f;
 
 public:
     void Update();

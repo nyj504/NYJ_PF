@@ -9,8 +9,10 @@ Monster::Monster(string name) : Character(name)
 	modelAnimator->ReadClip("Zombie_Walk"); //1
 	modelAnimator->ReadClip("Zombie_Bite"); //2
 	modelAnimator->ReadClip("Zombie_Dying"); //3
-	modelAnimator->GetClip(2)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDamaged"); }, 0.40f);
-	modelAnimator->GetClip(3)->SetEvent([]() { EventManager::Get()->ExcuteEvent("ExcuteDie"); }, 0.85f);
+	modelAnimator->GetClip((int)ATTACK)->SetEvent([]() 
+		{ EventManager::Get()->ExcuteEvent("ExcuteDamaged"); }, EXCUTE_ATTACK);
+	modelAnimator->GetClip((int)DIE)->SetEvent([]()
+		{ EventManager::Get()->ExcuteEvent("ExcuteDie"); }, EXCUTE_DIE);
 	modelAnimator->CreateTexture();
 	modelAnimator->SetParent(this);
 
@@ -44,10 +46,7 @@ void Monster::Update()
 	switch (monsterState)
 	{
 	case Monster::IDLE:
-	{
-		velocity.x = 0;
-		velocity.z = 0;
-	}
+		MoveSideways();
 		break;
 	case Monster::MOVE:
 	{
@@ -88,10 +87,9 @@ void Monster::Damaged(float damage, Character* target)
 	Character::Damaged(damage, target);
 
 	int hitSoundNum = GameMath::Random(1, 3);
-
 	Audio::Get()->Play("Zombie_hurt" + to_string(hitSoundNum));
 
-	if (curHp <= 0)
+	if (curHp <= 0) 
 	{
 		Audio::Get()->Play("Zombie_death");
 		SetMonsterState(DIE);
@@ -104,11 +102,9 @@ void Monster::SetMonsterState(MonsterState state)
 
 	monsterState = state; 
 
-	if (modelAnimator)
-	{
-		int clipNum = (int)monsterState;
-		modelAnimator->PlayClip(clipNum);
-	}
+	int clipNum = (int)monsterState;
+	modelAnimator->PlayClip(clipNum);
+
 	if (state == ATTACK)
 	{
 		MonsterManager::Get()->SetAttackingMonster(this);
@@ -133,22 +129,22 @@ void Monster::TargetInRange()
 {
 	if (monsterState == DIE) return;
 	
-	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
+	float distance = Vector3::Distance
+	(this->GetLocalPosition(), PLAYER->GetLocalPosition());
 	if (distance <= characterData.range)
 	{
 		if (distance <= ATK_RANGE && monsterState)
-		{
 			SetMonsterState(ATTACK);
-		}
 		else
-		{
 			SetMonsterState(MOVE);
-		}
 	}
 	else
-	{
 		SetMonsterState(IDLE);
-	}
+}
+
+void Monster::MoveSideways()
+{
+	Character::MoveSideways();
 }
 
 void Monster::Spawn(Vector3 pos)

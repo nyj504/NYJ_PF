@@ -74,7 +74,7 @@ void CrackEffect::SetMining(Block* block)
     PlayerEquipmentInfo playerEquipmentType = PLAYER->GetPlayerEquipInfo();
 
     if (block->GetItemData().weakType == playerEquipmentType.type)
-    {
+    { // 취약 속성
         float intervalTime = 1 / playerEquipmentType.weaponAtk;
         intervalSpeed = FRAME_INTERVAL * intervalTime;
     }
