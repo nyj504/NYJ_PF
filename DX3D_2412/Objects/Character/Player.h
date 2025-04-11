@@ -13,7 +13,7 @@ enum PlayerState
 class Player : public Character
 {
 private:
-	const float JUMP_POWER = 3.0f;
+	const float JUMP_POWER = 4.0f;
 	const float MAX_BLOCK_REACH = 5.0f;
 	const float MAX_INTERACT_REACH = 4.5f;
 

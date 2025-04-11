@@ -2,6 +2,8 @@
 
 Monster::Monster(string name) : Character(name)
 {
+	tag = "Monster";
+
 	modelAnimator = new ModelAnimator(name);
 	modelAnimator->Load();
 
@@ -24,12 +26,12 @@ Monster::Monster(string name) : Character(name)
 
 Monster::~Monster()
 {
-	
 }
 
 void Monster::Update()
 {
 	sayingTimer += DELTA;
+
 	if (sayingTimer >= SAYING_INTERVAL && monsterState != DIE)
 	{
 		sayingTimer -= SAYING_INTERVAL;
@@ -42,11 +44,14 @@ void Monster::Update()
 	UpdateWorld();
 
 	TargetInRange();
-	
+
 	switch (monsterState)
 	{
 	case Monster::IDLE:
-		MoveSideways();
+	{
+		velocity.x = 0;
+		velocity.z = 0;
+	}
 		break;
 	case Monster::MOVE:
 	{
@@ -59,7 +64,7 @@ void Monster::Update()
 		velocity.x = dir.x;
 		velocity.z = dir.z;
 	}
-		break;
+	break;
 	case Monster::ATTACK:
 		velocity.x = 0;
 		velocity.z = 0;
@@ -74,7 +79,6 @@ void Monster::Update()
 void Monster::Render()
 {
 	Character::Render();
-	
 }
 
 void Monster::Move()
@@ -129,17 +133,19 @@ void Monster::TargetInRange()
 {
 	if (monsterState == DIE) return;
 	
-	float distance = Vector3::Distance
-	(this->GetLocalPosition(), PLAYER->GetLocalPosition());
+	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
+	
 	if (distance <= characterData.range)
 	{
-		if (distance <= ATK_RANGE && monsterState)
+		if (distance <= ATK_RANGE)
 			SetMonsterState(ATTACK);
 		else
 			SetMonsterState(MOVE);
 	}
 	else
+	{
 		SetMonsterState(IDLE);
+	}
 }
 
 void Monster::MoveSideways()

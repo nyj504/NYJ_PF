@@ -105,7 +105,7 @@ void Furnace::MeltingItem()
 
     ItemData ingredientData = DataManager::Get()->GetItemData(ingredientKey);
 
-    UINT totalResultCount = ingredientData.craftAmount * ingredientCount;
+    UINT totalResultCount = ingredientData.craftAmount;
 
     craftSlots[2]->SetItem(stoi(ingredientData.serialKey), totalResultCount);
     craftSlots[1]->DecreaseItem(1);

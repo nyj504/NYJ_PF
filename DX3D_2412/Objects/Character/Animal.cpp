@@ -2,6 +2,8 @@
 
 Animal::Animal(string name) : Character(name)
 {
+	tag = "Animal";
+
     model = new Model(name);
     model->Load();
     model->SetParent(this);
@@ -19,6 +21,7 @@ Animal::~Animal()
 void Animal::Update()
 {
 	sayingTimer += DELTA;
+	
 	if (sayingTimer >= SAYING_INTERVAL && animalState != DIE)
 	{
 		sayingTimer -= SAYING_INTERVAL;
@@ -26,6 +29,7 @@ void Animal::Update()
 		int randNum = GameMath::Random(1, 4);
 		Audio::Get()->Play("Chicken_say" + to_string(randNum));
 	}
+
 	Character::Update();
 
 	UpdateWorld();
@@ -111,7 +115,7 @@ void Animal::TargetOutRange()
 
 	float distance = Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition());
 
-	if (distance >= characterData.range)
+	if (distance >= characterData.range / 2)
 	{
 		SetAnimalState(MOVE_AROUND);
 	}
@@ -119,7 +123,25 @@ void Animal::TargetOutRange()
 
 void Animal::MoveSideways()
 {
-	Character::MoveSideways();
+	if (idleWanderTimer >= WANDER_DELAY)
+	{
+		idleWanderTimer -= WANDER_DELAY;
+
+		float offsetX = GameMath::Random(-3.0f, 3.0f);
+		float offsetZ = GameMath::Random(-3.0f, 3.0f);
+
+		Vector3 idleTargetPos = idlePosition + Vector3(offsetX, 0.0f, offsetZ);
+		idleWanderTimer = 0.0f;
+
+		LookAt(idleTargetPos);
+
+		Vector3 dir = idleTargetPos - GetLocalPosition();
+		dir.y = 0.0f;
+
+		dir.Normalize();
+		velocity.x = dir.x;
+		velocity.z = dir.z;
+	}
 }
 
 void Animal::Spawn(Vector3 pos)

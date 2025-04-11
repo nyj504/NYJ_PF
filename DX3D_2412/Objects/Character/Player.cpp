@@ -39,12 +39,18 @@ void Player::Update()
 	
 	if (KEY->Down(VK_SPACE))
 	{
-		velocity.y += JUMP_POWER;
+		velocity.y = JUMP_POWER;
+	}
+
+	if (velocity.x <= 0.1f && velocity.z <= 0.1f && playerState != MINING)
+	{
+		SetPlayerState(IDLE);
 	}
 
 	BuildAndMining();
 	Control();
 	CAM->UpdateWorld();
+	Move();
 }
 
 void Player::Render()
@@ -102,24 +108,19 @@ void Player::Control()
 		dir += GetRight();
 	}
 	dir.Normalize();
-
-	if (KEY->Press(VK_SHIFT))
-	{
-		SetPlayerState(RUN);
-		dir.x *= 2.0f;
-		dir.z *= 2.0f;
-	}
-	else if(dir != 0.0f)
-	{
-		SetPlayerState(WALK);
-	}
-
 	velocity.x = dir.x;
 	velocity.z = dir.z;
 
-	if (velocity.x <= 0.1f && velocity.z <= 0.1f && playerState != MINING)
+	if (KEY->Press(VK_SHIFT))
 	{
-		SetPlayerState(IDLE);
+		velocity.x *= 1.5f;
+		velocity.z *= 1.5f;
+
+		SetPlayerState(RUN);
+	}
+	else if(velocity.x > 0.1f || velocity.z > 0.1f)
+	{
+		SetPlayerState(WALK);
 	}
 
 	if (!UIManager::Get()->IsPopup())
@@ -128,8 +129,6 @@ void Player::Control()
 		Rotate(Vector3::Up(), delta.x * rotSpeed * DELTA);
 		CAM->Rotate(Vector3::Left(), delta.y * rotSpeed * DELTA);
 	}
-
-	Move();
 }
 
 void Player::Move()

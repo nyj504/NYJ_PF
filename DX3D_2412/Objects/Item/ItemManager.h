@@ -2,7 +2,7 @@
 class ItemManager : public Singleton<ItemManager>
 {
 private:
-	const int MAX_DROPITEM_COUNT = 20;
+	const int MAX_DROPITEM_COUNT = 100;
 
 private:
 	friend class Singleton;

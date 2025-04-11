@@ -1,5 +1,7 @@
 #include "Framework.h"
 
+bool Sky::isNight = false;
+
 Sky::Sky()
 {
 	buffer = new FloatValueBuffer();
@@ -42,6 +44,11 @@ Sky::~Sky()
 
 void Sky::Update()
 {
+	if (startSkyState == SkyState::MIDNIGHT || startSkyState == SkyState::DAYBREAK)
+		isNight = true;
+	else
+		isNight = false;
+
 	if (startSkyState == SkyState::SUNSET || startSkyState == SkyState::DEEPDUSK ||
 		startSkyState == SkyState::DAWN)
 		buffer->Get()[0] += DELTA * DAYBREAK_TIME;

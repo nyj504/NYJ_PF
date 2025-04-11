@@ -36,7 +36,7 @@ private:
 	bool isParticlePlayed = false;
 
 	Vector3 lastPlayerPos; // 마지막 플레이어 위치
-	float updateThreshold = 32.0f;
+	float updateThreshold = 128.0f;
 
 	Block* selectedBlock = nullptr;
 	Block* steppedBlock = nullptr;

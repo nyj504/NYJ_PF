@@ -35,7 +35,7 @@ void DropQuad::Update()
 	quad->UpdateWorld();
 	collider->UpdateWorld();
 
-	if (collider->IsCollision(PLAYER->GetCollider()))
+	if (Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition()) <= 0.1f)
 	{
 		Audio::Get()->Play("pop");
 		ItemData data = DataManager::Get()->GetItemData(key);

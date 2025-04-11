@@ -17,9 +17,7 @@ InGameScene::InGameScene() : isPaused(false)
 	sky = new Sky();
 
 	PLAYER->SetLocalPosition(0, 4, 0);
-
-	MonsterManager::Get()->Spawn();
-
+	
 	curMusic = "BGM0";
 }
 
@@ -107,24 +105,24 @@ void InGameScene::PostRender()
 
 void InGameScene::GUIRender()
 {
-	UIManager::Get()->Edit();
-
-	if (isPaused)
-	{
-		/*ImGui::Begin("Pause Menu");
-
-		if (ImGui::Button("Save Game"))
-		{
-			MAP->Save(); 
-		}
-
-		if (ImGui::Button("Resume"))
-		{
-			isPaused = false; 
-		}
-
-		ImGui::End();*/
-	}
+	//UIManager::Get()->Edit();
+	//
+	//if (isPaused)
+	//{
+	//	/*ImGui::Begin("Pause Menu");
+	//
+	//	if (ImGui::Button("Save Game"))
+	//	{
+	//		MAP->Save(); 
+	//	}
+	//
+	//	if (ImGui::Button("Resume"))
+	//	{
+	//		isPaused = false; 
+	//	}
+	//
+	//	ImGui::End();*/
+	//}
 }
 
 void InGameScene::ChangeBGM()

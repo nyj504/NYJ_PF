@@ -10,7 +10,7 @@ protected:
 	const Vector3 KNOCKBACK_RANGE = { 0.2f, 0.2f, 0.2f };
 	const float HIT_DURATION = 0.2f;
 	const float SAYING_INTERVAL = 7.5f;
-	const float WANDER_DELAY = 2.0f;
+	const float WANDER_DELAY = 3.0f;
 
 public:
 	Character(string name);

@@ -22,12 +22,10 @@ void CraftSlot::SetItem(UINT key, UINT count)
 		tag == "LeggingsSlot" || tag == "BootsSlot")
 	{
 		craftBox->EquipArmor();
-		isChanged = false;
 	}
 
 	if (tag == "CraftSlot")
 	{
 		craftBox->CraftItem();
-		isChanged = false;
 	}
 }

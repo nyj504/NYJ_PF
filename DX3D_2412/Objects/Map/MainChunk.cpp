@@ -70,6 +70,29 @@ void MainChunk::GenerateTerrain()
                 break;
             }
             float height = perlin.Noise(worldX, worldZ) * noiseFactor + baseHeight;
+
+            if (terrainType == TerrainType::HILLS || terrainType == TerrainType::MOUNTAINS)
+            {
+                float plainBase = PLAIN_HEIGHT;
+                float plainNoise = PLAIN_NOISE;
+
+                float plainHeight = perlin.Noise(worldX, worldZ) * plainNoise + plainBase;
+
+                // 현재 위치 기준으로 Chunk 중심에서 얼마나 떨어졌는지 계산
+                float localX = (float)x / (float)(CHUNK_WIDTH - 1);
+                float localZ = (float)z / (float)(CHUNK_DEPTH - 1);
+
+                // 가장자리에서는 0 → 중앙으로 갈수록 1 (둥글게 처리하면 더 부드러움)
+                float edgeFactorX = 1.0f - abs(localX - 0.5f) * 2.0f;
+                float edgeFactorZ = 1.0f - abs(localZ - 0.5f) * 2.0f;
+
+                float edgeBlendFactor = min(edgeFactorX, edgeFactorZ); // 모서리는 가장 낮게 blending
+                edgeBlendFactor = min(max(edgeBlendFactor, 0.0f), 1.0f); // clamp
+
+                // 중심에서 1 → 모서리는 0 으로 자연스럽게 blending
+                height = GameMath::Lerp(plainHeight, height, edgeBlendFactor);
+            }
+
             heightMap[x][z] = (int)(height); //서브청크의 높이맵 결정 
         }
     }

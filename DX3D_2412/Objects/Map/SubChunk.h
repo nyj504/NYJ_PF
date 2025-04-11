@@ -32,7 +32,7 @@ public:
 
 	void CheckMousePosBlock();
 	void CheckPlayerCollision();
-	void CheckMonsterCollision();
+	void CheckMonsterCollision(Character* character);
 
 	void ActiveCollider();
 	void Test();

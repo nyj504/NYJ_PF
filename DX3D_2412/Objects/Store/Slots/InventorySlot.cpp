@@ -21,6 +21,7 @@ void InventorySlot::Update()
 {
 	if (isRest)
 		SetSlotState(REST);
+
 	bool isLButtonDown = KEY->Down(VK_LBUTTON);
 	bool isRButtonDown = KEY->Down(VK_RBUTTON);
 	bool isShiftButtonDown = KEY->Press(VK_SHIFT);

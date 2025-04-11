@@ -84,6 +84,25 @@ private:
     float values[4] = {};
 };
 
+class TimeBuffer : public ConstBuffer
+{
+private:
+    struct Data
+    {
+        float time = 0.0f;
+        float padding[3];
+    };
+public:
+    TimeBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& GetData() { return data; }
+
+private:
+    Data data;
+};
+
 class LightBuffer : public ConstBuffer
 {
 public:

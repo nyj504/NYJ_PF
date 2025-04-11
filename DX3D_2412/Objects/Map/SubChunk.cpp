@@ -18,6 +18,7 @@ void SubChunk::Update()
 {
 	Vector3 playerPos = PLAYER->GetLocalPosition();
 	Vector3 minPlayerPosition = PLAYER->GetLocalPosition() - PLAYER->GetCollider()->HalfSize();
+	vector<Character*> characters = MonsterManager::Get()->GetActiveMonsters();
 
 	int activeIndex = abs((int)floor(playerPos.y / SUBCHUNK_HEIGHT));
 
@@ -27,7 +28,13 @@ void SubChunk::Update()
 		CheckPlayerCollision();
 	
 	if (activeIndex == index)
-		CheckMonsterCollision();
+	{
+		for (Character* character : characters)
+		{
+			if (character)
+				CheckMonsterCollision(character);
+		}
+	}
 }
 
 void SubChunk::Render()
@@ -112,9 +119,9 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 						break;
 					case DepthLevel::SHALLOWS:
 					{
-						if (randValue <= 15) blockType = 7;  // ¼®Åº
+						if (randValue <= 15) blockType = 10;  // ¼®Åº
 						else if (randValue <= 20) blockType = 8; // ±¸¸®
-						else if (randValue <= 22) blockType = 10; // ±Ý
+						else if (randValue <= 22) blockType = 7; // ±Ý
 					}
 						break;
 					case DepthLevel::MIDDEPTH:
@@ -122,7 +129,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 						if (randValue <= 14) blockType = 9;  // Ã¶
 						else if (randValue <= 20) blockType = 10; // ±Ý
 						else if (randValue <= 25) blockType = 12; // Ã»±Ý¼®
-						else if (randValue <= 28) blockType = 13; // ·¹µå½ºÅæ
+						else if (randValue <= 28) blockType = 7; // ·¹µå½ºÅæ
 						else if (randValue <= 30) blockType = 11; // ´ÙÀÌ¾Æ
 					}
 						break;
@@ -366,7 +373,7 @@ void SubChunk::CheckPlayerCollision()
 		float distanceY = Vector3::Distance(playerPos.y, blockPos.y);
 		float distanceZ = Vector3::Distance(playerPos.z, blockPos.z);
 	
-		if (distanceX > 2 && distanceZ > 2 && distanceY > 4)
+		if (distanceX > 2 && distanceZ > 2 && distanceY > 6)
 			continue;
 	
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -405,13 +412,6 @@ void SubChunk::CheckPlayerCollision()
 		}
 	}
 
-	
-	if (!steppedBlock)
-	{
-		PLAYER->SetFall();
-		return;
-	}
-	
 	if (maxHeight >= minPlayerPosition.y)
 	{
 		Vector3 playerVelocity = PLAYER->GetPlayerVelocity();
@@ -431,24 +431,24 @@ void SubChunk::CheckPlayerCollision()
 			}
 		}
 	}
+	else
+	{
+		PLAYER->SetFall();
+	}
 	
 }
 
-void SubChunk::CheckMonsterCollision()
+void SubChunk::CheckMonsterCollision(Character* character)
 {
-	Character* monster = MonsterManager::Get()->GetMonsters();
-
-	if (!monster) return;
-
-	Ray ray(monster->GetLocalPosition(), Vector3::Down());
+	Ray ray(character->GetLocalPosition(), Vector3::Down());
 	RaycastHit hit;
 
 	float maxHeight = 0.0f;
 	float epsilonY = 0.1f;
 
-	Vector3 monsterPos = monster->GetLocalPosition();
-	Vector3 maxMonsterPosition = monsterPos + monster->GetCollider()->HalfSize();
-	Vector3 minMonsterPosition = monsterPos - monster->GetCollider()->HalfSize();
+	Vector3 monsterPos = character->GetLocalPosition();
+	Vector3 maxMonsterPosition = monsterPos + character->GetCollider()->HalfSize();
+	Vector3 minMonsterPosition = monsterPos - character->GetCollider()->HalfSize();
 	Vector3 overlap;
 
 	for (Block* block : interactableBlocks)
@@ -457,7 +457,11 @@ void SubChunk::CheckMonsterCollision()
 
 		float distance = Vector3::Distance(monsterPos, blockPos);
 
-		if (distance > 2)
+		float distanceX = Vector3::Distance(monsterPos.x, blockPos.x);
+		float distanceY = Vector3::Distance(monsterPos.y, blockPos.y);
+		float distanceZ = Vector3::Distance(monsterPos.z, blockPos.z);
+
+		if (distanceX > 2 && distanceZ > 2 && distanceY > 6)
 			continue;
 
 		if (block->GetCollider()->IsRayCollision(ray, &hit))
@@ -465,43 +469,41 @@ void SubChunk::CheckMonsterCollision()
 			if (hit.point.y > maxHeight)
 				maxHeight = hit.point.y;
 		}
-		if (distance <= 2)
-		{
-			Vector3 maxBoxPosition = blockPos + block->GetCollider()->HalfSize();
-			Vector3 minBoxPosition = blockPos - block->GetCollider()->HalfSize();
+		Vector3 maxBoxPosition = blockPos + block->GetCollider()->HalfSize();
+		Vector3 minBoxPosition = blockPos - block->GetCollider()->HalfSize();
 
-			if (block->GetCollider()->IsBoxCollision(monster->GetCollider(), &overlap))
+		if (block->GetCollider()->IsBoxCollision(character->GetCollider(), &overlap))
+		{
+			if (minMonsterPosition.y < maxBoxPosition.y - epsilonY &&
+				maxMonsterPosition.y > minBoxPosition.y + epsilonY)
 			{
-				if (minMonsterPosition.y < maxBoxPosition.y - epsilonY &&
-					maxMonsterPosition.y > minBoxPosition.y + epsilonY)
+				if (abs(overlap.x) < abs(overlap.z))
 				{
-					if (abs(overlap.x) < abs(overlap.z))
-					{
-						if (monsterPos.x < blockPos.x)
-							monster->Translate(-overlap.x, 0, 0);
-						else
-							monster->Translate(overlap.x, 0, 0);
-					}
+					if (monsterPos.x < blockPos.x)
+						character->Translate(-overlap.x, 0, 0);
 					else
-					{
-						if (monsterPos.z < blockPos.z)
-							monster->Translate(0, 0, -overlap.z);
-						else
-							monster->Translate(0, 0, overlap.z);
-					}
+						character->Translate(overlap.x, 0, 0);
+				}
+				else
+				{
+					if (monsterPos.z < blockPos.z)
+						character->Translate(0, 0, -overlap.z);
+					else
+						character->Translate(0, 0, overlap.z);
 				}
 			}
 		}
+		
 	}
 
 	if (maxHeight >= minMonsterPosition.y)
 	{
-		monster->Translate(0, maxHeight - minMonsterPosition.y, 0);
-		monster->SetLand();
+		character->Translate(0, maxHeight - minMonsterPosition.y, 0);
+		character->SetLand();
 	}
 	else if (maxHeight - minMonsterPosition.y < 0.1f)
 	{
-		monster->SetFall();
+		character->SetFall();
 	}
 }
 

@@ -67,7 +67,6 @@ void Character::Move()
     Translate(velocity * characterData.moveSpeed * DELTA);
 }
 
-
 void Character::ActivateHitState()
 {
     hitTimer = 0.0f;
@@ -75,11 +74,11 @@ void Character::ActivateHitState()
 
     vector<Material*> materials;
 
-    if (characterType == CharacterType::ANIMAL )
+    if (characterType == CharacterType::ANIMAL)
         materials = model->GetMaterials();
     else
         materials = modelAnimator->GetMaterials();
-    
+
     for (Material* material : materials)
     {
         material->GetData()->diffuse = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -97,13 +96,9 @@ void Character::DeactivateHitState()
             vector<Material*> materials;
 
             if (characterType == CharacterType::ANIMAL)
-            {
                 materials = model->GetMaterials();
-            }
             else
-            {
                 materials = modelAnimator->GetMaterials();
-            }
 
             for (Material* material : materials)
             {
@@ -117,25 +112,18 @@ void Character::DeactivateHitState()
 
 void Character::MoveSideways()
 {
-    if (idleWanderTimer >= WANDER_DELAY)
-    {
-        idleWanderTimer -= WANDER_DELAY;
+    float offsetX = GameMath::Random(-3.0f, 3.0f);
+    float offsetZ = GameMath::Random(-3.0f, 3.0f);
 
-        float offsetX = GameMath::Random(-3.0f, 3.0f);
-        float offsetZ = GameMath::Random(-3.0f, 3.0f);
+    Vector3 idleTargetPos = idlePosition + Vector3(offsetX, 0.0f, offsetZ);
+    LookAt(idleTargetPos);
 
-        Vector3 idleTargetPos = idlePosition + Vector3(offsetX, 0.0f, offsetZ);
-        idleWanderTimer = 0.0f;
+    Vector3 dir = idleTargetPos - GetLocalPosition();
+    dir.y = 0.0f;
+    dir.Normalize();
 
-        LookAt(idleTargetPos);
-
-        Vector3 dir = idleTargetPos - GetLocalPosition();
-        dir.y = 0.0f;
-
-        dir.Normalize();
-        velocity.x = dir.x;
-        velocity.z = dir.z;
-    }
+    velocity.x = dir.x;
+    velocity.z = dir.z;
 }
 
 void Character::Damaged(float damage, Character* target)

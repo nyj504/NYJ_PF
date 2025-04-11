@@ -6,13 +6,13 @@ MonsterManager::MonsterManager()
 
 	for (int i = 0; i < MONSTER_COUNT; i++)
 	{
-		Monster* monster = new Monster("Zombie");
-		monster->SetActive(false);
-		monsters.push_back(monster);
-
 		Animal* animal = new Animal("chicken");
 		animal->SetActive(false);
 		monsters.push_back(animal);
+
+		Monster* monster = new Monster("Zombie");
+		monster->SetActive(false);
+		monsters.push_back(monster);
 	}
 
 	particle = new ParticleSystem("Resources/Textures/Particle/character_dead.fx");
@@ -35,6 +35,14 @@ MonsterManager::~MonsterManager()
 
 void MonsterManager::Update()
 {
+	spawnTimer += DELTA;
+
+	if (spawnTimer >= SPAWN_INTERVAL)
+	{
+		spawnTimer -= SPAWN_INTERVAL;
+		Spawn();
+	}
+
 	particle->Update();
 
 	for (Character* monster : monsters)
@@ -86,12 +94,26 @@ void MonsterManager::GetDamaged()
 
 void MonsterManager::Spawn()
 {
+	bool isNight = Sky::isNight;
+
+	Vector3 playerPos = PLAYER->GetLocalPosition();
+	Vector3 offset = { 4.0f, 0.0f, 4.0f };
+
 	for (Character* monster : monsters)
 	{
-		if (!monster->IsActive())
+		if (!monster->IsActive() && playerPos.y > 0)
 		{
-			monster->Spawn(Vector3(5, 4, 5));
-			return;
+			if (monster->GetTag() == "Animal" && !isNight)
+			{
+				monster->Spawn(playerPos + offset);
+				return;
+			}
+
+			if (monster->GetTag() == "Monster" && isNight)
+			{
+				monster->Spawn(playerPos + offset);
+				return;
+			}
 		}
 	}
 }
@@ -110,15 +132,14 @@ void MonsterManager::ExcuteDamaged()
 	attackMonster->ExcuteAttack();
 }
 
-Character* MonsterManager::GetMonsters()
+vector<Character*> MonsterManager::GetActiveMonsters()
 {
+	vector<Character*> activeMonsters;
+
 	for (Character* monster : monsters)
 	{
 		if (monster->IsActive())
-		{
-			return monster;
-		}
-		else
-			return nullptr;
+			activeMonsters.push_back(monster);
 	}
+	return activeMonsters;
 }

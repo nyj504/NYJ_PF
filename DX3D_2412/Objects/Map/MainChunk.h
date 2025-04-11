@@ -8,7 +8,7 @@ private:
     const int SUBCHUNK_SIZE = 4;
 
     const float PLAIN_HEIGHT = 2.5f;
-    const float HILLS_HEIGHT = 8.5f;
+    const float HILLS_HEIGHT = 6.5f;
     const float MOUNTAIN_HEIGHT = 5.0f;
 
     const float PLAIN_NOISE = 2.5f;

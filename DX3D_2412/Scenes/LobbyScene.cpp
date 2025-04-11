@@ -3,6 +3,8 @@
 
 LobbyScene::LobbyScene()
 {
+	timeBuffer = new TimeBuffer();
+
 	BlockManager::Get();
 	InventorySingleton::Get();
 
@@ -15,9 +17,19 @@ LobbyScene::LobbyScene()
 	title->UpdateWorld();
 
 	background = new Quad(L"Resources/Textures/Lobby/panorama_0.png");
+	background->GetMaterial()->SetShader(L"UI/Lobby.hlsl");
 	background->SetLocalPosition(CENTER);
 	background->SetLocalScale(Vector3(1.3f, 1.0f));
 	background->UpdateWorld();
+
+	for (int i = 0; i < PANORAMA_SIZE; i++)
+	{
+		string path = "Resources/Textures/Lobby/panorama_" + to_string(i) + ".png";
+		backgrounds[i] = path;
+	}
+
+	lobbyStart = Texture::Add(L"Resources/Textures/Lobby/panorama_0.png");
+	lobbyEnd = Texture::Add(L"Resources/Textures/Lobby/panorama_1.png");
 
 	Button* button = new Button(L"Resources/Textures/Lobby/lobbyButton.png");
 	button->SetLocalPosition(Vector3(CENTER.x, CENTER.y));
@@ -42,44 +54,33 @@ LobbyScene::~LobbyScene()
 {
 	for (Button* button : buttons)
 		delete button;
-	
+
 	delete title;
-	delete background;
+	delete timeBuffer;
 }
 
 void LobbyScene::Update()
 {
+	lerpTime += DELTA;
+	panoramaTime += DELTA;
+
+	timeBuffer->GetData().time = min(lerpTime / PANORAMA_INTERVAL, 1.0f);
+
+	if (panoramaTime >= PANORAMA_INTERVAL)
+	{
+		panoramaTime -= PANORAMA_INTERVAL;
+		lerpTime -= PANORAMA_INTERVAL;
+
+		curPanoramaIndex = (curPanoramaIndex + 1) % PANORAMA_SIZE;
+
+		lobbyStart = lobbyEnd;
+
+		string path = backgrounds[curPanoramaIndex];
+		lobbyEnd = Texture::Add(Utility::ToWString(path));
+	}
+
 	for (Button* button : buttons)
 		button->Update();
-
-	if (KEY->Down('1'))
-	{
-		Audio::Get()->Play("Steve_knockback");
-	}
-	if (KEY->Down('2'))
-	{
-		Audio::Get()->Play("Steve_hurt");
-	}
-	if (KEY->Down('3'))
-	{
-		Audio::Get()->Play("Steve_hit");
-	}
-	if (KEY->Down('4'))
-	{
-		Audio::Get()->Play("step_cloth4");
-	}
-	if (KEY->Down('5'))
-	{
-		Audio::Get()->Play("step_stone1");
-	}
-	if (KEY->Down('6'))
-	{
-		Audio::Get()->Play("step_stone2");
-	}
-	if (KEY->Down('7'))
-	{
-		Audio::Get()->Play("step_cloth3");
-	}
 }
 
 void LobbyScene::PreRender()
@@ -88,10 +89,16 @@ void LobbyScene::PreRender()
 
 void LobbyScene::Render()
 {
+
 }
 
 void LobbyScene::PostRender()
 {
+	timeBuffer->SetPS(10);
+
+	lobbyStart->PSSet(10);
+	lobbyEnd->PSSet(11);
+
 	background->Render();
 	title->Render();
 
@@ -101,8 +108,8 @@ void LobbyScene::PostRender()
 
 void LobbyScene::GUIRender()
 {
-	for (Button* button : buttons)
-		button->Edit();
+	//for (Button* button : buttons)
+	//	button->Edit();
 }
 
 void LobbyScene::GameStart()

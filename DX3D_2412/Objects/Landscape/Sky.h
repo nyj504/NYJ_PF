@@ -15,6 +15,7 @@ private:
 	};
 	const float WORLD_TIME = 0.01f;
 	const float DAYBREAK_TIME = 0.1f;
+
 public:
 	Sky();
 	~Sky();
@@ -23,6 +24,8 @@ public:
 	void Render();
 	void Edit();
 
+public:
+	static bool isNight;
 private:
 	SkyState startSkyState;
 	SkyState endSkyState;

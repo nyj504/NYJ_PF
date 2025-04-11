@@ -49,7 +49,10 @@ void ItemManager::Render()
 {
 	for (DropQuad* item : dropItems)
 	{
-		item->Render();
+		if (item->IsActive())
+		{
+			item->Render();
+		}
 	}
 	for (DropCube* singleBlock : dropSingleBlocks)
 	{

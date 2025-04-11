@@ -3,6 +3,7 @@ class MonsterManager : public Singleton<MonsterManager>
 {
 private:
 	const int MONSTER_COUNT = 3;
+	const int SPAWN_INTERVAL = 60.0f;
 private:
 	friend class Singleton;
 	MonsterManager();
@@ -17,11 +18,12 @@ public:
 	void ExcuteDie();
 	void ExcuteDamaged();
 
-	Character* GetMonsters();
+	vector<Character*> GetActiveMonsters();
 	void SetAttackingMonster(Monster* monster) { attackMonster = monster; }
 
 private:
 	float deadTimer = 0.0f;
+	float spawnTimer = 0.0f;
 	bool isActiveParticle = false;
 	Vector3 deadPosition;
 	

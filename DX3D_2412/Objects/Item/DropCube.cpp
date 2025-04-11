@@ -30,7 +30,7 @@ void DropCube::Update()
 	UpdateWorld();
 	cube->Update();
 
-	if (cube->GetCollider()->IsCollision(PLAYER->GetCollider()))
+	if (Vector3::Distance(this->GetLocalPosition(), PLAYER->GetLocalPosition()) <= 0.1f)
 	{
 		Audio::Get()->Play("pop");
 

@@ -72,7 +72,7 @@ void WorldGenerator::Render()
 
 void WorldGenerator::CreateWorld()
 {
-    int gridSize = 1; 
+    int gridSize = 10; 
  
     for (int x = -gridSize; x <= gridSize; x++)
     {
@@ -85,7 +85,7 @@ void WorldGenerator::CreateWorld()
 
             if (mainChunks.find(chunkKey) != mainChunks.end()) continue;
 
-            TerrainType terrainType = TerrainType::PLAINS;
+            TerrainType terrainType = (TerrainType)GameMath::Random(0, 2);
 
             Vector3 chunkPosition = { chunkX, 0, chunkZ };
             MainChunk* mainChunk = new MainChunk(chunkPosition, terrainType, chunkKey, this);
