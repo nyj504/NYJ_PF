@@ -58,7 +58,7 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 	worldPos = pos;
 	blocks.clear();
 
-	depthLevel = GetDepthLevelFromWorldY(pos.y);
+	depthLevel = GetDepthLevelFromWorldY();
 
 	vector<Vector3> treePositions;
 
@@ -106,10 +106,11 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 
 				if (worldY == terrainHeight) blockType = 4; // 풀
 				else if (worldY > terrainHeight - 3) blockType = 6; // 흙
-				else if (worldY < terrainHeight - 6) blockType = 2; // 돌
-				else if (worldY <= terrainHeight - 47) blockType = 1; //심층암
+				else if (worldY < terrainHeight - 5) blockType = 2; // 돌
+				
+				if (worldY == -48) blockType = 1; //심층암
 
-				if (blockType == 2 || blockType == 1)
+				if (blockType == 2)
 				{
 					int randValue = GameMath::Random(1, 101);
 
@@ -119,26 +120,26 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 						break;
 					case DepthLevel::SHALLOWS:
 					{
-						if (randValue <= 15) blockType = 10;  // 석탄
-						else if (randValue <= 20) blockType = 8; // 구리
-						else if (randValue <= 22) blockType = 7; // 금
+						if (randValue <= 10) blockType = 8;  // 구리
+						else if (randValue <= 25) blockType = 9; // 철
+						else if (randValue <= 30) blockType = 7; // 석탄
 					}
 						break;
 					case DepthLevel::MIDDEPTH:
 					{
-						if (randValue <= 14) blockType = 9;  // 철
-						else if (randValue <= 20) blockType = 10; // 금
-						else if (randValue <= 25) blockType = 12; // 청금석
-						else if (randValue <= 28) blockType = 7; // 레드스톤
-						else if (randValue <= 30) blockType = 11; // 다이아
+						if (randValue <= 10) blockType = 11;  // 다이아
+						else if (randValue <= 15) blockType = 10; // 금
+						else if (randValue <= 18) blockType = 12; // 청금석
+						else if (randValue <= 22) blockType = 7; // 레드스톤
+						else if (randValue <= 30) blockType = 9; // 철
 					}
 						break;
 					case DepthLevel::ABYSS:
 					{
-						if (randValue <= 7)  blockType = 13; // 레드스톤
-						else if (randValue <= 12) blockType = 12; // 청금석
-						else if (randValue <= 19) blockType = 10; // 금
-						else if (randValue <= 23) blockType = 11; // 다이아
+						if (randValue <= 10)  blockType = 11; // 레드스톤
+						else if (randValue <= 15) blockType = 12; // 청금석
+						else if (randValue <= 25) blockType = 13; // 다이아
+						else if (randValue <= 35) blockType = 10; // 금
 					}
 						break;
 					default:
@@ -162,13 +163,23 @@ void SubChunk::GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DE
 	}
 }
 
-DepthLevel SubChunk::GetDepthLevelFromWorldY(int y)
+DepthLevel SubChunk::GetDepthLevelFromWorldY()
 {
-	if (y >= 0) return DepthLevel::GROUND;
-	else if (y >= -15) return DepthLevel::SHALLOWS;
-	else if (y >= -31) return DepthLevel::MIDDEPTH;
-	else if (y >= -39) return DepthLevel::ABYSS;
-	else return DepthLevel::ABYSS;
+	switch (index)
+	{
+	case 0:
+		return DepthLevel::GROUND;
+		break;
+	case 1:
+		return DepthLevel::SHALLOWS;
+		break;
+	case 2:
+		return DepthLevel::MIDDEPTH;
+		break;
+	case 3:
+		return DepthLevel::ABYSS;
+		break;
+	}
 }
 
 void SubChunk::GenerateTree(TreeType type,  Vector3 pos)
@@ -427,7 +438,12 @@ void SubChunk::CheckPlayerCollision()
 	
 			if (!Audio::Get()->IsPlaySound(stepSound))
 			{
-				Audio::Get()->Play(stepSound);
+				float volume = 1.0f;
+				if (stepSound == "step_sand")
+				{
+					volume = 0.2f;
+				}
+				Audio::Get()->Play(stepSound, volume);
 			}
 		}
 	}
@@ -547,11 +563,6 @@ void SubChunk::FindVisibleBlocks()
 			block->SetOcclusion(true);
 			continue;
 		} // 오클루젼 
-
-		if (blockWorldPos.y <= playerPos.y - 7)
-		{
-			continue;
-		}
 
 		InstanceData visibleInstanceData;
 		UVInfo uvInfo = block->GetUVInfo(); 

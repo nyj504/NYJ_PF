@@ -162,6 +162,7 @@ void Player::BuildAndMining()
 	if (KEY->Down(VK_LBUTTON))
 	{
 		Audio::Get()->Play("Steve_sweep");
+		velocity.y = 0;
 
 		SetPlayerState(MINING);
 

@@ -107,7 +107,7 @@ void InventoryCraftingSlot::CraftItem()
 {
     string serialKey;
   
-    int minCount = 0;
+    int minCount = 64;
     bool isChanged = false;
 
     for (int i = 0; i < craftSlots.size() - 1; i++)
@@ -126,7 +126,7 @@ void InventoryCraftingSlot::CraftItem()
         
         if (itemKey > 0 && itemCount > 0)
         {
-            if (itemCount > minCount)
+            if (itemCount < minCount)
             {
                 minCount = itemCount;
             }
@@ -151,6 +151,8 @@ void InventoryCraftingSlot::CraftItem()
 
     if (it != craftingRecipes.end())
     {
+        craftSlots[MAX_SLOTSIZE - 1]->SetItem(0, 0);
+
         UINT resultKey = it->second.first;
         UINT resultCount = it->second.second;
         UINT finalResultCount = resultCount * minCount;

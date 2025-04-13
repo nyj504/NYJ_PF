@@ -78,8 +78,19 @@ void CrackEffect::SetMining(Block* block)
         float intervalTime = 1 / playerEquipmentType.weaponAtk;
         intervalSpeed = FRAME_INTERVAL * intervalTime;
     }
+    else if (block->GetItemData().key == 11)
+    {
+        if (block->GetItemData().weakType != playerEquipmentType.type && playerEquipmentType.weaponAtk <= 3)
+            intervalSpeed = FRAME_INTERVAL * 3.0f;
+        else
+        {
+            float intervalTime = 1 / playerEquipmentType.weaponAtk;
+            intervalSpeed = FRAME_INTERVAL * intervalTime;
+        }
+    }
+    else if (block->GetItemData().key == 1) return;
     else
-        intervalSpeed = FRAME_INTERVAL;
+     intervalSpeed = FRAME_INTERVAL;
     
     SetLocalPosition(block->GetLocalPosition());
     UpdateWorld();

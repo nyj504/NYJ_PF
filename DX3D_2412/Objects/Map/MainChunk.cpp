@@ -17,25 +17,27 @@ MainChunk::~MainChunk()
 void MainChunk::Update()
 {
     int playerY = PLAYER->GetGlobalPosition().y;
-    int minBaseY = chunkPosition.y;
+  
+    activeChunkIndex = (abs(playerY - SUBCHUNK_HEIGHT / 2) / SUBCHUNK_HEIGHT);
     
-    activeChunkIndex = (abs(playerY - minBaseY) / SUBCHUNK_HEIGHT) % SUBCHUNK_SIZE;
+    int nextIndex = activeChunkIndex + 1;
+  
+    if (nextIndex >= SUBCHUNK_SIZE)
+        nextIndex = activeChunkIndex - 1;
 
-    if (!subChunks[activeChunkIndex]->HasCollider())
+    for(SubChunk* subchunk : subChunks)
     {
-        subChunks[activeChunkIndex]->ActiveCollider();
-        subChunks[1]->ActiveCollider();
+        if(!subchunk->HasCollider())
+         subchunk->ActiveCollider();
     }
 
      subChunks[activeChunkIndex]->Update();
-     subChunks[activeChunkIndex + 1]->Update();
-    
+     subChunks[nextIndex]->Update();
 }
 
 void MainChunk::Render()
 {
     subChunks[activeChunkIndex]->Render();
-    subChunks[activeChunkIndex + 1]->Render();
 }
 
 void MainChunk::GenerateTerrain()
@@ -128,6 +130,14 @@ void MainChunk::SetInstanceData(bool isChange)
         totalSingleInstanceDatas.insert(totalSingleInstanceDatas.end(), newSingleInstanceData.begin(), newSingleInstanceData.end());
         totalMultiInstanceDatas.insert(totalMultiInstanceDatas.end(), newMultiInstanceData.begin(), newMultiInstanceData.end());
     }
+}
+
+int MainChunk::GetActiveChunkIndex()
+{
+    if (activeChunkIndex == 3)
+        activeChunkIndex = 2;
+   
+    return activeChunkIndex; 
 }
 
 void MainChunk::Save()

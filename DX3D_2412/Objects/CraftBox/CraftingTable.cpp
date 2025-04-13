@@ -50,7 +50,7 @@ void CraftingTable::CraftItem()
     string serialKey;
 
     unordered_map<UINT, UINT> itemCounts;
-    int minCount = INT_MAX;
+    int minCount = 64;
     bool isChanged = false;
 
     for (int i = 0; i < craftSlots.size() - 1; i++)
@@ -96,6 +96,8 @@ void CraftingTable::CraftItem()
 
     if (it != craftingRecipes.end())
     {
+        craftSlots[MAX_SLOTSIZE - 1]->SetItem(0, 0);
+
         UINT resultKey = it->second.first;
         UINT resultCount = it->second.second;
         UINT finalResultCount = resultCount * minCount;

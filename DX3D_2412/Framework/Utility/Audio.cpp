@@ -125,7 +125,7 @@ void Audio::LoadAudioFiles(const string& path)
 
         string key = filename.substr(0, filename.find_last_of('.'));
 
-        Audio::Get()->Add(key, fullPath, false, false);
+        Add(key, fullPath, false, false);
 
     } while (FindNextFileA(hFind, &findData));
 

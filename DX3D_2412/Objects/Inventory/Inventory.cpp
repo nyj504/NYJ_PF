@@ -13,6 +13,7 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	invenCamera = new Camera();
 	invenCamera->SetTarget(PLAYER);
 	invenCamera->TargetOptionLoad("RenderTargetMode");
+	
 	invenCamera->UpdateWorld();
 
 	renderTarget = new RenderTarget();
@@ -24,6 +25,12 @@ Inventory::Inventory() : Quad((L"Resources/Textures/GUI/inventorySlot.png"))
 	quad->GetMaterial()->SetDiffuseMap(texture);
 	quad->SetLocalPosition(Vector3(CENTER.x - 75, CENTER.y + 163));
 	quad->UpdateWorld();
+
+	//AddItem(89, 1);
+	//AddItem(47, 64);
+	//AddItem(42, 64);
+	//AddItem(90, 1);
+	//AddItem(37, 1);
 
 	SetActive(false);
 }
@@ -82,7 +89,7 @@ void Inventory::Render()
 	cloneIcon->Render();
 
 	if(isRenderTargetActivate)
-	quad->Render();
+		quad->Render();
 }
 
 void Inventory::CreateSlot()
@@ -217,6 +224,8 @@ void Inventory::TransferItem()
 
 	if (toSlot == fromSlot)
 	{
+		fromSlot->SetItem(0, 0);
+		toSlot->SetItem(fromKey, fromCount);
 		Clear();
 		return;
 	}
@@ -300,21 +309,6 @@ void Inventory::TransferItem()
 
 void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 {
-	if (fromSlot == nullptr && inventorySlot->GetTag() == "ResultSlot" && inventorySlot->GetCount() > 0)
-	{
-		if (inventorySlot->GetKey() != 0)
-		{
-			fromSlot = inventorySlot;
-			fromSlot->GetIcon()->SetActive(false);
-			isExcuteCrafting = true;
-			fromSlot->SetChanged(true);
-			EventManager::Get()->ExcuteEvent("ExcuteCrafting");
-			
-			UpdateCloneIcon();
-		}
-		return;
-	}	
-
 	if (fromSlot == nullptr && inventorySlot->GetKey() == 0) return;
 
 	if (fromSlot == nullptr && !inventorySlot->IsPush())
@@ -323,6 +317,9 @@ void Inventory::OnSelectSlot(InventorySlot* inventorySlot)
 
 		if (!fromSlot->IsPressShift()) 
 		{
+			if(inventorySlot->GetTag() == "ResultSlot")
+				isExcuteCrafting = true;
+
 			fromSlot->GetIcon()->SetActive(false);
 		}
 		else //Shift를 누른 상태 (절반으로 나누기)

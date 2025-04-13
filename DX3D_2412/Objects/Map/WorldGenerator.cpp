@@ -266,9 +266,15 @@ void WorldGenerator::MiningBlock(Block* block)
         totalMultiInstanceDatas.erase(blockID);
     }
 
-    activeSubChunk->FindVisibleBlocks();
+    for (MainChunk* closestMainchunk : closestChunks)
+    {
+        int index = closestMainchunk->GetActiveChunkIndex();
+      
+        closestMainchunk->GetSubchunk(index)->FindVisibleBlocks();
+        closestMainchunk->GetSubchunk(++index)->FindVisibleBlocks();
 
-    SetInstanceData(mainChunks[activeSubChunk->GetParentIndex()], true);
+        SetInstanceData(mainChunks[closestMainchunk->GetMyIndex()], true);
+    }
 
     UpdateInstanceBuffer();
     

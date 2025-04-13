@@ -51,6 +51,7 @@ public:
 
 	void SetParentIndex(UINT parentIndex) { this->parentIndex = parentIndex; }
 	UINT GetParentIndex() { return parentIndex; }
+	
 	UVInfo GetUVInfo() { return uvInfo; }
 
 	void Mining();

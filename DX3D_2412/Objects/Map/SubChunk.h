@@ -27,7 +27,7 @@ public:
 	Block* GetBlock(Vector3 globalPos);
 
 	void GenerateTerrain(Vector3 pos, UINT heightMap[CHUNK_WIDTH][CHUNK_DEPTH]);
-	DepthLevel GetDepthLevelFromWorldY(int y);
+	DepthLevel GetDepthLevelFromWorldY();
 	void GenerateTree(TreeType type, Vector3 pos);
 
 	void CheckMousePosBlock();

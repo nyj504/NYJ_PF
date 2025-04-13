@@ -34,10 +34,13 @@ void Monster::Update()
 
 	if (sayingTimer >= SAYING_INTERVAL && monsterState != DIE)
 	{
+		float distance = Vector3::Distance(PLAYER->GetLocalPosition(), this->GetLocalPosition());
+
 		sayingTimer -= SAYING_INTERVAL;
 
 		int randNum = GameMath::Random(1, 4);
-		Audio::Get()->Play("Zombie_say" + to_string(randNum), 0.3f);
+		if (distance <= ACTIVATE_HOWLING)
+			Audio::Get()->Play("Zombie_say" + to_string(randNum), 0.3f);
 	}
 
 	Character::Update();

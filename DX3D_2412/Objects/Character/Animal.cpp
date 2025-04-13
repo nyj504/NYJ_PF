@@ -24,10 +24,13 @@ void Animal::Update()
 	
 	if (sayingTimer >= SAYING_INTERVAL && animalState != DIE)
 	{
+		float distance = Vector3::Distance(PLAYER->GetLocalPosition(), this->GetLocalPosition());
 		sayingTimer -= SAYING_INTERVAL;
 
 		int randNum = GameMath::Random(1, 4);
-		Audio::Get()->Play("Chicken_say" + to_string(randNum));
+
+		if(distance <= ACTIVATE_HOWLING)
+			Audio::Get()->Play("Chicken_say" + to_string(randNum));
 	}
 
 	Character::Update();

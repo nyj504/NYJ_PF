@@ -9,6 +9,7 @@ public:
 	void Update();
 
 	void SetItem(UINT key, UINT count) override;
+	void IncreaseItem();
 private:
 	CraftBox* craftBox;
 };

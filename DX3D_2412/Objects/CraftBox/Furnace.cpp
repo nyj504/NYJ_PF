@@ -109,5 +109,5 @@ void Furnace::MeltingItem()
 
     craftSlots[2]->SetItem(stoi(ingredientData.serialKey), totalResultCount);
     craftSlots[1]->DecreaseItem(1);
-    craftSlots[0]->DecreaseItem(ingredientCount);
+    craftSlots[0]->DecreaseItem(1);
 }

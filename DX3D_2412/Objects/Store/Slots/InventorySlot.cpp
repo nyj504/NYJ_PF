@@ -100,6 +100,10 @@ void InventorySlot::DecreaseItem(UINT count)
 void InventorySlot::ConsumeItem()
 {
 	itemCount--;
+	
+	if (itemCount <= 0)
+		slotKey = 0;
+	
 	icon->UpdateFromSlot(this);
 
 	isChanged = true;

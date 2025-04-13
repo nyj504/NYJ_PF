@@ -31,7 +31,9 @@ public:
     vector<InstanceData> GetTotalMultiInstanceDatas() { return totalMultiInstanceDatas; }
 
     vector<SubChunk*>GetSubchunks() { return subChunks; }
+    SubChunk* GetSubchunk(int index) { return subChunks[index]; }
     UINT64 GetMyIndex() { return myIndex; }
+    int GetActiveChunkIndex();
 
     void Save();
     void Load();

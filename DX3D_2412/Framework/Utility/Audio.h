@@ -7,7 +7,7 @@ class Audio : public Singleton<Audio>
 private:
     friend class Singleton;
 
-    const int MAX_CHANNEL = 20;
+    const int MAX_CHANNEL = 30;
 
     struct SoundInfo
     {

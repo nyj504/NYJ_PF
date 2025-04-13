@@ -25,10 +25,10 @@ key,equipType,equipParts,atk,defense
 85,Gold,ChestPlate,0,7
 86,Gold,Helmet,0,2
 87,Gold,Leggings,0,6
-88,Diamond,Axe,7,0
-89,Diamond,PickAxe,7,0
-90,Diamond,Shovel,7,0
-91,Diamond,Sword,7,0
+88,Diamond,Axe,20,0
+89,Diamond,PickAxe,20,0
+90,Diamond,Shovel,20,0
+91,Diamond,Sword,10,0
 92,Diamond,Boots,0,3
 93,Diamond,ChestPlate,0,7
 94,Diamond,Helmet,0,3

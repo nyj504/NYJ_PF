@@ -24,7 +24,7 @@ void CraftSlot::SetItem(UINT key, UINT count)
 		craftBox->EquipArmor();
 	}
 
-	if (tag == "CraftSlot")
+	if (tag == "CraftSlot" || tag == "ResultSlot")
 	{
 		craftBox->CraftItem();
 	}

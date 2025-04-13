@@ -3,7 +3,7 @@ class MonsterManager : public Singleton<MonsterManager>
 {
 private:
 	const int MONSTER_COUNT = 3;
-	const int SPAWN_INTERVAL = 60.0f;
+	const int SPAWN_INTERVAL = 180.0f;
 private:
 	friend class Singleton;
 	MonsterManager();
